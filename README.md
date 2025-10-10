@@ -1,4 +1,4 @@
-# 📚 LivoAppOfBooks
+# 📚 Livo
 
 Aplicativo Android inspirado no Letterboxd, mas voltado para livros.  
 Permite buscar e descobrir obras, organizar leituras em listas personalizadas, avaliar e escrever resenhas.  
@@ -41,7 +41,8 @@ A ideia é criar uma comunidade para amantes de livros, onde cada usuário pode 
 - **Mapeamento de objetos:** Lombok  
 - **Banco de Dados:** PostgreSQL (produção) e H2 (testes)  
 - **Containerização:** Docker  
-- **Documentação de API:** Swagger / OpenAPI  
+- **Documentação de API:** Swagger / OpenAPI
+- **Link do repositório: ??
 
 ### 🌐 Integrações
 - **APIs externas:** Google Books API
