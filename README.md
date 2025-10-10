@@ -44,26 +44,11 @@ A ideia é criar uma comunidade para amantes de livros, onde cada usuário pode 
 - **Documentação de API:** Swagger / OpenAPI  
 
 ### 🌐 Integrações
-- **APIs externas:** Google Books API  
-
----
-
-## 👥 Colaboradores
-
-Seu Nome: Função [@seuusuario](https://github.com/seuusuario) 
-Nome do colega: Função (ex: UI/UX Designer) [@colega](https://github.com/colega) 
-Nome do colega: Função (ex: Back-end/Integração) [@colega](https://github.com/colega) 
-
+- **APIs externas:** Google Books API
+  
 ---
 
 ## 💡 Impacto e Objetivo
 
 O **LivoAppOfBooks** visa incentivar o hábito da leitura, oferecendo uma experiência envolvente para leitores de todos os perfis.  
 
-## 📸 Prévia (opcional)
-
-?????
-
-```markdown
-![Tela inicial](link-da-imagem)
-![Tela de detalhes do livro](link-da-imagem)
