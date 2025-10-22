@@ -6,8 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,13 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,14 +27,15 @@ import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.theme.LightColor
 import com.example.livoappofbooks.ui.theme.PrincipalColor
+import com.example.livoappofbooks.ui.theme.buttonShape
 
 
 @Composable
 fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier){
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(LightColor) // fundo geral
+            .background(LightColor)
     ) {
         Box(
             modifier = Modifier
@@ -84,28 +82,55 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondaryContainer),
+                .background(LightColor),
             contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 60.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
-                    onClick = { },
-                    modifier = Modifier.fillMaxWidth()
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp)
+                        .border(
+                            width = 2.dp,
+                            color = PrincipalColor,
+                            shape = buttonShape
+                        ),
+                    shape = buttonShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PrincipalColor,
+                    )
                 ) {
-                    Text("Botão 1")
+                    Text(text = "Entrar",
+                        fontSize = 20.sp,
+                        color = LightColor)
                 }
 
                 Button(
                     onClick = {},
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp)
+                        .border(
+                            width = 2.dp,
+                            color = PrincipalColor,
+                            shape = buttonShape
+                        ),
+                    shape = buttonShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = LightColor,
+                    )
                 ) {
-                    Text("Botão 2")
+                    Text(
+                        text = "Cadastrar",
+                        fontSize = 20.sp,
+                        color = PrincipalColor)
                 }
             }
         }
