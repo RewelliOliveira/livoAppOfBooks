@@ -53,7 +53,7 @@ fun LivoAppOfBooksTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography, // sua tipografia personalizada
         shapes = Shapes,
         content = content
     )

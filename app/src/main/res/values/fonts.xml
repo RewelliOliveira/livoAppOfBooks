@@ -1,0 +1,13 @@
+<resources>
+    <!-- Certificados necessários para o Google Fonts Provider -->
+    <array name="com_google_android_gms_fonts_certs">
+        <item>
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn1j6OqLq...
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtC...
+            <!-- Obs: Esse valor é geralmente o certificado base64 do Google Fonts.
+                 Em projetos de teste, você pode usar o valor oficial padrão: -->
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7C0Z7bZ...
+        </item>
+    </array>
+</resources>
+
