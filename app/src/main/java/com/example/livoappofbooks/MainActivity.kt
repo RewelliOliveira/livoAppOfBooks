@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.livoappofbooks.ui.screens.InitialScreen
 
 class MainActivity : ComponentActivity() {
@@ -14,8 +12,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InitialScreen(
-                title = "Full name",
-                subTitle = "title"
+                title = "Organize suas leituras com o Livo!",
+                subTitle = "Selecione uma das opções para continuar"
             )
         }
     }
