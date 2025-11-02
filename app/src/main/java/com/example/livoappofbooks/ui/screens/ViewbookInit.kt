@@ -1,24 +1,28 @@
 package com.example.livoappofbooks.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,10 +32,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.StarRating
-import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.LightColor
+import com.example.livoappofbooks.ui.theme.PrincipalColor
 
+// 1. ADICIONADOS NOVOS PARÂMETROS
 @Composable
 fun ViewBookScreen(
     title: String,
@@ -39,6 +44,9 @@ fun ViewBookScreen(
     rate: Double,
     sinopse: String,
     imageUrl: String,
+    publishYear: String, // Novo parâmetro
+    publisher: String,   // Novo parâmetro
+    pageCount: String,   // Novo parâmetro
     onBackClick: () -> Unit
 ) {
     Box(
@@ -46,14 +54,13 @@ fun ViewBookScreen(
             .fillMaxSize()
             .background(LightColor)
     ) {
-
+        // --- Fundo com sombra e gradiente ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp), // Altura do "banner"
+                .height(350.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-
             AsyncImage(
                 model = imageUrl,
                 placeholder = painterResource(id = R.drawable.livro_teste),
@@ -61,12 +68,23 @@ fun ViewBookScreen(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
-                    .blur(15.dp)
-                    .alpha(0.9f)
+                    .height(320.dp)
+                    .blur(10.dp)
+                    .shadow(20.dp)
             )
 
-            // Capa do livro
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(320.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, LightColor.copy(alpha = 1f)),
+                            startY = 250f
+                        )
+                    )
+            )
+
             AsyncImage(
                 model = imageUrl,
                 placeholder = painterResource(id = R.drawable.livro_teste),
@@ -75,9 +93,9 @@ fun ViewBookScreen(
                 modifier = Modifier
                     .height(260.dp)
                     .width(170.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(RoundedCornerShape(8.dp))
+                    .shadow(16.dp, RoundedCornerShape(8.dp))
                     .align(Alignment.BottomCenter)
-                    .shadow(elevation = 25.dp, shape = RoundedCornerShape(6.dp))
             )
 
             IconButton(
@@ -86,7 +104,7 @@ fun ViewBookScreen(
                     .align(Alignment.TopStart)
                     .padding(16.dp)
                     .size(36.dp)
-                    .background(Color.White.copy(alpha = 0.8f), CircleShape)
+                    .background(Color.White, CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -96,49 +114,60 @@ fun ViewBookScreen(
             }
         }
 
+        // --- Conteúdo rolável + botão fixo ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 24.dp), // Aumentei o padding para um melhor respiro
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(Modifier.height(360.dp))
 
-            Spacer(Modifier.height(350.dp + 24.dp))
-
-            Row(){
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.Start
-                ){
+                ) {
                     Text(
                         text = title,
                         style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = Color.Black,
-                        textAlign = TextAlign.Center
+                        color = PrincipalColor
                     )
-
-                    // Autor
+                    Spacer(Modifier.height(8.dp))
                     Text(
                         text = author,
                         style = AppTypography.bodyMedium,
                         color = Color.DarkGray
                     )
                 }
-                // Avaliação (estrelas)
                 StarRating(rating = rate)
             }
+            Spacer(Modifier.height(24.dp))
 
-            Spacer(Modifier.height(16.dp))
+            // 2. SEÇÃO DE ÍCONES CORRIGIDA E REUTILIZÁVEL
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                InfoItem(icon = Icons.Default.CalendarMonth, text = publishYear)
+                InfoItem(icon = Icons.Default.MenuBook, text = "$pageCount págs")
+                InfoItem(icon = Icons.Default.Book, text = publisher)
+            }
 
+            Spacer(Modifier.height(24.dp))
             Divider(color = Color.LightGray.copy(alpha = 0.6f))
-
             Spacer(Modifier.height(16.dp))
 
-            // Seção de sinopse
             Text(
                 text = "Sinopse",
-                style = AppTypography.titleMedium.copy(color = Color.Black, fontWeight = FontWeight.SemiBold),
+                style = AppTypography.titleMedium.copy(
+                    color = Color.Black,
+                    fontWeight = FontWeight.SemiBold
+                ),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -149,9 +178,20 @@ fun ViewBookScreen(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Spacer(Modifier.height(36.dp))
+            Spacer(Modifier.height(100.dp)) // Espaço para não colar no botão
+        }
 
-            // Botão "Adicionar à biblioteca"
+        // --- Botão fixado no rodapé ---
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color.Transparent, LightColor.copy(alpha = 0.98f))
+                    )
+                )
+                .padding(16.dp)
+        ) {
             Button(
                 onClick = { /* ação */ },
                 colors = ButtonDefaults.buttonColors(containerColor = PrincipalColor),
@@ -159,6 +199,7 @@ fun ViewBookScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
+                    .shadow(8.dp, RoundedCornerShape(50))
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -171,27 +212,43 @@ fun ViewBookScreen(
                     style = AppTypography.titleSmall.copy(color = Color.White)
                 )
             }
-
-            // Espaço no final para não colar na borda inferior
-            Spacer(Modifier.height(24.dp))
         }
     }
 }
 
-// ... (Preview continua igual)
+@Composable
+private fun InfoItem(icon: ImageVector, text: String) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.DarkGray
+        )
+        Spacer(Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = AppTypography.bodyMedium,
+            color = Color.DarkGray
+        )
+    }
+}
 
-
-
+// 4. PREVIEW ATUALIZADO COM OS NOVOS DADOS
 @Preview(showBackground = true)
 @Composable
 fun ViewBookScreenPreview() {
     ViewBookScreen(
         title = "As Estrelas do Amanhã",
         author = "Marina Alves",
-        rate = 3.7, // Ajustei para testar a meia estrela
+        rate = 3.7,
         sinopse = "Em um futuro próximo, a Terra enfrenta crises ambientais que ameaçam a vida humana. Um grupo de jovens cientistas descobre um método para viajar até um planeta habitável...",
-        // A URL pode ser qualquer string, pois o placeholder será usado no preview
         imageUrl = "url_qualquer",
+        publishYear = "2023",
+        publisher = "Galera",
+        pageCount = "240",
         onBackClick = {}
     )
 }
