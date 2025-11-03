@@ -2,7 +2,7 @@ package com.example.livoappofbooks.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PrincipalColor = Color(0xFF003D3A)
+val PrincipalColor: Color = Color(0xFF003D3A)
 val LightColor = Color(0xFFFDFBED)
 val DarkColor = Color(0xFF001327)
 val PositiveActions = Color(0xFF2BA80C)
