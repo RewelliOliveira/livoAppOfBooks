@@ -20,6 +20,7 @@ import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
+import com.example.livoappofbooks.ui.components.FilterBar
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -33,8 +34,8 @@ data class Livro(
 @Composable
 fun LibraryScreen() {
     val themeState = rememberThemeState()
-
     var searchQuery by remember { mutableStateOf("") }
+    var selectedFilter by remember { mutableStateOf("Todos") } // Estado para o filtro selecionado
 
     val livrosMock = listOf(
         Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
@@ -54,6 +55,16 @@ fun LibraryScreen() {
         Livro("Abandonado", 40, 0, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"),
         Livro("Lido", 100, 5, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg")
     )
+
+
+    val filteredLivros = when (selectedFilter) {
+        "Todos" -> livrosMock
+        "Lendo" -> livrosMock.filter { it.status == "Lendo" }
+        "Lido" -> livrosMock.filter { it.status == "Lido" }
+        "QueroLer" -> livrosMock.filter { it.status == "Quero Ler" }
+        "Abandonado" -> livrosMock.filter { it.status == "Abandonado" }
+        else -> livrosMock
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -113,6 +124,16 @@ fun LibraryScreen() {
                 onQueryChange = { searchQuery = it },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            FilterBar(
+                selectedFilter = selectedFilter,
+                onFilterSelected = { filter ->
+                    selectedFilter = filter
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 24.dp)
             )
 
@@ -122,7 +143,7 @@ fun LibraryScreen() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
-                    items(livrosMock) { livro ->
+                    items(filteredLivros) { livro -> // Use a lista filtrada
                         Book(
                             status = livro.status,
                             progresso = livro.progresso,
