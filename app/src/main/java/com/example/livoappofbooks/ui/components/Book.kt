@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun Book(
@@ -51,12 +52,12 @@ fun Book(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color(0xFF4A6572)),
+                        .background(SubtitlesColor), // Usando SubtitlesColor do tema
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "CAPA",
-                        color = Color.White,
+                        color = LightColor,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -73,12 +74,12 @@ fun Book(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val corFundo = when (status) {
-                "Lido" -> Color(0xFF003D3A)
-                "Lendo" -> Color(0xFF00244D)
-                "Quero Ler" -> Color(0xFFF4B61A)
-                "Abandonado" -> Color(0xFF444444)
-                else -> Color(0xFF004D40)
+            val (corFundo, corTexto) = when (status) {
+                "Lido" -> PrincipalColor to Color.White
+                "Lendo" -> DarkColor to Color.White
+                "Quero Ler" -> Color(0xFFF4B61A) to Color.Black
+                "Abandonado" -> SubtitlesColor to Color.White
+                else -> PrincipalColor to Color.White
             }
 
             Box(
@@ -91,7 +92,7 @@ fun Book(
             ) {
                 Text(
                     text = status,
-                    color = Color.White,
+                    color = corTexto,
                     fontSize = 9.47.sp,
                     fontWeight = FontWeight.Medium,
                     lineHeight = 9.47.sp
