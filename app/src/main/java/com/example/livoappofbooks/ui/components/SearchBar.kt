@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.theme.PrincipalColor
-import com.example.livoappofbooks.ui.theme.SubtitlesColor
+import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun SearchBar(
@@ -28,14 +29,42 @@ fun SearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val themeState = rememberThemeState()
+
+    val backgroundColor = MaterialTheme.colorScheme.background
+
+    val borderColor = if (themeState.isDarkTheme) {
+        Color.White
+    } else {
+        PrincipalColor
+    }
+
+    val textColor = if (themeState.isDarkTheme) {
+        Color.White
+    } else {
+        Color.Black
+    }
+
+    val placeholderColor = if (themeState.isDarkTheme) {
+        Color.White
+    } else {
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    }
+
+    val iconColor = if (themeState.isDarkTheme) {
+        Color.White
+    } else {
+        PrincipalColor
+    }
+
     Box(
         modifier = modifier
             .height(41.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(Color.White)
+            .background(backgroundColor)
             .border(
                 width = 2.dp,
-                color = PrincipalColor,
+                color = borderColor,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -45,23 +74,14 @@ fun SearchBar(
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Pesquisar",
-                tint = PrincipalColor,
-                modifier = Modifier.size(20.dp)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
             BasicTextField(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = Color.Black,
+                    color = textColor,
                     fontSize = 16.sp
                 ),
-                cursorBrush = SolidColor(PrincipalColor),
+                cursorBrush = SolidColor(iconColor),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -78,13 +98,22 @@ fun SearchBar(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
                                     lineHeight = 10.sp,
-                                    color = SubtitlesColor
+                                    color = placeholderColor
                                 )
                             )
                         }
                         innerTextField()
                     }
                 }
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Pesquisar",
+                tint = iconColor,
+                modifier = Modifier.size(28.dp)
             )
         }
     }
