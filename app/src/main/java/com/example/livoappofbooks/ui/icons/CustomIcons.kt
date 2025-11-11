@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.ui.icons
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathFillType.Companion.NonZero
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
@@ -301,9 +302,58 @@ val MarcaPagina: ImageVector
         return _MarcaPagina!!
     }
 
+
+val Bookshelf: ImageVector
+    get() {
+        if (_Bookshelf != null) return _Bookshelf!!
+
+        _Bookshelf = ImageVector.Builder(
+            name = "Bookshelf",
+            defaultWidth = 16.dp,
+            defaultHeight = 16.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).apply {
+            path(
+                fill = SolidColor(Color.Black)
+            ) {
+                moveTo(2.5f, 0f)
+                arcToRelative(0.5f, 0.5f, 0f, false, true, 0.5f, 0.5f)
+                verticalLineTo(2f)
+                horizontalLineToRelative(10f)
+                verticalLineTo(0.5f)
+                arcToRelative(0.5f, 0.5f, 0f, false, true, 1f, 0f)
+                verticalLineToRelative(15f)
+                arcToRelative(0.5f, 0.5f, 0f, false, true, -1f, 0f)
+                verticalLineTo(15f)
+                horizontalLineTo(3f)
+                verticalLineToRelative(0.5f)
+                arcToRelative(0.5f, 0.5f, 0f, false, true, -1f, 0f)
+                verticalLineTo(0.5f)
+                arcToRelative(0.5f, 0.5f, 0f, false, true, 0.5f, -0.5f)
+                moveTo(3f, 14f)
+                horizontalLineToRelative(10f)
+                verticalLineToRelative(-3f)
+                horizontalLineTo(3f)
+                close()
+                moveToRelative(0f, -4f)
+                horizontalLineToRelative(10f)
+                verticalLineTo(7f)
+                horizontalLineTo(3f)
+                close()
+                moveToRelative(0f, -4f)
+                horizontalLineToRelative(10f)
+                verticalLineTo(3f)
+                horizontalLineTo(3f)
+                close()
+            }
+        }.build()
+
+        return _Bookshelf!!
+    }
+
+private var _Bookshelf: ImageVector? = null
 private var _MarcaPagina: ImageVector? = null
-
-
 private var _Language: ImageVector? = null
 private var _CalendarDays: ImageVector? = null
 private var _BookOpen: ImageVector? = null
