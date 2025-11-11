@@ -27,7 +27,8 @@ import com.example.livoappofbooks.ui.icons.MarcaPagina // Exemplo para o preview
  * @param modifier O modificador para customizar o botão.
  * @param icon (Opcional) O ícone a ser exibido à esquerda do texto.
  * @param enabled (Opcional) Define se o botão está ativo ou desativado.
- */@Composable
+ */
+@Composable
 fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
@@ -44,9 +45,10 @@ fun PrimaryButton(
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .defaultMinSize(minHeight = 36.dp) // Altura mínima padrão
+            .defaultMinSize(minHeight = 40.dp) // 👈 mesma altura do Status
+            .heightIn(min = 40.dp)              // garante consistência visual
             .shadow(
-                elevation = if (enabled) 8.dp else 0.dp,
+                elevation = if (enabled) 4.dp else 0.dp,
                 shape = RoundedCornerShape(50)
             )
     ) {
@@ -54,7 +56,8 @@ fun PrimaryButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(18.dp) // 👈 mesmo tamanho do ícone do Status
             )
             Spacer(Modifier.width(8.dp))
         }
