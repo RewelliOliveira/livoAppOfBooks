@@ -4,41 +4,42 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-// 🌙 Tema escuro
+// 🌙 Tema Escuro
 private val DarkColorScheme = darkColorScheme(
     primary = PrincipalColor,
     secondary = PositiveActions,
     tertiary = SubtitlesColor,
     background = DarkColor,
     surface = DarkColor,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White
+    error = AlertColor,
+    onPrimary = BackgroundLight,
+    onSecondary = BackgroundLight,
+    onTertiary = BackgroundLight,
+    onBackground = BackgroundLight,
+    onSurface = BackgroundLight
 )
 
-// 🌞 Tema claro
+// 🌞 Tema Claro
 private val LightColorScheme = lightColorScheme(
     primary = PrincipalColor,
     secondary = PositiveActions,
     tertiary = SubtitlesColor,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black
+    background = BackgroundLight,
+    surface = BackgroundLight,
+    error = AlertColor,
+    onPrimary = BackgroundLight,
+    onSecondary = BackgroundLight,
+    onTertiary = DarkColor,
+    onBackground = DarkColor,
+    onSurface = DarkColor
 )
 
 @Composable
 fun LivoAppOfBooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true, // suporte a cores dinâmicas Android 12+
+    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,7 +54,7 @@ fun LivoAppOfBooksTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography, // sua tipografia personalizada
+        typography = AppTypography,
         shapes = Shapes,
         content = content
     )
