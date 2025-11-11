@@ -32,7 +32,6 @@ import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.FundoClaro
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 
-// 1. ADICIONADOS NOVOS PARÂMETROS
 @Composable
 fun ViewBook(
     title: String,
@@ -140,7 +139,7 @@ fun ViewBook(
                 }
                 StarRating(rating = rate)
             }
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier
@@ -165,15 +164,15 @@ fun ViewBook(
             ) {
                 PrimaryButton(
                     modifier = Modifier.weight(1F),
-                    text = "$shelf",
+                    text = shelf,
                     onClick = {},
-                    icon = BuildingLibrary
+                    icon = Bookshelf
                 )
                 Spacer(Modifier.width(16.dp))
                 Status(status = BookStatus.LENDO, onClick = {})
             }
 
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "Sinopse",
