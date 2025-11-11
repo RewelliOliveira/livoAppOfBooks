@@ -23,8 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
+import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
+import com.example.livoappofbooks.ui.components.PrimaryButton
+import com.example.livoappofbooks.ui.components.Status
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.FundoClaro
 import com.example.livoappofbooks.ui.theme.PrincipalColor
@@ -39,8 +42,8 @@ fun ViewBook(
     imageUrl: String,
     publishYear: String,
     publisher: String,
-    language: String,
     pageCount: String,
+    shelf: String,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -151,9 +154,26 @@ fun ViewBook(
 
             }
 
-            Spacer(Modifier.height(24.dp))
-            Divider(color = Color.LightGray.copy(alpha = 0.6f))
             Spacer(Modifier.height(16.dp))
+            Divider(color = Color.LightGray)
+            Spacer(Modifier.height(8.dp))
+
+            Row(modifier = Modifier
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                PrimaryButton(
+                    modifier = Modifier.weight(1F),
+                    text = "$shelf",
+                    onClick = {},
+                    icon = BuildingLibrary
+                )
+                Spacer(Modifier.width(16.dp))
+                Status(status = BookStatus.LENDO, onClick = {})
+            }
+
+            Spacer(Modifier.width(16.dp))
 
             Text(
                 text = "Sinopse",
@@ -177,7 +197,7 @@ fun ViewBook(
 @Preview(showBackground = true)
 @Composable
 fun ViewBookPreview() {
-    ViewBookScreen(
+    ViewBook(
         title = "Peter Pan in Wonderland",
         author = "Samira Sales",
         rate = 3.7,
@@ -185,7 +205,7 @@ fun ViewBookPreview() {
         imageUrl = "url_qualquer",
         publishYear = "2025",
         publisher = "Bila-Bilu",
-        language = "Português - BR",
+        shelf = "Romances",
         pageCount = "240",
         onBackClick = {}
     )
