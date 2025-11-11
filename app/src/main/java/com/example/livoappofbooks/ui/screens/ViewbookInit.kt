@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.ui.screens
 
+import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,10 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.LibraryBooks
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,7 +31,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.LightColor
+import com.example.livoappofbooks.ui.theme.FundoClaro
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 // 1. ADICIONADOS NOVOS PARÂMETROS
@@ -47,13 +44,14 @@ fun ViewBookScreen(
     imageUrl: String,
     publishYear: String,
     publisher: String,
+    language: String,
     pageCount: String,
     onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightColor)
+            .background(FundoClaro)
     ) {
         Box(
             modifier = Modifier
@@ -79,7 +77,7 @@ fun ViewBookScreen(
                     .height(320.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, LightColor.copy(alpha = 1f)),
+                            colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 1f)),
                             startY = 250f
                         )
                     )
@@ -107,22 +105,21 @@ fun ViewBookScreen(
                     .background(Color.White, CircleShape)
             ) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Arrow_back_ios_new,
                     contentDescription = "Voltar",
                     tint = Color.Black
                 )
             }
         }
 
-        // --- Conteúdo rolável + botão fixo ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp), // Aumentei o padding para um melhor respiro
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(360.dp))
+            Spacer(Modifier.height(385.dp))
 
             Row(
                 verticalAlignment = Alignment.Bottom
@@ -147,15 +144,16 @@ fun ViewBookScreen(
             }
             Spacer(Modifier.height(24.dp))
 
-            // 2. SEÇÃO DE ÍCONES CORRIGIDA E REUTILIZÁVEL
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                InfoItem(icon = Icons.Default.CalendarMonth, text = publishYear)
-                InfoItem(icon = Icons.Default.MenuBook, text = "$pageCount págs")
-                InfoItem(icon = Icons.Default.Book, text = publisher)
+                InfoItem(icon = CalendarDays, text = publishYear)
+                InfoItem(icon = BuildingLibrary, text = publisher)
+                InfoItem(icon = BookOpen, text = "$pageCount págs")
+
             }
 
             Spacer(Modifier.height(24.dp))
@@ -187,7 +185,7 @@ fun ViewBookScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, LightColor.copy(alpha = 0.98f))
+                        colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 0.98f))
                     )
                 )
                 .padding(16.dp)
@@ -221,13 +219,14 @@ fun ViewBookScreen(
 @Composable
 fun ViewBookScreenPreview() {
     ViewBookScreen(
-        title = "As Estrelas do Amanhã",
-        author = "Marina Alves",
+        title = "Peter Pan in Wonderland",
+        author = "Samira Sales",
         rate = 3.7,
-        sinopse = "Em um futuro próximo, a Terra enfrenta crises ambientais que ameaçam a vida humana. Um grupo de jovens cientistas descobre um método para viajar até um planeta habitável...",
+        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguem ficar fazendo zuada no meu pé do ouvido",
         imageUrl = "url_qualquer",
-        publishYear = "2023",
-        publisher = "Galera",
+        publishYear = "2025",
+        publisher = "Bila-Bilu",
+        language = "Português - BR",
         pageCount = "240",
         onBackClick = {}
     )

@@ -23,13 +23,13 @@ fun InfoItem(icon: ImageVector, text: String) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.DarkGray
+            tint = Color.Black
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = text,
             style = AppTypography.bodyMedium,
-            color = Color.DarkGray
+            color = Color.Black
         )
     }
 }
