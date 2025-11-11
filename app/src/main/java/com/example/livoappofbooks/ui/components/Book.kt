@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun Book(
@@ -27,6 +28,8 @@ fun Book(
     avaliacao: Int,
     imageUrl: String? = null
 ) {
+    val themeState = rememberThemeState()
+
     Column(
         modifier = Modifier
             .width(120.dp)
@@ -52,7 +55,7 @@ fun Book(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(SubtitlesColor), // Usando SubtitlesColor do tema
+                        .background(SubtitlesColor),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -99,6 +102,9 @@ fun Book(
                 )
             }
 
+
+            val infoColor = if (themeState.isDarkTheme) Color.White else corFundo
+
             if (status == "Lido") {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +112,7 @@ fun Book(
                 ) {
                     Text(
                         text = "$avaliacao",
-                        color = corFundo,
+                        color = infoColor,
                         fontSize = 9.47.sp,
                         fontWeight = FontWeight.Medium,
                         lineHeight = 9.47.sp
@@ -122,7 +128,7 @@ fun Book(
             } else {
                 Text(
                     text = "$progresso%",
-                    color = corFundo,
+                    color = infoColor,
                     fontSize = 9.47.sp,
                     fontWeight = FontWeight.Medium,
                     lineHeight = 9.47.sp
