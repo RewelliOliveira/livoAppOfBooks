@@ -73,7 +73,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                 painter = painterResource(R.drawable.initiallogo_svg),
                 contentDescription = "Icone Livo",
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(110.dp)
                     .align(Alignment.Center)
             )
         }
