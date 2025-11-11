@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.StarRating
+import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.LightColor
 import com.example.livoappofbooks.ui.theme.PrincipalColor
@@ -44,9 +45,9 @@ fun ViewBookScreen(
     rate: Double,
     sinopse: String,
     imageUrl: String,
-    publishYear: String, // Novo parâmetro
-    publisher: String,   // Novo parâmetro
-    pageCount: String,   // Novo parâmetro
+    publishYear: String,
+    publisher: String,
+    pageCount: String,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -54,7 +55,6 @@ fun ViewBookScreen(
             .fillMaxSize()
             .background(LightColor)
     ) {
-        // --- Fundo com sombra e gradiente ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -213,26 +213,6 @@ fun ViewBookScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun InfoItem(icon: ImageVector, text: String) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = Color.DarkGray
-        )
-        Spacer(Modifier.width(4.dp))
-        Text(
-            text = text,
-            style = AppTypography.bodyMedium,
-            color = Color.DarkGray
-        )
     }
 }
 
