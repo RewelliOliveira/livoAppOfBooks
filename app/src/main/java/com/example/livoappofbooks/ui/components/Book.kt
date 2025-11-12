@@ -12,20 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun Book(
     status: String,
-    progresso: Int,
-    avaliacao: Int,
+    progress: Int,
+    evaluate: Int,
     imageUrl: String? = null
 ) {
     val themeState = rememberThemeState()
@@ -111,7 +111,7 @@ fun Book(
                     modifier = Modifier.height(14.dp)
                 ) {
                     Text(
-                        text = "$avaliacao",
+                        text = "$evaluate",
                         color = infoColor,
                         fontSize = 9.47.sp,
                         fontWeight = FontWeight.Medium,
@@ -127,7 +127,7 @@ fun Book(
                 }
             } else {
                 Text(
-                    text = "$progresso%",
+                    text = "$progress%",
                     color = infoColor,
                     fontSize = 9.47.sp,
                     fontWeight = FontWeight.Medium,
@@ -136,4 +136,16 @@ fun Book(
             }
         }
     }
+}
+
+@Composable
+fun AsyncImage(
+    model: String,
+    contentDescription: String,
+    modifier: Modifier,
+    contentScale: ContentScale,
+    placeholder: Painter,
+    error: Painter
+) {
+    TODO("Not yet implemented")
 }
