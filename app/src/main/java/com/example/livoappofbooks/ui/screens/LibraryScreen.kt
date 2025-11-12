@@ -28,8 +28,8 @@ import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 data class Livro(
     val status: String,
-    val progresso: Int,
-    val avaliacao: Int,
+    val progress: Int,
+    val evaluate: Int,
     val imageUrl: String
 )
 
@@ -143,8 +143,8 @@ fun LibraryScreen() {
                             items(filteredLivros) { livro ->
                                 Book(
                                     status = livro.status,
-                                    progresso = livro.progresso,
-                                    avaliacao = livro.avaliacao,
+                                    progress = livro.progress,
+                                    evaluate = livro.evaluate,
                                     imageUrl = livro.imageUrl
                                 )
                             }
