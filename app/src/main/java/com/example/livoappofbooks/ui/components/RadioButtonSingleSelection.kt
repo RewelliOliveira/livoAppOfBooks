@@ -48,9 +48,9 @@ fun RadioButtonSingleSelection(
                     selected = (text == selectedOption),
                     onClick = null, // null recomendado p/ acessibilidade
                     colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.primary,
-                    unselectedColor = Color.Gray
-                )
+                        selectedColor = MaterialTheme.colorScheme.primary,
+                        unselectedColor = Color.Gray
+                     )
                 )
                 Text(
                     text = text,
