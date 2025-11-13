@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.ui.components.dialogs
+package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

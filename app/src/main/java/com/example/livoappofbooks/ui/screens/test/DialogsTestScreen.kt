@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.livoappofbooks.ui.components.dialogs.BookStatusDialog
+import com.example.livoappofbooks.ui.components.sheets.BookStatusBottomSheet
 
 @Preview
 @Composable
@@ -58,7 +58,7 @@ fun DialogsTestScreen() {
 
     // 🔹 Mostra o dialog somente se `showDialog` for verdadeiro
     if (showDialog) {
-        BookStatusDialog(
+        BookStatusBottomSheet(
             radioOptions = radioOptions,
             selectedOption = selectedOption,
             onSelectionChange = { option ->
