@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,10 +39,12 @@ fun ShelfCheckboxBottomSheet(
     onSelectionChange: (List<String>) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true // Abre sempre totalmente
-    )
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val configuration = LocalConfiguration.current
+    val screenHeightPx = configuration.screenHeightDp.dp
+    val maxSheetHeight = (screenHeightPx * 0.60f)
+
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = sheetState,
@@ -50,6 +54,7 @@ fun ShelfCheckboxBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(max = maxSheetHeight)
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -64,7 +69,8 @@ fun ShelfCheckboxBottomSheet(
             CheckboxSelection(
                 options = options,
                 selectedOptions = selectedOptions,
-                onSelectionChange = onSelectionChange
+                onSelectionChange = onSelectionChange,
+                modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

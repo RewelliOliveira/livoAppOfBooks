@@ -89,7 +89,7 @@ fun DialogsTestScreen() {
 
     if(showShelfsModal){
         ShelfCheckboxBottomSheet(
-            options = checkboxOptions,
+            options = checkboxOptions + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste" + "teste"   ,
             selectedOptions = selectedOptions,
             onSelectionChange = {selectedOptions = it},
             onDismiss = {

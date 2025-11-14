@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -26,34 +29,31 @@ fun CheckboxSelection(
     onSelectionChange: (List<String>) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier.selectableGroup()) {
-        options.forEach { option ->
+    val listState = rememberLazyListState()
 
+    LazyColumn(
+        state = listState,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        items(options) { option ->
             val isSelected = option in selectedOptions
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        val newList =
-                            if (isSelected) selectedOptions - option
-                            else selectedOptions + option
-
+                        val newList = if (isSelected) selectedOptions - option else selectedOptions + option
                         onSelectionChange(newList)
-                    },
+                    }
+                    .padding(vertical = 8.dp, horizontal = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = isSelected,
                     onCheckedChange = { checked ->
-                        val newList =
-                            if (checked) selectedOptions + option
-                            else selectedOptions - option
-
+                        val newList = if (checked) selectedOptions + option else selectedOptions - option
                         onSelectionChange(newList)
                     }
                 )
-
                 Text(
                     text = option,
                     style = MaterialTheme.typography.bodyLarge,
@@ -63,6 +63,7 @@ fun CheckboxSelection(
         }
     }
 }
+
 
 
 @Preview(showBackground = true)
