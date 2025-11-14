@@ -58,7 +58,7 @@ fun ViewBook(
         ) {
             AsyncImage(
                 model = imageUrl,
-                placeholder = painterResource(id = R.drawable.livro_teste),
+                //placeholder = painterResource(id = R.drawable.livro_teste),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -82,7 +82,7 @@ fun ViewBook(
 
             AsyncImage(
                 model = imageUrl,
-                placeholder = painterResource(id = R.drawable.livro_teste),
+                //placeholder = painterResource(id = R.drawable.livro_teste),
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

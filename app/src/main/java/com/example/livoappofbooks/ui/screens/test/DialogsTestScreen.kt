@@ -19,15 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.components.sheets.BookStatusBottomSheet
+import com.example.livoappofbooks.ui.components.sheets.ShelfCheckboxBottomSheet
 
 @Preview
 @Composable
 fun DialogsTestScreen() {
-    var showDialog by remember { mutableStateOf(false) }
+    var showStatusModal by remember { mutableStateOf(false) }
+    var showShelfsModal by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf("") }
     val radioOptions = listOf("Lido", "Lendo", "Quero ler", "Abandonei")
+    val checkboxOptions = listOf<String>("Romance", "Religião", "Filosofia", "Ficção")
+    var selectedOptions by remember { mutableStateOf(listOf<String>()) }
 
-    // 🔹 Tela principal
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,11 +43,11 @@ fun DialogsTestScreen() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Test Dialog Status",
+                text = "Test Modal Status",
                 style = MaterialTheme.typography.titleLarge
             )
-            Button(onClick = { showDialog = true }) {
-                Text("Abrir Dialog")
+            Button(onClick = { showStatusModal = true }) {
+                Text("Abrir Status Modal")
             }
             // Mostra o resultado da seleção
             if (selectedOption.isNotEmpty()) {
@@ -53,19 +56,44 @@ fun DialogsTestScreen() {
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
+
+            Text(
+                text = "Test Modal Shelfs",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Button(onClick = { showShelfsModal = true }) {
+                Text("Abrir Shelfs Modal")
+            }
+            // Mostra o resultado da seleção
+            selectedOptions.forEach { option ->
+                Text(
+                    text = "Selecionado: $option",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
         }
     }
 
-    // 🔹 Mostra o dialog somente se `showDialog` for verdadeiro
-    if (showDialog) {
+    if (showStatusModal) {
         BookStatusBottomSheet(
-            radioOptions = radioOptions,
+            options = radioOptions,
             selectedOption = selectedOption,
             onSelectionChange = { option ->
                 selectedOption = option
             },
             onDismiss = {
-                showDialog = false
+                showStatusModal = false
+            }
+        )
+    }
+
+    if(showShelfsModal){
+        ShelfCheckboxBottomSheet(
+            options = checkboxOptions,
+            selectedOptions = selectedOptions,
+            onSelectionChange = {selectedOptions = it},
+            onDismiss = {
+                showShelfsModal = false
             }
         )
     }

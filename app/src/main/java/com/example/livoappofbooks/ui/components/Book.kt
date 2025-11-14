@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -58,6 +59,7 @@ fun Book(
                         .background(SubtitlesColor),
                     contentAlignment = Alignment.Center
                 ) {
+                    val LightColor = MaterialTheme.colorScheme.onPrimary //estava dando erro de referência em LightColor, criei a variável apenas para parar de dar o erro.
                     Text(
                         text = "CAPA",
                         color = LightColor,

@@ -24,7 +24,7 @@ fun DialogTopBar(
         Column {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge
             )
             Text(
                 text = subTitle,

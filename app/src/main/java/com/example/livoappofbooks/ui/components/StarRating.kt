@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.StarHalf
 import androidx.compose.material.icons.rounded.StarHalf
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.icons.rounded.Star
@@ -31,7 +32,7 @@ fun StarRating(
         for (i in 1..maxStars) {
             val icon = when {
                 i <= fullStars -> Icons.Rounded.Star
-                i == fullStars + 1 && hasHalfStar -> Icons.Rounded.StarHalf
+                i == fullStars + 1 && hasHalfStar -> Icons.AutoMirrored.Rounded.StarHalf
                 else -> Icons.Outlined.StarOutline
             }
 

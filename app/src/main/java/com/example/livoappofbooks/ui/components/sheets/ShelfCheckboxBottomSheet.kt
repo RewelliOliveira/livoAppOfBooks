@@ -24,16 +24,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
+import com.example.livoappofbooks.ui.components.CheckboxSelection
 import com.example.livoappofbooks.ui.components.DialogTopBar
 import com.example.livoappofbooks.ui.components.RadioButtonSingleSelection
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookStatusBottomSheet(
+fun ShelfCheckboxBottomSheet(
     options: List<String>,
-    selectedOption: String,
-    onSelectionChange: (String) -> Unit,
+    selectedOptions: List<String>,
+    onSelectionChange: (List<String>) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -53,32 +54,18 @@ fun BookStatusBottomSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             DialogTopBar(
-                title = stringResource(R.string.status_modal_title),
-                subTitle = stringResource(R.string.status_modal_subtitle),
+                title = "Prateleiras",
+                subTitle = "Escolha o status da leitura do seu livro",
                 onDismiss = {
                     scope.launch { sheetState.hide() }
                     onDismiss()
                 }
             )
-
-            RadioButtonSingleSelection(
-                radioOptions = options,
-                selectedOption = selectedOption,
-                onSelectionChange = { option ->
-                    onSelectionChange(option)
-                    scope.launch {
-                        sheetState.hide() // Fecha o bottom sheet
-                        onDismiss()       // Notifica fechamento
-                    }
-                },
-                onDismiss = {
-                    scope.launch {
-                        sheetState.hide()
-                        onDismiss()
-                    }
-                }
+            CheckboxSelection(
+                options = options,
+                selectedOptions = selectedOptions,
+                onSelectionChange = onSelectionChange
             )
-
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
@@ -87,12 +74,12 @@ fun BookStatusBottomSheet(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewBookStatusDialog(){
-    val radioOptions = listOf<String>("Lido", "Lendo", "Quero ler", "Abandonei")
-    var selectedOption by remember { mutableStateOf<String>(radioOptions[0]) }
+fun ShelfCheckboxBottomSheetPreview(){
+    val options = listOf<String>("Romance", "Religião", "Filosofia", "Ficção")
+    var selectedOptions by remember { mutableStateOf(listOf<String>()) }
     Box(){
         Text(text = "hello")
-        BookStatusBottomSheet(options = radioOptions, selectedOption = radioOptions.first(), onSelectionChange = { selectedOption = it}, onDismiss = {})
+        ShelfCheckboxBottomSheet(options = options, selectedOptions = selectedOptions ,onSelectionChange = { selectedOptions = it}, onDismiss = {})
     }
 }
 
