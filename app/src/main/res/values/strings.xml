@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LivoAppOfBooks</string>
+    <string name="status_modal_title">Status do livro</string>
+    <string name="status_modal_subtitle">Escolha o status da leitura do seu livro</string>
 </resources>

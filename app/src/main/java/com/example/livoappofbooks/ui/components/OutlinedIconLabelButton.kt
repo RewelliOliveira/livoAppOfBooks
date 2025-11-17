@@ -1,5 +1,4 @@
 package com.example.livoappofbooks.ui.components
-
 import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
@@ -15,45 +14,40 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.domain.model.BookStatus
+
 @Composable
-fun Status(
-    status: BookStatus,
-    onClick: () -> Unit
+fun OutlinedIconLabelButton(
+    text: String,
+    color: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null
 ) {
-    OutlinedIconLabelButton(
-        text = status.displayName,
-        icon = MarcaPagina,
-        color = status.color,
-        onClick = onClick
-    )
-}
-
-
-
-// --- Preview para visualizar todos os estados ---
-@Preview(showBackground = true, name = "Quero Ler")
-@Composable
-fun StatusPreviewWantToRead() {
-    Status(status = BookStatus.QUERO_LER, onClick = {})
-}
-
-@Preview(showBackground = true, name = "Lendo")
-@Composable
-fun StatusPreviewReading() {
-    Status(status = BookStatus.LENDO, onClick = {})
-}
-
-@Preview(showBackground = true, name = "Lido")
-@Composable
-fun StatusPreviewRead() {
-    Status(status = BookStatus.LIDO, onClick = {})
-}
-
-@Preview(showBackground = true, name = "Abandonado")
-@Composable
-fun StatusPreviewAbandoned() {
-    Status(status = BookStatus.ABANDONADO, onClick = {})
+    OutlinedButton(
+        modifier = modifier
+            .defaultMinSize(minHeight = 40.dp)
+            .heightIn(min = 40.dp),
+        onClick = onClick,
+        border = BorderStroke(2.dp, color),
+        shape = RoundedCornerShape(50)
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = color
+            )
+            Spacer(Modifier.width(6.dp))
+        }
+        Text(
+            text = text,
+            color = color
+        )
+    }
 }
