@@ -29,7 +29,7 @@ import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.Status
 import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.FundoClaro
+import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 @Composable
@@ -48,7 +48,7 @@ fun ViewBook(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(FundoClaro)
+            .background(BackgroundLight)
     ) {
         Box(
             modifier = Modifier
@@ -74,7 +74,7 @@ fun ViewBook(
                     .height(320.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 1f)),
+                            colors = listOf(Color.Transparent, BackgroundLight.copy(alpha = 1f)),
                             startY = 250f
                         )
                     )
@@ -154,7 +154,7 @@ fun ViewBook(
             }
 
             Spacer(Modifier.height(16.dp))
-            Divider(color = Color.LightGray)
+            HorizontalDivider(color = Color.LightGray)
             Spacer(Modifier.height(8.dp))
 
             Row(modifier = Modifier

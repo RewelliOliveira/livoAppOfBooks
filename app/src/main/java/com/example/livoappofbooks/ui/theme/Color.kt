@@ -16,14 +16,3 @@ import androidx.compose.ui.graphics.Color
 @Stable val White = Color(0xFFFFFFFF)
 @Stable val Gray = Color(0xFF808080)
 @Stable val Transparent = Color(0x00000000)
-
-// 💡 Aliases semânticos (uso opcional para clareza de código)
-@Stable val VerdePrincipal = PrincipalColor
-@Stable val VerdeEscuro = DarkColor
-@Stable val TextoSecundario = SubtitlesColor
-@Stable val VerdeClaro = PositiveActions
-@Stable val Vermelho = AlertColor
-@Stable val FundoClaro = BackgroundLight
-@Stable val Preto = Black
-@Stable val Branco = White
-@Stable val Cinza = Gray
