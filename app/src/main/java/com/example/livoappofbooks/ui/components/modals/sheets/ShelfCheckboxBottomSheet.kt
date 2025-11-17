@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.ui.components.sheets
+package com.example.livoappofbooks.ui.components.modals.sheets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,13 +22,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CheckboxSelection
-import com.example.livoappofbooks.ui.components.DialogTopBar
-import com.example.livoappofbooks.ui.components.RadioButtonSingleSelection
+import com.example.livoappofbooks.ui.components.modals.ModalHeader
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +55,7 @@ fun ShelfCheckboxBottomSheet(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            DialogTopBar(
+            ModalHeader(
                 title = "Prateleiras",
                 subTitle = "Escolha o status da leitura do seu livro",
                 onDismiss = {

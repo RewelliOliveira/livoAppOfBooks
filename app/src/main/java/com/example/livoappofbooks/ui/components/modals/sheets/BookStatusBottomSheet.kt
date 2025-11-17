@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.ui.components.sheets
+package com.example.livoappofbooks.ui.components.modals.sheets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
-import com.example.livoappofbooks.ui.components.DialogTopBar
+import com.example.livoappofbooks.ui.components.modals.ModalHeader
 import com.example.livoappofbooks.ui.components.RadioButtonSingleSelection
 import kotlinx.coroutines.launch
 
@@ -52,7 +52,7 @@ fun BookStatusBottomSheet(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            DialogTopBar(
+            ModalHeader(
                 title = stringResource(R.string.status_modal_title),
                 subTitle = stringResource(R.string.status_modal_subtitle),
                 onDismiss = {

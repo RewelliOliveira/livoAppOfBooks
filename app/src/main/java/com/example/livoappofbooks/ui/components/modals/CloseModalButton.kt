@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.ui.components
+package com.example.livoappofbooks.ui.components.modals
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,10 +17,9 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun CornerCloseButton(onDismiss: () -> Unit) {
+fun CloseModalButton(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
-            .size(40.dp) // controla o tamanho total do botão
+        modifier = modifier
             .background(Color(0xFFD9D9D9), shape = CircleShape)
             .clickable(onClick = onDismiss),
         contentAlignment = Alignment.Center
@@ -28,7 +27,6 @@ fun CornerCloseButton(onDismiss: () -> Unit) {
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = "Fechar",
-            modifier = Modifier.size(20.dp), // tamanho real do ícone
             tint = MaterialTheme.colorScheme.primary
         )
     }
