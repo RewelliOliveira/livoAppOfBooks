@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,9 +22,9 @@ import androidx.compose.ui.window.Dialog
 import com.example.livoappofbooks.ui.components.OutlinedIconLabelButton
 
 @Composable
-fun RemoveBookDialog(
+fun ConfirmRemoveBookDialog(
     onDismiss: () -> Unit,
-    onClick: () -> Unit,
+    onConfirm: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Dialog(
@@ -40,7 +38,7 @@ fun RemoveBookDialog(
                 modifier = Modifier
                     .padding(24.dp)
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -58,18 +56,16 @@ fun RemoveBookDialog(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ){
-
                     OutlinedIconLabelButton(
                         text = "Cancelar",
-                        icon = Icons.Default.Book,
                         color = MaterialTheme.colorScheme.secondary,
-                        onClick = onClick
+                        onClick = onDismiss
                     )
                     OutlinedIconLabelButton(
                         text = "Remover",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_trash_bin),
                         color = MaterialTheme.colorScheme.error,
-                        onClick = onClick
+                        onClick = onConfirm
                     )
                 }
             }
@@ -81,8 +77,8 @@ fun RemoveBookDialog(
 @Composable
 fun RemoveBookDialogPreview() {
 
-        RemoveBookDialog(
+        ConfirmRemoveBookDialog(
             onDismiss = {},
-            onClick = {}
+            onConfirm = {}
         )
 }

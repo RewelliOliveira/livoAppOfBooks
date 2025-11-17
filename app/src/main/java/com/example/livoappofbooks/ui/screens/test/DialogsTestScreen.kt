@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.components.modals.dialogs.RatingDialog
+import com.example.livoappofbooks.ui.components.modals.dialogs.ConfirmRemoveBookDialog
 import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.components.modals.sheets.ShelfCheckboxBottomSheet
 
@@ -30,11 +30,14 @@ fun DialogsTestScreen() {
     var showStatusModal by remember { mutableStateOf(false) }
     var showShelfsModal by remember { mutableStateOf(false) }
     var showRatingModal by remember { mutableStateOf(false)}
+    var showDeleteBookModal by remember { mutableStateOf(false)}
     var selectedOption by remember { mutableStateOf("") }
     val radioOptions = listOf("Lido", "Lendo", "Quero ler", "Abandonei")
     val checkboxOptions = listOf<String>("Romance", "Religião", "Filosofia", "Ficção")
     var selectedOptions by remember { mutableStateOf(listOf<String>()) }
     var rating by remember { mutableDoubleStateOf(0.0) }
+    var deleted by remember {mutableStateOf(false)}
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -80,11 +83,23 @@ fun DialogsTestScreen() {
                 style = MaterialTheme.typography.titleLarge
             )
             Button(onClick = { showRatingModal = true }) {
-                Text("Abrir Shelfs Modal")
+                Text("Abrir Rating Modal")
             }
             if (rating != 0.0)
                 Text(
                     text = "Avaliação: $rating"
+                )
+
+            Text(
+                text = "Test Modal DeleteBook",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Button(onClick = { showDeleteBookModal = true }) {
+                Text("Abrir DeleteBook")
+            }
+            if (deleted)
+                Text(
+                    text = "deletado: $deleted"
                 )
         }
     }
@@ -126,5 +141,16 @@ fun DialogsTestScreen() {
                 showRatingModal = false
             }
         )
+    }
+
+    if(showDeleteBookModal){
+        ConfirmRemoveBookDialog(
+            onDismiss = {
+                showDeleteBookModal = false
+            },
+            onConfirm = {
+                deleted = true
+                showDeleteBookModal = false
+            })
     }
 }

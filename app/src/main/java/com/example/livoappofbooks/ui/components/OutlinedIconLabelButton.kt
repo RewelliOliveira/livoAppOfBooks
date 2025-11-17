@@ -23,10 +23,10 @@ import com.example.livoappofbooks.domain.model.BookStatus
 @Composable
 fun OutlinedIconLabelButton(
     text: String,
-    icon: ImageVector,
     color: Color,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null
 ) {
     OutlinedButton(
         modifier = modifier
@@ -36,13 +36,15 @@ fun OutlinedIconLabelButton(
         border = BorderStroke(2.dp, color),
         shape = RoundedCornerShape(50)
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(18.dp),
-            tint = color
-        )
-        Spacer(Modifier.width(6.dp))
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = color
+            )
+            Spacer(Modifier.width(6.dp))
+        }
         Text(
             text = text,
             color = color
