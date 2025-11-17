@@ -13,9 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +40,7 @@ fun Book(
                 .aspectRatio(2f / 3f)
                 .clip(RoundedCornerShape(8.dp))
         ) {
+            /*
             if (!imageUrl.isNullOrEmpty()) {
                 AsyncImage(
                     model = imageUrl,
@@ -62,11 +60,24 @@ fun Book(
                     val LightColor = MaterialTheme.colorScheme.onPrimary //estava dando erro de referência em LightColor, criei a variável apenas para parar de dar o erro.
                     Text(
                         text = "CAPA",
-                        color = LightColor,
+                        color = BackgroundLight,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
                 }
+             */
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(SubtitlesColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "CAPA",
+                    color = BackgroundLight,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
 
@@ -140,6 +151,7 @@ fun Book(
     }
 }
 
+/*
 @Composable
 fun AsyncImage(
     model: String,
@@ -151,3 +163,4 @@ fun AsyncImage(
 ) {
     TODO("Not yet implemented")
 }
+ */

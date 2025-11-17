@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.R
-import com.example.livoappofbooks.ui.theme.FundoClaro
+import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.buttonShape
 
@@ -35,7 +35,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(FundoClaro)
+            .background(BackgroundLight)
     ) {
         Box(
             modifier = Modifier
@@ -59,13 +59,13 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                 Text(
                     text = title,
                     fontSize = 20.sp,
-                    color = FundoClaro,
+                    color = BackgroundLight,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = subTitle,
                     fontSize = 17.sp,
-                    color = FundoClaro
+                    color = BackgroundLight
                 )
             }
 
@@ -82,7 +82,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .background(FundoClaro),
+                .background(BackgroundLight),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -109,7 +109,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                 ) {
                     Text(text = "Entrar",
                         fontSize = 20.sp,
-                        color = FundoClaro)
+                        color = BackgroundLight)
                 }
 
                 Button(
@@ -124,7 +124,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                         ),
                     shape = buttonShape,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = FundoClaro,
+                        containerColor = BackgroundLight,
                     )
                 ) {
                     Text(

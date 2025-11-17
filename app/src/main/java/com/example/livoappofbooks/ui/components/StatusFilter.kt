@@ -3,7 +3,6 @@ package com.example.livoappofbooks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -30,8 +30,8 @@ fun FilterBar(
     val isDarkTheme = themeState.isDarkTheme
 
     val baseLineColor = if (isDarkTheme) Color(0xFF666666) else Color(0xFFB8D5D3)
-    val selectedLineColor = if (isDarkTheme) MaterialTheme.colorScheme.onPrimary else PrincipalColor
-    val selectedTextColor = if (isDarkTheme) MaterialTheme.colorScheme.onPrimary else PrincipalColor
+    val selectedLineColor = if (isDarkTheme) BackgroundLight else PrincipalColor
+    val selectedTextColor = if (isDarkTheme) BackgroundLight else PrincipalColor
     val unselectedTextColor = if (isDarkTheme) Color(0xFFAAAAAA) else Color.Gray
 
     var textPositions by remember { mutableStateOf<Map<String, Pair<Float, IntSize>>>(emptyMap()) }
