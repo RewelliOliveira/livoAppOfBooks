@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,17 +43,19 @@ fun RatingDialog(
                 modifier = Modifier
                     .padding(24.dp)
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 ModalHeader(
                     title = "Avaliação",
                     subTitle = "Dê estrelas para avaliar sua leitura",
-                    onDismiss = onDismiss
+                    onDismiss = { onDismiss() }
                 )
 
                 StarRating(
                     rating = rating,
+                    starSize = 56,
                     onRatingChange = onRatingChange
                 )
             }
@@ -68,7 +71,7 @@ fun RatingDialogPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+            //.background(MaterialTheme.colorScheme.surface)
     ) {
         RatingDialog(
             rating = rating,

@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.ui.components.modals.dialogs.RatingDialog
 import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.components.modals.sheets.ShelfCheckboxBottomSheet
 
@@ -26,11 +29,12 @@ import com.example.livoappofbooks.ui.components.modals.sheets.ShelfCheckboxBotto
 fun DialogsTestScreen() {
     var showStatusModal by remember { mutableStateOf(false) }
     var showShelfsModal by remember { mutableStateOf(false) }
+    var showRatingModal by remember { mutableStateOf(false)}
     var selectedOption by remember { mutableStateOf("") }
     val radioOptions = listOf("Lido", "Lendo", "Quero ler", "Abandonei")
     val checkboxOptions = listOf<String>("Romance", "Religião", "Filosofia", "Ficção")
     var selectedOptions by remember { mutableStateOf(listOf<String>()) }
-
+    var rating by remember { mutableDoubleStateOf(0.0) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,6 +75,17 @@ fun DialogsTestScreen() {
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
+            Text(
+                text = "Test Modal Rating",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Button(onClick = { showRatingModal = true }) {
+                Text("Abrir Shelfs Modal")
+            }
+            if (rating != 0.0)
+                Text(
+                    text = "Avaliação: $rating"
+                )
         }
     }
 
@@ -94,6 +109,21 @@ fun DialogsTestScreen() {
             onSelectionChange = {selectedOptions = it},
             onDismiss = {
                 showShelfsModal = false
+            }
+        )
+    }
+
+    if(showRatingModal){
+        RatingDialog(
+            rating = rating,
+            onRatingChange = { newValue ->
+                rating = if (rating == newValue - 0.5)
+                    newValue
+                else
+                    newValue - 0.5
+            },
+            onDismiss = {
+                showRatingModal = false
             }
         )
     }
