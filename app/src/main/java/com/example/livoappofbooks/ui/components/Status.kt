@@ -18,8 +18,11 @@
     import androidx.compose.ui.tooling.preview.Preview
     import androidx.compose.ui.unit.dp
     import com.example.livoappofbooks.domain.model.BookStatus
+
+    import com.example.livoappofbooks.ui.theme.AppTypography
     @Composable
     fun Status(
+        modifier: Modifier,
         status: BookStatus,
         onClick: () -> Unit
     ) {
@@ -40,33 +43,8 @@
             Spacer(Modifier.width(6.dp))
             Text(
                 text = status.displayName,
-                color = status.color
+                style = AppTypography.titleSmall.copy(color = status.color)
             )
         }
     }
 
-
-    // --- Preview para visualizar todos os estados ---
-    @Preview(showBackground = true, name = "Quero Ler")
-    @Composable
-    fun StatusPreviewWantToRead() {
-        Status(status = BookStatus.QUERO_LER, onClick = {})
-    }
-
-    @Preview(showBackground = true, name = "Lendo")
-    @Composable
-    fun StatusPreviewReading() {
-        Status(status = BookStatus.LENDO, onClick = {})
-    }
-
-    @Preview(showBackground = true, name = "Lido")
-    @Composable
-    fun StatusPreviewRead() {
-        Status(status = BookStatus.LIDO, onClick = {})
-    }
-
-    @Preview(showBackground = true, name = "Abandonado")
-    @Composable
-    fun StatusPreviewAbandoned() {
-        Status(status = BookStatus.ABANDONADO, onClick = {})
-    }
