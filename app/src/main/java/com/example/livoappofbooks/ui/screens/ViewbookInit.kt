@@ -5,21 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +28,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.FundoClaro
+import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 // 1. ADICIONADOS NOVOS PARÂMETROS
@@ -51,7 +48,7 @@ fun ViewBookScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(FundoClaro)
+            .background(BackgroundLight)
     ) {
         Box(
             modifier = Modifier
@@ -61,7 +58,7 @@ fun ViewBookScreen(
         ) {
             AsyncImage(
                 model = imageUrl,
-                placeholder = painterResource(id = R.drawable.livro_teste),
+                //placeholder = painterResource(id = R.drawable.livro_teste),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -77,7 +74,7 @@ fun ViewBookScreen(
                     .height(320.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 1f)),
+                            colors = listOf(Color.Transparent, BackgroundLight.copy(alpha = 1f)),
                             startY = 250f
                         )
                     )
@@ -85,7 +82,7 @@ fun ViewBookScreen(
 
             AsyncImage(
                 model = imageUrl,
-                placeholder = painterResource(id = R.drawable.livro_teste),
+               // placeholder = painterResource(id = R.drawable.livro_teste),
                 contentDescription = title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -157,7 +154,7 @@ fun ViewBookScreen(
             }
 
             Spacer(Modifier.height(24.dp))
-            Divider(color = Color.LightGray.copy(alpha = 0.6f))
+            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.6f))
             Spacer(Modifier.height(16.dp))
 
             Text(
@@ -185,7 +182,7 @@ fun ViewBookScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 0.98f))
+                        colors = listOf(Color.Transparent, BackgroundLight.copy(alpha = 0.98f))
                     )
                 )
                 .padding(16.dp)

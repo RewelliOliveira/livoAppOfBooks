@@ -65,7 +65,7 @@ fun ViewBook(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(FundoClaro)
+            .background(BackgroundLight)
     ) {
 
         Column(

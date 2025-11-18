@@ -27,7 +27,7 @@ import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.buttonShape
 
 @Composable
-fun CadastroScreen() {
+fun RegisterScreen() {
     Scaffold(
         topBar = { Header() },
         bottomBar = { CadastroFooter() }
@@ -129,5 +129,5 @@ fun CadastroFooter() {
 @Preview(showBackground = true)
 @Composable
 private fun CadastroPreview(){
-    CadastroScreen()
+    RegisterScreen()
 }
