@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.ui.screens
 
+import RatingButton
 import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,11 +33,13 @@ import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.components.PrimaryButton
+import com.example.livoappofbooks.ui.components.ProgressBarBook
 import com.example.livoappofbooks.ui.components.Status
 import com.example.livoappofbooks.ui.theme.AlertColor
-import com.example.livoappofbooks.ui.theme.AppTypography
+import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.theme.FundoClaro
-import com.example.livoappofbooks.ui.theme.PrincipalColor@Composable
+import com.example.livoappofbooks.ui.theme.PrincipalColor
+@Composable
 fun ViewBook(
     title: String,
     author: String,
@@ -46,6 +49,7 @@ fun ViewBook(
     publishYear: String,
     publisher: String,
     pageCount: String,
+    status: String,
     shelf: String,
     onBackClick: () -> Unit
 ) {
@@ -157,7 +161,7 @@ fun ViewBook(
                 }
 
                 Spacer(Modifier.height(16.dp))
-                Divider(color = Color.LightGray)
+                Divider(color = Gray)
                 Spacer(Modifier.height(8.dp))
 
                 Row(
@@ -166,16 +170,31 @@ fun ViewBook(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     PrimaryButton(
-                        modifier = Modifier.weight(1f),
-                        text = shelf,
+                        modifier = Modifier.weight(2f),
+                        text = shelf.take(8),
                         onClick = {},
                         icon = Bookshelf
                     )
-                    Spacer(Modifier.width(16.dp))
-                    Status(status = BookStatus.LENDO, onClick = {})
+                    Spacer(Modifier.width(8.dp))
+                    Status(modifier = Modifier.weight(1f), status = BookStatus.fromString(status), onClick = {})
                 }
 
                 Spacer(Modifier.height(16.dp))
+
+                Column(){
+                    PrimaryButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Pencil,
+                        text = "Registrar Leitura",
+                        onClick = {}
+                    )
+                    RatingButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {})
+                }
+
+                Spacer(Modifier.height(16.dp))
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -215,7 +234,7 @@ fun ViewBook(
                             )
                         }
                     }
-                    Spacer(Modifier.height(64.dp))
+                    Spacer(Modifier.height(16.dp))
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
@@ -224,7 +243,7 @@ fun ViewBook(
                             textDecoration = TextDecoration.Underline
                         ),
                         modifier = Modifier
-                            .padding(bottom = 30.dp)
+                            .padding(bottom = 60.dp)
                             .clickable(onClick = {})
                     )
                 }
@@ -235,7 +254,7 @@ fun ViewBook(
             onClick = onBackClick,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(20.dp, 40.dp)
+                .padding(24.dp, 42.dp)
                 .size(16.dp)
                 .background(Color.White, CircleShape)
         ) {
@@ -245,6 +264,13 @@ fun ViewBook(
                 tint = Color.Black,
             )
         }
+        ProgressBarBook(
+            currentPage = 108,
+            totalPages = 240,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+            )
     }
 }
 
@@ -263,6 +289,7 @@ fun ViewBookPreview() {
         publisher = "Bila-Bilu",
         shelf = "Romances",
         pageCount = "240",
+        status = "ABANDONADO",
         onBackClick = {}
     )
 }
