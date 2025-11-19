@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +25,7 @@ fun Book(
     evaluate: Int,
     imageUrl: String? = null
 ) {
-    val themeState = rememberThemeState()
+    val isDark = rememberThemeState().isDarkTheme
 
     Column(
         modifier = Modifier
@@ -34,6 +33,7 @@ fun Book(
             .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,6 +66,8 @@ fun Book(
                     )
                 }
              */
+
+            // Capa temporária
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -90,14 +92,17 @@ fun Book(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
+            // Cores baseadas no status
             val (corFundo, corTexto) = when (status) {
-                "Lido" -> PrincipalColor to Color.White
-                "Lendo" -> DarkColor to Color.White
-                "Quero Ler" -> Color(0xFFF4B61A) to Color.Black
+                "Lido"       -> PrincipalColor to Color.White
+                "Lendo"      -> DarkColor to Color.White
+                "Quero Ler"  -> Color(0xFFF4B61A) to Color.Black
                 "Abandonado" -> SubtitlesColor to Color.White
-                else -> PrincipalColor to Color.White
+                else         -> PrincipalColor to Color.White
             }
 
+            // Caixa do status
             Box(
                 modifier = Modifier
                     .width(83.dp)
@@ -115,9 +120,10 @@ fun Book(
                 )
             }
 
+            // Cor do texto de avaliação ou progresso
+            val infoColor = if (isDark) Color.White else corFundo
 
-            val infoColor = if (themeState.isDarkTheme) Color.White else corFundo
-
+            // Se o livro foi lido → exibe avaliação
             if (status == "Lido") {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -138,6 +144,8 @@ fun Book(
                         modifier = Modifier.size(12.dp)
                     )
                 }
+
+                // Caso contrário → exibe progresso
             } else {
                 Text(
                     text = "$progress%",
@@ -163,4 +171,4 @@ fun AsyncImage(
 ) {
     TODO("Not yet implemented")
 }
- */
+*/

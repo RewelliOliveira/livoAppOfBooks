@@ -36,6 +36,8 @@ data class Livro(
 @Composable
 fun LibraryScreen() {
     val themeState = rememberThemeState()
+    val isDark = themeState.isDarkTheme
+
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
@@ -43,11 +45,10 @@ fun LibraryScreen() {
         Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
         Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"),
         Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/91B2nUwGW+L._AC_UF1000,1000_QL80_.jpg"),
+        Livro("Lido", 100, 5, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
         Livro("Lendo", 30, 0, "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"),
         Livro("Lendo", 50, 0, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Abandonado", 40, 0, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lido", 100, 5, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg")
+        Livro("Abandonado", 40, 0, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg")
     )
 
     val filteredLivros = when (selectedFilter) {
@@ -65,7 +66,6 @@ fun LibraryScreen() {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
 
-            // conteúdo principal (header + filtros + grid)
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,11 +80,7 @@ fun LibraryScreen() {
                 ) {
                     Image(
                         painter = painterResource(
-                            id = if (themeState.isDarkTheme) {
-                                R.drawable.livo_dark
-                            } else {
-                                R.drawable.livo
-                            }
+                            id = if (isDark) R.drawable.livo_dark else R.drawable.livo
                         ),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
@@ -97,7 +93,7 @@ fun LibraryScreen() {
                     IconButton(
                         onClick = { themeState.toggleTheme() }
                     ) {
-                        val iconRes = if (themeState.isDarkTheme) {
+                        val iconRes = if (isDark) {
                             R.drawable.ic_dark_mode
                         } else {
                             R.drawable.ic_light_mode
@@ -105,7 +101,7 @@ fun LibraryScreen() {
 
                         Image(
                             painter = painterResource(id = iconRes),
-                            contentDescription = if (themeState.isDarkTheme) {
+                            contentDescription = if (isDark) {
                                 "Mudar para tema claro"
                             } else {
                                 "Mudar para tema escuro"
@@ -125,9 +121,7 @@ fun LibraryScreen() {
 
                 FilterBar(
                     selectedFilter = selectedFilter,
-                    onFilterSelected = { filter ->
-                        selectedFilter = filter
-                    },
+                    onFilterSelected = { selectedFilter = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 24.dp)
@@ -155,8 +149,7 @@ fun LibraryScreen() {
 
             if (filteredLivros.isEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

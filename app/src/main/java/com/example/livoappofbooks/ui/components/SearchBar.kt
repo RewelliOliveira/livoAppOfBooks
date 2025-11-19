@@ -1,3 +1,7 @@
+// Código atualizado: cores trocadas para MaterialTheme.colorScheme
+// OBS: Este arquivo contém apenas um exemplo iniciando pela SearchBar.
+// Me diga se quer que eu continue atualizando o restante dos componentes.
+
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
@@ -14,14 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.theme.PrincipalColor
-import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun SearchBar(
@@ -29,42 +30,16 @@ fun SearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val themeState = rememberThemeState()
-
-    val backgroundColor = MaterialTheme.colorScheme.background
-
-    val borderColor = if (themeState.isDarkTheme) {
-        Color.White
-    } else {
-        PrincipalColor
-    }
-
-    val textColor = if (themeState.isDarkTheme) {
-        Color.White
-    } else {
-        Color.Black
-    }
-
-    val placeholderColor = if (themeState.isDarkTheme) {
-        Color.White
-    } else {
-        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-    }
-
-    val iconColor = if (themeState.isDarkTheme) {
-        Color.White
-    } else {
-        PrincipalColor
-    }
+    val colors = MaterialTheme.colorScheme
 
     Box(
         modifier = modifier
             .height(41.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(backgroundColor)
+            .background(colors.surface)
             .border(
                 width = 2.dp,
-                color = borderColor,
+                color = colors.onPrimary,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -78,10 +53,10 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = textColor,
+                    color = colors.onSurface,
                     fontSize = 16.sp
                 ),
-                cursorBrush = SolidColor(iconColor),
+                cursorBrush = SolidColor(colors.primary),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -94,11 +69,10 @@ fun SearchBar(
                             Text(
                                 text = "Pesquisar na minha biblioteca",
                                 style = TextStyle(
-                                    fontFamily = null,
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
                                     lineHeight = 10.sp,
-                                    color = placeholderColor
+                                    color = colors.onSurface.copy(alpha = 0.6f)
                                 )
                             )
                         }
@@ -112,7 +86,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
-                tint = iconColor,
+                tint = colors.onPrimary,
                 modifier = Modifier.size(28.dp)
             )
         }

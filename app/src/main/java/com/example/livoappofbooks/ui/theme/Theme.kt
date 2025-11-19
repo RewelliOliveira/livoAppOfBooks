@@ -14,8 +14,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = PrincipalColor,
     secondary = PositiveActions,
     tertiary = SubtitlesColor,
-    background = DarkColor,
-    surface = DarkColor,
+    background = Black,
+    surface = Black,
     error = AlertColor,
     onPrimary = BackgroundLight,
     onSecondary = BackgroundLight,
@@ -32,7 +32,7 @@ private val LightColorScheme = lightColorScheme(
     background = BackgroundLight,
     surface = BackgroundLight,
     error = AlertColor,
-    onPrimary = BackgroundLight,
+    onPrimary = PrincipalColor,
     onSecondary = BackgroundLight,
     onTertiary = DarkColor,
     onBackground = DarkColor,
@@ -75,7 +75,7 @@ fun rememberThemeState(): ThemeState {
 @Composable
 fun LivoAppOfBooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
