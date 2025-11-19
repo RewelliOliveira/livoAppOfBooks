@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 // 🌙 Tema Escuro
@@ -34,7 +33,7 @@ private val LightColorScheme = lightColorScheme(
     error = AlertColor,
     onPrimary = PrincipalColor,
     onSecondary = BackgroundLight,
-    onTertiary = DarkColor,
+    onTertiary = PrincipalColor,
     onBackground = DarkColor,
     onSurface = DarkColor
 )
