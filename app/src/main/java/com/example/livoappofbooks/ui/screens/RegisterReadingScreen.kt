@@ -13,11 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.components.ProgressBarSimple
+import com.example.livoappofbooks.ui.components.SmallInput
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.theme.BackgroundLight
@@ -154,18 +154,20 @@ fun RegisterReadingScreen() {
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                OutlinedTextField(
+                SmallInput(
                     value = "",
                     onValueChange = {},
-                    label = { Text("Título da resenha (opcional)") },
-                    modifier = Modifier.weight(1f)
+                    label = "Título da resenha (opcional)",
+                    modifier = Modifier
+                        .weight(1f)
                 )
 
-                OutlinedTextField(
+                SmallInput(
                     value = "",
                     onValueChange = {},
-                    label = { Text("Pág.") },
-                    modifier = Modifier.width(90.dp)
+                    label = "Pág.",
+                    modifier = Modifier
+                        .width(90.dp)
                 )
             }
 
@@ -175,8 +177,10 @@ fun RegisterReadingScreen() {
                 label = { Text("Escreva sua resenha (opcional)") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(150.dp),
+                shape = RoundedCornerShape(12.dp),
             )
+
         }
     }
 }
