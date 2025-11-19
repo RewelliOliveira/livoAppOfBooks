@@ -1,7 +1,6 @@
 package com.example.livoappofbooks.ui.icons
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathFillType.Companion.NonZero
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
@@ -35,6 +34,48 @@ val Arrow_back_ios_new: ImageVector
 
         return _Arrow_back_ios_new!!
     }
+
+
+val Send: ImageVector
+    get() {
+        if (_Send != null) return _Send!!
+
+        _Send = ImageVector.Builder(
+            name = "Send",
+            defaultWidth = 16.dp,
+            defaultHeight = 16.dp,
+            viewportWidth = 16f,
+            viewportHeight = 16f
+        ).apply {
+            path(
+                fill = SolidColor(Color.White)
+            ) {
+                moveTo(1f, 1.91f)
+                lineTo(1.78f, 1.5f)
+                lineTo(15f, 7.44899f)
+                verticalLineTo(8.3999f)
+                lineTo(1.78f, 14.33f)
+                lineTo(1f, 13.91f)
+                lineTo(2.58311f, 8f)
+                lineTo(1f, 1.91f)
+                close()
+                moveTo(3.6118f, 8.5f)
+                lineTo(2.33037f, 13.1295f)
+                lineTo(13.5f, 7.8999f)
+                lineTo(2.33037f, 2.83859f)
+                lineTo(3.6118f, 7.43874f)
+                lineTo(9f, 7.5f)
+                verticalLineTo(8.5f)
+                horizontalLineTo(3.6118f)
+                close()
+            }
+        }.build()
+
+        return _Send!!
+    }
+
+private var _Send: ImageVector? = null
+
 
 val BuildingLibrary: ImageVector
     get() {
