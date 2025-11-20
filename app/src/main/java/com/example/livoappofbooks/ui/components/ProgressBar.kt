@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -17,19 +18,20 @@ import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarBook(
-    progress: Float,          // valor entre 0f e 1f
     currentPage: Int,         // página atual
     totalPages: Int,          // total de páginas
     modifier: Modifier = Modifier
 ) {
+    val progress = currentPage.toFloat() / totalPages.toFloat()
     val percentage = (progress * 100).toInt()
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(BackgroundLight)
-            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .border(1.dp, PrincipalColor, RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            .background(FundoClaro, RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            .padding(horizontal = 10.dp, vertical = 20.dp)
+
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -77,7 +79,6 @@ fun ProgressBarBook(
 @Composable
 fun PreviewProgressBarBook() {
     ProgressBarBook(
-        progress = 108f / 364f,
         currentPage = 108,
         totalPages = 364
     )

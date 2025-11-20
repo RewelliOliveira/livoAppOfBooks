@@ -19,15 +19,6 @@ import com.example.livoappofbooks.ui.theme.PrincipalColor
 import androidx.compose.material.icons.filled.Add
 import com.example.livoappofbooks.ui.icons.MarcaPagina // Exemplo para o preview
 
-/**
- * Um botão primário reutilizável para o projeto.
- *
- * @param text O texto a ser exibido no botão.
- * @param onClick A ação a ser executada quando o botão for clicado.
- * @param modifier O modificador para customizar o botão.
- * @param icon (Opcional) O ícone a ser exibido à esquerda do texto.
- * @param enabled (Opcional) Define se o botão está ativo ou desativado.
- */
 @Composable
 fun PrimaryButton(
     text: String,
@@ -45,8 +36,7 @@ fun PrimaryButton(
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .defaultMinSize(minHeight = 40.dp) // 👈 mesma altura do Status
-            .heightIn(min = 40.dp)              // garante consistência visual
+            .defaultMinSize(minHeight = 40.dp)
             .shadow(
                 elevation = if (enabled) 4.dp else 0.dp,
                 shape = RoundedCornerShape(50)
@@ -57,7 +47,7 @@ fun PrimaryButton(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color.White,
-                modifier = Modifier.size(18.dp) // 👈 mesmo tamanho do ícone do Status
+                modifier = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(8.dp))
         }
@@ -78,7 +68,7 @@ fun PrimaryButtonWithIconPreview() {
         PrimaryButton(
             text = "Adicionar à biblioteca",
             onClick = {},
-            icon = Icons.Default.Add // Usando o ícone do seu código original
+            icon = Icons.Default.Add
         )
     }
 }

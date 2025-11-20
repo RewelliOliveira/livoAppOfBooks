@@ -352,6 +352,232 @@ val Bookshelf: ImageVector
         return _Bookshelf!!
     }
 
+val Star: ImageVector
+    get() {
+        if (_Star != null) return _Star!!
+
+        _Star = ImageVector.Builder(
+            name = "Star",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(11.4806f, 3.4987f)
+                curveTo(11.6728f, 3.03673f, 12.3272f, 3.03673f, 12.5193f, 3.4987f)
+                lineTo(14.6453f, 8.61016f)
+                curveTo(14.7263f, 8.80492f, 14.9095f, 8.93799f, 15.1197f, 8.95485f)
+                lineTo(20.638f, 9.39724f)
+                curveTo(21.1367f, 9.43722f, 21.339f, 10.0596f, 20.959f, 10.3851f)
+                lineTo(16.7546f, 13.9866f)
+                curveTo(16.5945f, 14.1238f, 16.5245f, 14.3391f, 16.5734f, 14.5443f)
+                lineTo(17.8579f, 19.9292f)
+                curveTo(17.974f, 20.4159f, 17.4446f, 20.8005f, 17.0176f, 20.5397f)
+                lineTo(12.2932f, 17.6541f)
+                curveTo(12.1132f, 17.5441f, 11.8868f, 17.5441f, 11.7068f, 17.6541f)
+                lineTo(6.98238f, 20.5397f)
+                curveTo(6.55539f, 20.8005f, 6.02594f, 20.4159f, 6.14203f, 19.9292f)
+                lineTo(7.42652f, 14.5443f)
+                curveTo(7.47546f, 14.3391f, 7.4055f, 14.1238f, 7.24531f, 13.9866f)
+                lineTo(3.04099f, 10.3851f)
+                curveTo(2.661f, 10.0596f, 2.86323f, 9.43722f, 3.36197f, 9.39724f)
+                lineTo(8.88022f, 8.95485f)
+                curveTo(9.09048f, 8.93799f, 9.27363f, 8.80492f, 9.35464f, 8.61016f)
+                lineTo(11.4806f, 3.4987f)
+                close()
+            }
+        }.build()
+
+        return _Star!!
+    }
+
+val StarHalf: ImageVector
+    get() {
+        if (_StarHalf != null) return _StarHalf!!
+
+        _StarHalf = ImageVector.Builder(
+            name = "StarHalf",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+
+            // --- Metade esquerda preenchida ---
+            path(
+                fill = SolidColor(Color(0xFF0F172A)),
+                stroke = null
+            ) {
+                moveTo(11.4806f, 3.4987f)
+                curveTo(11.6728f, 3.03673f, 12.3272f, 3.03673f, 12.5193f, 3.4987f)
+                lineTo(12.5193f, 17.6541f)
+                lineTo(11.7068f, 17.6541f)
+                lineTo(6.98238f, 20.5397f)
+                lineTo(7.42652f, 14.5443f)
+                lineTo(3.04099f, 10.3851f)
+                lineTo(8.88022f, 8.95485f)
+                lineTo(11.4806f, 3.4987f)
+                close()
+            }
+
+            // --- Contorno completo igual ao Star original ---
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(11.4806f, 3.4987f)
+                curveTo(11.6728f, 3.03673f, 12.3272f, 3.03673f, 12.5193f, 3.4987f)
+                lineTo(14.6453f, 8.61016f)
+                curveTo(14.7263f, 8.80492f, 14.9095f, 8.93799f, 15.1197f, 8.95485f)
+                lineTo(20.638f, 9.39724f)
+                curveTo(21.1367f, 9.43722f, 21.339f, 10.0596f, 20.959f, 10.3851f)
+                lineTo(16.7546f, 13.9866f)
+                curveTo(16.5945f, 14.1238f, 16.5245f, 14.3391f, 16.5734f, 14.5443f)
+                lineTo(17.8579f, 19.9292f)
+                curveTo(17.974f, 20.4159f, 17.4446f, 20.8005f, 17.0176f, 20.5397f)
+                lineTo(12.2932f, 17.6541f)
+                curveTo(12.1132f, 17.5441f, 11.8868f, 17.5441f, 11.7068f, 17.6541f)
+                lineTo(6.98238f, 20.5397f)
+                curveTo(6.55539f, 20.8005f, 6.02594f, 20.4159f, 6.14203f, 19.9292f)
+                lineTo(7.42652f, 14.5443f)
+                curveTo(7.47546f, 14.3391f, 7.4055f, 14.1238f, 7.24531f, 13.9866f)
+                lineTo(3.04099f, 10.3851f)
+                curveTo(2.661f, 10.0596f, 2.86323f, 9.43722f, 3.36197f, 9.39724f)
+                lineTo(8.88022f, 8.95485f)
+                curveTo(9.09048f, 8.93799f, 9.27363f, 8.80492f, 9.35464f, 8.61016f)
+                lineTo(11.4806f, 3.4987f)
+                close()
+            }
+
+        }.build()
+
+        return _StarHalf!!
+    }
+
+val StarFull: ImageVector
+    get() {
+        if (_StarFull != null) return _StarFull!!
+
+        _StarFull = ImageVector.Builder(
+            name = "StarFull",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+
+            path(
+                fill = SolidColor(Color(0xFF0F172A)),
+                stroke = null
+            ) {
+                moveTo(11.4806f, 3.4987f)
+                curveTo(11.6728f, 3.03673f, 12.3272f, 3.03673f, 12.5193f, 3.4987f)
+                lineTo(14.6453f, 8.61016f)
+                curveTo(14.7263f, 8.80492f, 14.9095f, 8.93799f, 15.1197f, 8.95485f)
+                lineTo(20.638f, 9.39724f)
+                curveTo(21.1367f, 9.43722f, 21.339f, 10.0596f, 20.959f, 10.3851f)
+                lineTo(16.7546f, 13.9866f)
+                curveTo(16.5945f, 14.1238f, 16.5245f, 14.3391f, 16.5734f, 14.5443f)
+                lineTo(17.8579f, 19.9292f)
+                curveTo(17.974f, 20.4159f, 17.4446f, 20.8005f, 17.0176f, 20.5397f)
+                lineTo(12.2932f, 17.6541f)
+                curveTo(12.1132f, 17.5441f, 11.8868f, 17.5441f, 11.7068f, 17.6541f)
+                lineTo(6.98238f, 20.5397f)
+                curveTo(6.55539f, 20.8005f, 6.02594f, 20.4159f, 6.14203f, 19.9292f)
+                lineTo(7.42652f, 14.5443f)
+                curveTo(7.47546f, 14.3391f, 7.4055f, 14.1238f, 7.24531f, 13.9866f)
+                lineTo(3.04099f, 10.3851f)
+                curveTo(2.661f, 10.0596f, 2.86323f, 9.43722f, 3.36197f, 9.39724f)
+                lineTo(8.88022f, 8.95485f)
+                curveTo(9.09048f, 8.93799f, 9.27363f, 8.80492f, 9.35464f, 8.61016f)
+                lineTo(11.4806f, 3.4987f)
+                close()
+            }
+
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round,
+                fill = null
+            ) {
+                moveTo(11.4806f, 3.4987f)
+                curveTo(11.6728f, 3.03673f, 12.3272f, 3.03673f, 12.5193f, 3.4987f)
+                lineTo(14.6453f, 8.61016f)
+                curveTo(14.7263f, 8.80492f, 14.9095f, 8.93799f, 15.1197f, 8.95485f)
+                lineTo(20.638f, 9.39724f)
+                curveTo(21.1367f, 9.43722f, 21.339f, 10.0596f, 20.959f, 10.3851f)
+                lineTo(16.7546f, 13.9866f)
+                curveTo(16.5945f, 14.1238f, 16.5245f, 14.3391f, 16.5734f, 14.5443f)
+                lineTo(17.8579f, 19.9292f)
+                curveTo(17.974f, 20.4159f, 17.4446f, 20.8005f, 17.0176f, 20.5397f)
+                lineTo(12.2932f, 17.6541f)
+                curveTo(12.1132f, 17.5441f, 11.8868f, 17.5441f, 11.7068f, 17.6541f)
+                lineTo(6.98238f, 20.5397f)
+                curveTo(6.55539f, 20.8005f, 6.02594f, 20.4159f, 6.14203f, 19.9292f)
+                lineTo(7.42652f, 14.5443f)
+                curveTo(7.47546f, 14.3391f, 7.4055f, 14.1238f, 7.24531f, 13.9866f)
+                lineTo(3.04099f, 10.3851f)
+                curveTo(2.661f, 10.0596f, 2.86323f, 9.43722f, 3.36197f, 9.39724f)
+                lineTo(8.88022f, 8.95485f)
+                curveTo(9.09048f, 8.93799f, 9.27363f, 8.80492f, 9.35464f, 8.61016f)
+                lineTo(11.4806f, 3.4987f)
+                close()
+            }
+
+        }.build()
+
+        return _StarFull!!
+    }
+
+val Pencil: ImageVector
+    get() {
+        if (_Pencil != null) return _Pencil!!
+
+        _Pencil = ImageVector.Builder(
+            name = "Pencil",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(16.8617f, 4.48667f)
+                lineTo(18.5492f, 2.79917f)
+                curveTo(19.2814f, 2.06694f, 20.4686f, 2.06694f, 21.2008f, 2.79917f)
+                curveTo(21.9331f, 3.53141f, 21.9331f, 4.71859f, 21.2008f, 5.45083f)
+                lineTo(6.83218f, 19.8195f)
+                curveTo(6.30351f, 20.3481f, 5.65144f, 20.7368f, 4.93489f, 20.9502f)
+                lineTo(2.25f, 21.75f)
+                lineTo(3.04978f, 19.0651f)
+                curveTo(3.26323f, 18.3486f, 3.65185f, 17.6965f, 4.18052f, 17.1678f)
+                lineTo(16.8617f, 4.48667f)
+                close()
+                moveTo(16.8617f, 4.48667f)
+                lineTo(19.5f, 7.12499f)
+            }
+        }.build()
+
+        return _Pencil!!
+    }
+
+private var _Pencil: ImageVector? = null
+private var _StarFull: ImageVector? = null
+private var _StarHalf: ImageVector? = null
+private var _Star: ImageVector? = null
 private var _Bookshelf: ImageVector? = null
 private var _MarcaPagina: ImageVector? = null
 private var _Language: ImageVector? = null
