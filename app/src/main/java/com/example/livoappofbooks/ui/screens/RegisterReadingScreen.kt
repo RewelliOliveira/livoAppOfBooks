@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Save
-import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,16 +14,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.components.ProgressBarSimple
-import com.example.livoappofbooks.ui.components.SmallInput
-import com.example.livoappofbooks.ui.components.StarRating
+import com.example.livoappofbooks.ui.components.*
+import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.Send
 import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterReadingScreen() {
+
+    var titulo by remember { mutableStateOf("") }
+    var paginas by remember { mutableStateOf("") }
+    var resenha by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -53,15 +55,15 @@ fun RegisterReadingScreen() {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    OutlinedButton(onClick = { }) {
-                        Text("Cancelar")
-                    }
+                    OutlinedIconLabelButton(
+                        text = "Cancelar",
+                        onClick = {},
+                        color = PrincipalColor,
+                    )
 
-                    Button(onClick = { }) {
-                        Icon(Icons.Default.Save, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Salvar")
-                    }
+                    PrimaryButton(
+                        text = "Salvar", onClick = {}, icon = Send
+                    )
                 }
             }
         }) { innerPadding ->
@@ -90,9 +92,8 @@ fun RegisterReadingScreen() {
 
                 Spacer(Modifier.width(16.dp))
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
                     Text(
                         "As Estrelas do Amanhã", fontWeight = FontWeight.Bold, fontSize = 18.sp
                     )
@@ -105,13 +106,12 @@ fun RegisterReadingScreen() {
                             "Marina Alves",
                             fontSize = 14.sp,
                             color = Color.Gray,
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f)
                         )
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = BookOpen,
-                                contentDescription = "Livro aberto"
+                                imageVector = BookOpen, contentDescription = "Livro aberto"
                             )
                             Text("367 pags.", fontSize = 12.sp)
                         }
@@ -120,67 +120,61 @@ fun RegisterReadingScreen() {
                     Spacer(Modifier.width(30.dp))
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             "Lendo",
+                            fontSize = 12.sp,
                             color = BackgroundLight,
                             modifier = Modifier
                                 .background(
-                                    PrincipalColor,
-                                    RoundedCornerShape(30.dp)
+                                    PrincipalColor, RoundedCornerShape(30.dp)
                                 )
-                                .padding(horizontal = 8.dp, vertical = 3.dp),
+                                .padding(horizontal = 30.dp, vertical = 3.dp)
                         )
 
                         StarRating(
-                            rating = 3.5,
-                            maxStars = 5,
-                            starSize = 20,
+                            rating = 3.5, maxStars = 5, starSize = 20
                         )
                     }
                 }
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ProgressBarSimple(
-                    progress = 0.7f,
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ProgressBarSimple(progress = 0.7f)
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 
                 SmallInput(
-                    value = "",
-                    onValueChange = {},
+                    value = titulo,
+                    onValueChange = { titulo = it },
                     label = "Título da resenha (opcional)",
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 )
 
                 SmallInput(
-                    value = "",
-                    onValueChange = {},
+                    value = paginas,
+                    onValueChange = {
+                        if (it.all { char -> char.isDigit() }) {
+                            paginas = it
+                        }
+                    },
                     label = "Pág.",
-                    modifier = Modifier
-                        .width(90.dp)
+                    modifier = Modifier.width(90.dp)
                 )
             }
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = resenha,
+                onValueChange = { resenha = it },
                 label = { Text("Escreva sua resenha (opcional)") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp),
                 shape = RoundedCornerShape(12.dp),
             )
-
         }
     }
 }

@@ -20,10 +20,11 @@ fun SmallInput(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label, fontSize = 14.sp) },
-        modifier = modifier.height(43.dp),
+        label = { Text(label, fontSize = 13.sp) },
+        modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         singleLine = true,
-        textStyle = LocalTextStyle.current.copy(fontSize = 14.sp)
+        textStyle = LocalTextStyle.current.copy(fontSize = 16.sp)
     )
 }
+
