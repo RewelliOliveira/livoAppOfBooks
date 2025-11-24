@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.Close_small
 import com.example.livoappofbooks.ui.icons.Send
 import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.PrincipalColor
@@ -52,17 +53,23 @@ fun RegisterReadingScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     OutlinedIconLabelButton(
                         text = "Cancelar",
                         onClick = {},
                         color = PrincipalColor,
+                        icon = Close_small,
+                        modifier = Modifier.weight(1f)
                     )
 
                     PrimaryButton(
-                        text = "Salvar", onClick = {}, icon = Send
+                        text = "Salvar",
+                        onClick = {},
+                        icon = Send,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
