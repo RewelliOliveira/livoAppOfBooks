@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.livoappofbooks.ui.screens.LibraryScreen
+import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.test.DialogsTestScreen
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.theme.rememberThemeState
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ThemeProvider {
                 ConfigureSystemBarsForTheme()
-                DialogsTestScreen()
+                RegisterReadingScreen()
             }
         }
     }
