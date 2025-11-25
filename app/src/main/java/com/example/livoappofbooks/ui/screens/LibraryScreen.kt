@@ -34,7 +34,7 @@ data class Livro(
 )
 
 @Composable
-fun LibraryScreen() {
+fun LibraryScreen(onNavigate: () -> Unit) {
     val themeState = rememberThemeState()
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }

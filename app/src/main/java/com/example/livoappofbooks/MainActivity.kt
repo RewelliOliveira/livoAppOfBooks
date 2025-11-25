@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
-import com.example.livoappofbooks.ui.screens.test.DialogsTestScreen
+import com.example.livoappofbooks.navigation.AppNavigation
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -23,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ThemeProvider {
                 ConfigureSystemBarsForTheme()
-                RegisterReadingScreen()
+                AppNavigation()
             }
         }
     }
@@ -38,7 +37,6 @@ fun ConfigureSystemBarsForTheme() {
         val window = (view.context as ComponentActivity).window
 
         WindowCompat.getInsetsController(window, view).apply {
-            // Ícones pretos no modo claro, brancos no modo escuro
             isAppearanceLightStatusBars = !themeState.isDarkTheme
             isAppearanceLightNavigationBars = !themeState.isDarkTheme
         }

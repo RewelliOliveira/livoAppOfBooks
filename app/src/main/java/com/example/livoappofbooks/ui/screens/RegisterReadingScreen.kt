@@ -24,7 +24,7 @@ import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterReadingScreen() {
+fun RegisterReadingScreen(onNavigate: () -> Unit) {
 
     var titulo by remember { mutableStateOf("") }
     var paginas by remember { mutableStateOf("") }
@@ -189,5 +189,5 @@ fun RegisterReadingScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterReadingScreen() {
-    RegisterReadingScreen()
+    RegisterReadingScreen( onNavigate = {})
 }
