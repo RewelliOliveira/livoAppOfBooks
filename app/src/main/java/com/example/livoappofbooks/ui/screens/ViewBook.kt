@@ -5,19 +5,17 @@ import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,15 +28,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.domain.model.BookStatus
-import com.example.livoappofbooks.ui.components.StarRating
-import com.example.livoappofbooks.ui.components.InfoItem
-import com.example.livoappofbooks.ui.components.PrimaryButton
-import com.example.livoappofbooks.ui.components.ProgressBarBook
-import com.example.livoappofbooks.ui.components.Status
-import com.example.livoappofbooks.ui.theme.AlertColor
+import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.theme.*
-import com.example.livoappofbooks.ui.theme.FundoClaro
-import com.example.livoappofbooks.ui.theme.PrincipalColor
+
 @Composable
 fun ViewBook(
     title: String,
@@ -51,38 +43,35 @@ fun ViewBook(
     pageCount: String,
     status: String,
     shelf: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
 
-    val displayedSinopse =
-        if (isExpanded.value || !shouldTruncate) sinopse
-        else sinopse.take(previewLimit) + "..."
+    val displayedSinopse = if (isExpanded.value || !shouldTruncate) sinopse
+    else sinopse.take(previewLimit) + "..."
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundLight)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(350.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
-
                 AsyncImage(
-                    model = imageUrl,
+                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
                     placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -93,21 +82,20 @@ fun ViewBook(
                         .shadow(20.dp)
                 )
 
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(320.dp)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 1f)),
+                                colors = listOf(Color.Transparent, White.copy(alpha = 1f)),
                                 startY = 250f
                             )
                         )
                 )
 
                 AsyncImage(
-                    model = imageUrl,
+                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
                     placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
@@ -118,14 +106,12 @@ fun ViewBook(
                         .shadow(16.dp, RoundedCornerShape(8.dp))
                         .align(Alignment.BottomCenter)
                 )
-
             }
 
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 Spacer(Modifier.height(16.dp))
 
                 Row(verticalAlignment = Alignment.Bottom) {
@@ -176,21 +162,26 @@ fun ViewBook(
                         icon = Bookshelf
                     )
                     Spacer(Modifier.width(8.dp))
-                    Status(modifier = Modifier.weight(1f), status = BookStatus.fromString(status), onClick = {})
+                    Status(
+                        modifier = Modifier.weight(1f),
+                        status = BookStatus.fromString(status),
+                        onClick = {}
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
 
-                Column(){
+                Column {
                     PrimaryButton(
                         modifier = Modifier.fillMaxWidth(),
                         icon = Pencil,
                         text = "Registrar Leitura",
-                        onClick = {}
+                        onClick = onRegisterClick
                     )
                     RatingButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = {})
+                        onClick = {}
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -202,10 +193,7 @@ fun ViewBook(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Sinopse",
                             style = AppTypography.titleMedium.copy(
@@ -264,17 +252,16 @@ fun ViewBook(
                 tint = Color.Black,
             )
         }
+
         ProgressBarBook(
             currentPage = 108,
             totalPages = 240,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-            )
+        )
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
@@ -283,13 +270,14 @@ fun ViewBookPreview() {
         title = "Peter Pan in Wonderland",
         author = "Samira Sales",
         rate = 3.7,
-        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguem ficar fazendo zuada no meu pé do ouvido",
+        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguém ficar fazendo zuada no meu pé do ouvido",
         imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
         publishYear = "2025",
         publisher = "Bila-Bilu",
         shelf = "Romances",
         pageCount = "240",
         status = "ABANDONADO",
-        onBackClick = {}
+        onBackClick = {},
+        onRegisterClick = {}
     )
 }

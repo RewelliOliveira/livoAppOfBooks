@@ -34,7 +34,10 @@ data class Livro(
 )
 
 @Composable
-fun LibraryScreen() {
+fun LibraryScreen(
+    onNavigate: () -> Unit,
+    onBookClick: (Livro) -> Unit
+) {
     val themeState = rememberThemeState()
     val isDark = themeState.isDarkTheme
 
@@ -42,13 +45,48 @@ fun LibraryScreen() {
     var selectedFilter by remember { mutableStateOf("Todos") }
 
     val livrosMock = listOf(
-        Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lido", 100, 4, "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lido", 100, 5, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lendo", 30, 0, "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Lendo", 50, 0, "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"),
-        Livro("Abandonado", 40, 0, "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg")
+        Livro(
+            "Lido",
+            100,
+            4,
+            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Lido",
+            100,
+            4,
+            "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Lido",
+            100,
+            4,
+            "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Lido",
+            100,
+            5,
+            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Lendo",
+            30,
+            0,
+            "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Lendo",
+            50,
+            0,
+            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
+        ),
+        Livro(
+            "Abandonado",
+            40,
+            0,
+            "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
+        )
     )
 
     val filteredLivros = when (selectedFilter) {
@@ -139,7 +177,8 @@ fun LibraryScreen() {
                                     status = livro.status,
                                     progress = livro.progress,
                                     evaluate = livro.evaluate,
-                                    imageUrl = livro.imageUrl
+                                    imageUrl = livro.imageUrl,
+                                    onClick = { onBookClick(livro) } // <-- função que vamos definir
                                 )
                             }
                         }

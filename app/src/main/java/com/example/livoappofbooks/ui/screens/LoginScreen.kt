@@ -4,6 +4,7 @@ import com.example.livoappofbooks.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,20 +18,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.components.Input
+import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.components.shapes.TopDiagonalShape
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.buttonShape
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onBackClick: () -> Unit
+) {
     Scaffold(
-        topBar = { Header() },
-        bottomBar = { Footer() }
+        topBar = { Header(onBackClick) },
+        bottomBar = { Footer(onLoginSuccess) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -43,9 +46,11 @@ fun LoginScreen() {
     }
 }
 
-
 @Composable
-private fun Header(modifier: Modifier = Modifier){
+private fun Header(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -57,7 +62,9 @@ private fun Header(modifier: Modifier = Modifier){
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
             tint = Color(0xFF003D3A),
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable { onBackClick() }
         )
 
         Image(
@@ -69,7 +76,7 @@ private fun Header(modifier: Modifier = Modifier){
 }
 
 @Composable
-private fun Main(modifier: Modifier = Modifier){
+private fun Main(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     Spacer(modifier = modifier.height(30.dp))
     Text(
@@ -85,12 +92,10 @@ private fun Main(modifier: Modifier = Modifier){
     Spacer(modifier = Modifier.height(30.dp))
     Input("E-mail ou usuario")
     Input("Digite sua senha")
-
 }
 
-
 @Composable
-fun Footer() {
+fun Footer(onLoginSuccess: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,7 +104,7 @@ fun Footer() {
             .background(Color(0xFF003D3A))
     ) {
         Button(
-            onClick = {},
+            onClick = onLoginSuccess,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -123,10 +128,4 @@ fun Footer() {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LoginPreview(){
-    LoginScreen()
 }

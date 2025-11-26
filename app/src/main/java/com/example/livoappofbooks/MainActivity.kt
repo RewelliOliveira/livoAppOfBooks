@@ -6,10 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
-import com.example.livoappofbooks.ui.screens.test.DialogsTestScreen
+import com.example.livoappofbooks.navigation.AppNavigation
+import com.example.livoappofbooks.ui.screens.InitialScreen
+import com.example.livoappofbooks.ui.screens.LoginScreen
+import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -23,9 +29,34 @@ class MainActivity : ComponentActivity() {
         setContent {
             ThemeProvider {
                 ConfigureSystemBarsForTheme()
-                RegisterReadingScreen()
+                RootNavigation()
             }
         }
+    }
+}
+
+@Composable
+fun RootNavigation() {
+    var currentScreen by remember { mutableStateOf("initial") }
+
+    when (currentScreen) {
+        "initial" -> InitialScreen(
+            title = "Organize suas leituras com o Livo!",
+            subTitle = "Selecione uma das opções para continuar",
+            onLoginClick = { currentScreen = "login" },
+            onRegisterClick = { currentScreen = "register" })
+
+        "login" -> LoginScreen(
+            onLoginSuccess = { currentScreen = "app" },
+            onBackClick = { currentScreen = "initial" }
+        )
+
+        "register" -> RegisterScreen(
+            onBackClick = { currentScreen = "initial" },
+            onRegisterComplete = { currentScreen = "initial" }
+        )
+
+        "app" -> AppNavigation()
     }
 }
 
@@ -38,7 +69,6 @@ fun ConfigureSystemBarsForTheme() {
         val window = (view.context as ComponentActivity).window
 
         WindowCompat.getInsetsController(window, view).apply {
-            // Ícones pretos no modo claro, brancos no modo escuro
             isAppearanceLightStatusBars = !themeState.isDarkTheme
             isAppearanceLightNavigationBars = !themeState.isDarkTheme
         }

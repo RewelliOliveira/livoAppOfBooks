@@ -27,7 +27,6 @@ fun RadioButtonSingleSelection(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Garante acessibilidade adequada
     Column(modifier.selectableGroup()) {
         radioOptions.forEach { text ->
             Row(
@@ -45,7 +44,7 @@ fun RadioButtonSingleSelection(
             ) {
                 RadioButton(
                     selected = (text == selectedOption),
-                    onClick = null, // null recomendado p/ acessibilidade
+                    onClick = null,
                     colors = RadioButtonDefaults.colors(
                         selectedColor = MaterialTheme.colorScheme.primary,
                         unselectedColor = Color.Gray

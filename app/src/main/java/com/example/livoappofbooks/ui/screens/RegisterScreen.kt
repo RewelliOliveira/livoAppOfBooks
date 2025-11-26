@@ -4,6 +4,7 @@ import com.example.livoappofbooks.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
@@ -27,10 +27,13 @@ import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.buttonShape
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    onBackClick: () -> Unit,
+    onRegisterComplete: () -> Unit
+) {
     Scaffold(
-        topBar = { Header() },
-        bottomBar = { CadastroFooter() }
+        topBar = { Header(onBackClick) },
+        bottomBar = { CadastroFooter(onRegisterComplete) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -43,21 +46,21 @@ fun RegisterScreen() {
     }
 }
 
-
 @Composable
-private fun Header(modifier: Modifier = Modifier){
+private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(50.dp)
     ) {
-
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
             tint = Color(0xFF003D3A),
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable { onBackClick() }
         )
 
         Image(
@@ -69,7 +72,7 @@ private fun Header(modifier: Modifier = Modifier){
 }
 
 @Composable
-private fun Main(modifier: Modifier = Modifier){
+private fun Main(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf("") }
     Spacer(modifier = modifier.height(30.dp))
     Text(
@@ -89,9 +92,8 @@ private fun Main(modifier: Modifier = Modifier){
     Input("Confirme sua senha")
 }
 
-
 @Composable
-fun CadastroFooter() {
+fun CadastroFooter(onRegisterComplete: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +102,7 @@ fun CadastroFooter() {
             .background(Color(0xFF003D3A))
     ) {
         Button(
-            onClick = {},
+            onClick = { onRegisterComplete() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -124,10 +126,4 @@ fun CadastroFooter() {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CadastroPreview(){
-    RegisterScreen()
 }
