@@ -3,6 +3,7 @@ package com.example.livoappofbooks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,8 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.theme.BackgroundLight
-import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
@@ -26,26 +25,21 @@ fun FilterBar(
     modifier: Modifier = Modifier
 ) {
     val filters = listOf("Todos", "Lendo", "Lido", "Quero Ler", "Abandonado")
-    val themeState = rememberThemeState()
-    val isDarkTheme = themeState.isDarkTheme
 
-    val baseLineColor = if (isDarkTheme) Color(0xFF666666) else Color(0xFFB8D5D3)
-    val selectedLineColor = if (isDarkTheme) BackgroundLight else PrincipalColor
-    val selectedTextColor = if (isDarkTheme) BackgroundLight else PrincipalColor
-    val unselectedTextColor = if (isDarkTheme) Color(0xFFAAAAAA) else Color.Gray
+    val isDark = rememberThemeState().isDarkTheme
+    val cs = MaterialTheme.colorScheme
 
     var textPositions by remember { mutableStateOf<Map<String, Pair<Float, IntSize>>>(emptyMap()) }
     var rowWidth by remember { mutableStateOf(0) }
     val density = LocalDensity.current
 
     Column(modifier = modifier.fillMaxWidth()) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .onGloballyPositioned { coordinates ->
-                    rowWidth = coordinates.size.width
-                },
+                .onGloballyPositioned { rowWidth = it.size.width },
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -54,7 +48,10 @@ fun FilterBar(
                     text = filter,
                     fontSize = 14.sp,
                     fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal,
-                    color = if (selectedFilter == filter) selectedTextColor else unselectedTextColor,
+                    color = if (selectedFilter == filter)
+                        if (isDark) cs.onBackground else cs.primary
+                    else
+                        if (isDark) Color(0xFFAAAAAA) else Color.Gray,
                     modifier = Modifier
                         .clickable { onFilterSelected(filter) }
                         .onGloballyPositioned {
@@ -69,31 +66,26 @@ fun FilterBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(baseLineColor)
+                    .background(if (isDark) Color(0xFF666666) else Color(0xFFB8D5D3))
             )
 
             textPositions[selectedFilter]?.let { (xPx, sizePx) ->
-                val currentIndex = filters.indexOf(selectedFilter)
 
-                val left = when (currentIndex) {
+                val index = filters.indexOf(selectedFilter)
+
+                val left = when (index) {
                     0 -> 0f
                     else -> {
-                        val prev = filters[currentIndex - 1]
-                        val prevData = textPositions[prev]
-                        if (prevData != null)
-                            (prevData.first + prevData.second.width + xPx) / 2f
-                        else xPx
+                        val prev = textPositions[filters[index - 1]]
+                        if (prev != null) (prev.first + prev.second.width + xPx) / 2f else xPx
                     }
                 }
 
-                val right = when (currentIndex) {
-                    filters.lastIndex -> rowWidth.toFloat() // fim real do Row
+                val right = when (index) {
+                    filters.lastIndex -> rowWidth.toFloat()
                     else -> {
-                        val next = filters[currentIndex + 1]
-                        val nextData = textPositions[next]
-                        if (nextData != null)
-                            (xPx + sizePx.width + nextData.first) / 2f
-                        else xPx + sizePx.width
+                        val next = textPositions[filters[index + 1]]
+                        if (next != null) (xPx + sizePx.width + next.first) / 2f else xPx + sizePx.width
                     }
                 }
 
@@ -102,7 +94,7 @@ fun FilterBar(
                         .offset(x = with(density) { left.toDp() })
                         .width(with(density) { (right - left).toDp() })
                         .height(2.dp)
-                        .background(selectedLineColor)
+                        .background(if (isDark) cs.onBackground else cs.primary)
                 )
             }
         }
