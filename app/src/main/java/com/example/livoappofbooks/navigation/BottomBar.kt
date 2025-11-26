@@ -56,6 +56,8 @@ fun BottomBar(navController: NavController) {
                                 modifier = Modifier.size(25.dp)
                             )
                         }
+
+                        else -> {}
                     }
                 },
                 label = {

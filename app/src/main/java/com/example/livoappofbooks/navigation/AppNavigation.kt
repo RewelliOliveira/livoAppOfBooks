@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
+import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
 fun AppNavigation() {
@@ -26,15 +27,37 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
 
+            // Tela da Biblioteca
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    onNavigate = { navController.navigate(Screen.Profile.route) }
+                    onNavigate = { navController.navigate(Screen.Profile.route) },
+                    onBookClick = { livro ->
+                        // Aqui navegamos para a tela de visualização do livro
+                        navController.navigate(Screen.ViewBook.route)
+                    }
                 )
             }
 
+            // Tela de Perfil
             composable(Screen.Profile.route) {
                 ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) }
+                )
+            }
+
+            composable(Screen.ViewBook.route) {
+                ViewBook(
+                    title = "Peter Pan in Wonderland",
+                    author = "Samira Sales",
+                    rate = 3.7,
+                    sinopse = "Sinopse de teste do livro...",
+                    imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
+                    publishYear = "2025",
+                    publisher = "Bila-Bilu",
+                    pageCount = "240",
+                    status = "ABANDONADO",
+                    shelf = "Romances",
+                    onBackClick = { navController.popBackStack() }
                 )
             }
         }

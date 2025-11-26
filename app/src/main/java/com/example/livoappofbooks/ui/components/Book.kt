@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -23,14 +24,16 @@ fun Book(
     status: String,
     progress: Int,
     evaluate: Int,
-    imageUrl: String? = null
+    imageUrl: String? = null,
+    onClick: (() -> Unit)? = null  // <-- adicionamos o callback
 ) {
     val isDark = rememberThemeState().isDarkTheme
 
     Column(
         modifier = Modifier
             .width(120.dp)
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable { onClick?.invoke() }, // <-- adiciona aqui
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -95,11 +98,11 @@ fun Book(
 
             // Cores baseadas no status
             val (corFundo, corTexto) = when (status) {
-                "Lido"       -> PrincipalColor to Color.White
-                "Lendo"      -> DarkColor to Color.White
-                "Quero Ler"  -> Color(0xFFF4B61A) to Color.Black
+                "Lido" -> PrincipalColor to Color.White
+                "Lendo" -> DarkColor to Color.White
+                "Quero Ler" -> Color(0xFFF4B61A) to Color.Black
                 "Abandonado" -> SubtitlesColor to Color.White
-                else         -> PrincipalColor to Color.White
+                else -> PrincipalColor to Color.White
             }
 
             // Caixa do status

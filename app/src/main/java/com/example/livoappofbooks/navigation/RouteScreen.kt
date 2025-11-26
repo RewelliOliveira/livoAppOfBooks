@@ -7,7 +7,7 @@ import com.example.livoappofbooks.ui.icons.User
 sealed class Screen(
     val route: String,
     val label: String,
-    val icon: ScreenIcon
+    val icon: ScreenIcon?
 ) {
     object Library : Screen(
         "library",
@@ -19,6 +19,12 @@ sealed class Screen(
         "profile",
         "Perfil",
         ScreenIcon.Vector(User)
+    )
+
+    object ViewBook : Screen(
+        "view_book",
+        "Visualizar Livro",
+        null
     )
 }
 
