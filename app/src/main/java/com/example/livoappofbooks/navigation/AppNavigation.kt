@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.screens.LibraryScreen
-import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
+import com.example.livoappofbooks.ui.screens.ProfileScreen
 
 @Composable
 fun AppNavigation() {
@@ -28,12 +28,12 @@ fun AppNavigation() {
 
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    onNavigate = { navController.navigate(Screen.Register.route) }
+                    onNavigate = { navController.navigate(Screen.Profile.route) }
                 )
             }
 
-            composable(Screen.Register.route) {
-                RegisterReadingScreen(
+            composable(Screen.Profile.route) {
+                ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) }
                 )
             }

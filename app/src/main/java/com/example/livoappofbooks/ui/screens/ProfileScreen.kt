@@ -24,7 +24,7 @@ import com.example.livoappofbooks.ui.theme.AlertColor
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onNavigate: () -> Unit) {
     val themeState = rememberThemeState()
     val isDark = themeState.isDarkTheme
 
