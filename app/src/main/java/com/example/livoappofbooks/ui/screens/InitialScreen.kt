@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.R
@@ -31,7 +30,13 @@ import com.example.livoappofbooks.ui.theme.buttonShape
 
 
 @Composable
-fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier){
+fun InitialScreen(
+    title: String,
+    subTitle: String,
+    onLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -41,12 +46,14 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
             modifier = Modifier
                 .weight(3f)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(
-                    topStart = 0.dp,
-                    topEnd = 0.dp,
-                    bottomEnd = 60.dp,
-                    bottomStart = 60.dp
-                ))
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomEnd = 60.dp,
+                        bottomStart = 60.dp
+                    )
+                )
                 .background(PrincipalColor)
         ) {
             Column(
@@ -93,7 +100,7 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
-                    onClick = {},
+                    onClick = onLoginClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
@@ -107,13 +114,15 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                         containerColor = PrincipalColor,
                     )
                 ) {
-                    Text(text = "Entrar",
+                    Text(
+                        text = "Entrar",
                         fontSize = 20.sp,
-                        color = BackgroundLight)
+                        color = BackgroundLight
+                    )
                 }
 
                 Button(
-                    onClick = {},
+                    onClick = onRegisterClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
@@ -130,19 +139,10 @@ fun InitialScreen(title: String, subTitle: String, modifier: Modifier = Modifier
                     Text(
                         text = "Cadastrar",
                         fontSize = 20.sp,
-                        color = PrincipalColor)
+                        color = PrincipalColor
+                    )
                 }
             }
         }
-
     }
-}
-
-@Preview
-@Composable
-private fun GreetingPreview() {
-    InitialScreen(
-        title = "Organize suas leituras com o Livo!",
-        subTitle = "Selecione uma das opções para continuar"
-    )
 }

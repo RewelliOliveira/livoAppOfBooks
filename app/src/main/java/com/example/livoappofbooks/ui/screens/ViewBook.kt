@@ -37,7 +37,6 @@ import com.example.livoappofbooks.ui.components.ProgressBarBook
 import com.example.livoappofbooks.ui.components.Status
 import com.example.livoappofbooks.ui.theme.AlertColor
 import com.example.livoappofbooks.ui.theme.*
-import com.example.livoappofbooks.ui.theme.FundoClaro
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 @Composable
 fun ViewBook(
@@ -83,7 +82,7 @@ fun ViewBook(
 
                 AsyncImage(
                     model = imageUrl,
-                    placeholder = painterResource(id = R.drawable.livro_teste),
+                    placeholder = painterResource(id = R.drawable.initiallogo_svg),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -100,7 +99,7 @@ fun ViewBook(
                         .height(320.dp)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, FundoClaro.copy(alpha = 1f)),
+                                colors = listOf(Color.Transparent, White.copy(alpha = 1f)),
                                 startY = 250f
                             )
                         )
@@ -108,7 +107,7 @@ fun ViewBook(
 
                 AsyncImage(
                     model = imageUrl,
-                    placeholder = painterResource(id = R.drawable.livro_teste),
+                    placeholder = painterResource(id = R.drawable.initiallogo_svg),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
