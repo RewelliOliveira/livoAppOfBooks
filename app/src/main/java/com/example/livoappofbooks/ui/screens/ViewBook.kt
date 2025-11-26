@@ -5,19 +5,17 @@ import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,15 +28,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.domain.model.BookStatus
-import com.example.livoappofbooks.navigation.Screen
-import com.example.livoappofbooks.ui.components.StarRating
-import com.example.livoappofbooks.ui.components.InfoItem
-import com.example.livoappofbooks.ui.components.PrimaryButton
-import com.example.livoappofbooks.ui.components.ProgressBarBook
-import com.example.livoappofbooks.ui.components.Status
-import com.example.livoappofbooks.ui.theme.AlertColor
+import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.theme.*
-import com.example.livoappofbooks.ui.theme.PrincipalColor
 
 @Composable
 fun ViewBook(
@@ -68,13 +59,11 @@ fun ViewBook(
             .fillMaxSize()
             .background(BackgroundLight)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,8 +71,8 @@ fun ViewBook(
                 contentAlignment = Alignment.TopCenter
             ) {
                 AsyncImage(
-                    model = imageUrl,
-                    placeholder = painterResource(id = R.drawable.initiallogo_svg),
+                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                    placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -106,8 +95,8 @@ fun ViewBook(
                 )
 
                 AsyncImage(
-                    model = imageUrl,
-                    placeholder = painterResource(id = R.drawable.initiallogo_svg),
+                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                    placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -127,7 +116,8 @@ fun ViewBook(
 
                 Row(verticalAlignment = Alignment.Bottom) {
                     Column(
-                        modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.Start
                     ) {
                         Text(
                             text = title,
@@ -136,7 +126,9 @@ fun ViewBook(
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            text = author, style = AppTypography.bodyMedium, color = Color.DarkGray
+                            text = author,
+                            style = AppTypography.bodyMedium,
+                            color = Color.DarkGray
                         )
                     }
                     StarRating(rating = rate)
@@ -158,18 +150,38 @@ fun ViewBook(
                 Divider(color = Gray)
                 Spacer(Modifier.height(8.dp))
 
-                PrimaryButton(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    icon = Pencil,
-                    text = "Registrar Leitura",
-                    onClick = onRegisterClick
-                )
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    PrimaryButton(
+                        modifier = Modifier.weight(2f),
+                        text = shelf.take(8),
+                        onClick = {},
+                        icon = Bookshelf
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Status(
+                        modifier = Modifier.weight(1f),
+                        status = BookStatus.fromString(status),
+                        onClick = {}
+                    )
+                }
 
                 Spacer(Modifier.height(16.dp))
 
                 Column {
+                    PrimaryButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Pencil,
+                        text = "Registrar Leitura",
+                        onClick = onRegisterClick
+                    )
                     RatingButton(
-                        modifier = Modifier.fillMaxWidth(), onClick = {})
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {}
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -181,12 +193,12 @@ fun ViewBook(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "Sinopse", style = AppTypography.titleMedium.copy(
-                                color = Color.Black, fontWeight = FontWeight.SemiBold
+                            text = "Sinopse",
+                            style = AppTypography.titleMedium.copy(
+                                color = Color.Black,
+                                fontWeight = FontWeight.SemiBold
                             )
                         )
 
@@ -201,20 +213,24 @@ fun ViewBook(
                             Text(
                                 text = if (isExpanded.value) "Ver menos" else "Ver mais",
                                 style = AppTypography.bodyMedium.copy(
-                                    color = PrincipalColor, fontWeight = FontWeight.SemiBold
+                                    color = PrincipalColor,
+                                    fontWeight = FontWeight.SemiBold
                                 ),
                                 modifier = Modifier
                                     .padding(top = 4.dp)
-                                    .clickable { isExpanded.value = !isExpanded.value })
+                                    .clickable { isExpanded.value = !isExpanded.value }
+                            )
                         }
                     }
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        text = "Remover livro", style = AppTypography.titleMedium.copy(
+                        text = "Remover livro",
+                        style = AppTypography.titleMedium.copy(
                             color = AlertColor,
                             fontWeight = FontWeight.SemiBold,
                             textDecoration = TextDecoration.Underline
-                        ), modifier = Modifier
+                        ),
+                        modifier = Modifier
                             .padding(bottom = 60.dp)
                             .clickable(onClick = {})
                     )
@@ -245,4 +261,23 @@ fun ViewBook(
                 .fillMaxWidth()
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ViewBookPreview() {
+    ViewBook(
+        title = "Peter Pan in Wonderland",
+        author = "Samira Sales",
+        rate = 3.7,
+        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguém ficar fazendo zuada no meu pé do ouvido",
+        imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
+        publishYear = "2025",
+        publisher = "Bila-Bilu",
+        shelf = "Romances",
+        pageCount = "240",
+        status = "ABANDONADO",
+        onBackClick = {},
+        onRegisterClick = {}
+    )
 }
