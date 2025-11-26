@@ -9,11 +9,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
@@ -84,18 +87,14 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
+                AsyncImage(
+                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                    contentDescription = "Capa do livro",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(85.dp, 120.dp)
-                        .background(Color.Gray, RoundedCornerShape(8.dp))
-                ) {
-                    Icon(
-                        Icons.Default.Book,
-                        contentDescription = "Livro",
-                        tint = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
+                        .clip(RoundedCornerShape(8.dp))
+                )
 
                 Spacer(Modifier.width(16.dp))
 
