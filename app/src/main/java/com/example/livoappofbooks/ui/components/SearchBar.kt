@@ -1,7 +1,3 @@
-// Código atualizado: cores trocadas para MaterialTheme.colorScheme
-// OBS: Este arquivo contém apenas um exemplo iniciando pela SearchBar.
-// Me diga se quer que eu continue atualizando o restante dos componentes.
-
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background

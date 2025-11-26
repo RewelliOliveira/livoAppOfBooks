@@ -25,7 +25,7 @@ fun Book(
     progress: Int,
     evaluate: Int,
     imageUrl: String? = null,
-    onClick: (() -> Unit)? = null  // <-- adicionamos o callback
+    onClick: (() -> Unit)? = null
 ) {
     val isDark = rememberThemeState().isDarkTheme
 
@@ -33,7 +33,7 @@ fun Book(
         modifier = Modifier
             .width(120.dp)
             .padding(4.dp)
-            .clickable { onClick?.invoke() }, // <-- adiciona aqui
+            .clickable { onClick?.invoke() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -43,34 +43,7 @@ fun Book(
                 .aspectRatio(2f / 3f)
                 .clip(RoundedCornerShape(8.dp))
         ) {
-            /*
-            if (!imageUrl.isNullOrEmpty()) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = "Capa do livro",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(android.R.drawable.ic_menu_gallery),
-                    error = painterResource(android.R.drawable.ic_menu_gallery)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(SubtitlesColor),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val LightColor = MaterialTheme.colorScheme.onPrimary //estava dando erro de referência em LightColor, criei a variável apenas para parar de dar o erro.
-                    Text(
-                        text = "CAPA",
-                        color = BackgroundLight,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-             */
 
-            // Capa temporária
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -96,16 +69,14 @@ fun Book(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            // Cores baseadas no status
             val (corFundo, corTexto) = when (status) {
-                "Lido" -> PrincipalColor to Color.White
-                "Lendo" -> DarkColor to Color.White
-                "Quero Ler" -> Color(0xFFF4B61A) to Color.Black
+                "Lido"       -> PrincipalColor to Color.White
+                "Lendo"      -> DarkColor to Color.White
+                "Quero Ler"  -> Color(0xFFF4B61A) to Color.Black
                 "Abandonado" -> SubtitlesColor to Color.White
-                else -> PrincipalColor to Color.White
+                else         -> PrincipalColor to Color.White
             }
 
-            // Caixa do status
             Box(
                 modifier = Modifier
                     .width(83.dp)
@@ -123,10 +94,8 @@ fun Book(
                 )
             }
 
-            // Cor do texto de avaliação ou progresso
             val infoColor = if (isDark) Color.White else corFundo
 
-            // Se o livro foi lido → exibe avaliação
             if (status == "Lido") {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -148,7 +117,6 @@ fun Book(
                     )
                 }
 
-                // Caso contrário → exibe progresso
             } else {
                 Text(
                     text = "$progress%",
@@ -161,17 +129,3 @@ fun Book(
         }
     }
 }
-
-/*
-@Composable
-fun AsyncImage(
-    model: String,
-    contentDescription: String,
-    modifier: Modifier,
-    contentScale: ContentScale,
-    placeholder: Painter,
-    error: Painter
-) {
-    TODO("Not yet implemented")
-}
-*/

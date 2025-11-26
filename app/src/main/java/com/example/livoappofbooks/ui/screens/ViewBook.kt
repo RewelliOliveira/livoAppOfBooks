@@ -53,7 +53,7 @@ fun ViewBook(
     status: String,
     shelf: String,
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit  // <-- nova lambda
+    onRegisterClick: () -> Unit
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
@@ -158,7 +158,6 @@ fun ViewBook(
                 Divider(color = Gray)
                 Spacer(Modifier.height(8.dp))
 
-                // Botão Registrar Leitura agora usa a lambda
                 PrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
                     icon = Pencil,

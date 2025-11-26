@@ -18,8 +18,8 @@ import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarBook(
-    currentPage: Int,         // página atual
-    totalPages: Int,          // total de páginas
+    currentPage: Int,       
+    totalPages: Int,
     modifier: Modifier = Modifier
 ) {
     val progress = currentPage.toFloat() / totalPages.toFloat()

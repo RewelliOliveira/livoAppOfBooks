@@ -102,7 +102,7 @@ fun CadastroFooter(onRegisterComplete: () -> Unit) {
             .background(Color(0xFF003D3A))
     ) {
         Button(
-            onClick = { onRegisterComplete() },  // ação de concluir cadastro
+            onClick = { onRegisterComplete() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()

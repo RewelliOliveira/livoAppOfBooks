@@ -29,7 +29,7 @@ fun StarRating(
     maxStars: Int = 5,
     starSize: Int = 24,
     starColor: Color = PrincipalColor,
-    onRatingChange: ((Double) -> Unit)? = null //opcional, será passado quando o modal for clicavel
+    onRatingChange: ((Double) -> Unit)? = null
 ) {
     Row {
         val fullStars = floor(rating).toInt()

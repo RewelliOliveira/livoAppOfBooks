@@ -28,18 +28,15 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding)
         ) {
 
-            // Tela da Biblioteca
             composable(Screen.Library.route) {
                 LibraryScreen(
                     onNavigate = { navController.navigate(Screen.Profile.route) },
                     onBookClick = { livro ->
-                        // Aqui navegamos para a tela de visualização do livro
                         navController.navigate(Screen.ViewBook.route)
                     }
                 )
             }
 
-            // Tela de Perfil
             composable(Screen.Profile.route) {
                 ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) }
@@ -65,7 +62,7 @@ fun AppNavigation() {
 
             composable(Screen.RegisterReading.route) {
                 RegisterReadingScreen(
-                    onNavigate = { navController.popBackStack() } // volta para a tela anterior
+                    onNavigate = { navController.popBackStack() }
                 )
             }
         }
