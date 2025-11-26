@@ -37,7 +37,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                     "Registrar Leitura", fontWeight = FontWeight.Bold, fontSize = 20.sp
                 )
             }, navigationIcon = {
-                IconButton(onClick = { /* TODO: voltar */ }) {
+                IconButton(onClick = { onNavigate() }) {
                     Icon(
                         imageVector = Arrow_back_ios_new, contentDescription = "Voltar"
                     )
@@ -189,5 +189,5 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterReadingScreen() {
-    RegisterReadingScreen( onNavigate = {})
+    RegisterReadingScreen(onNavigate = {})
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.domain.model.BookStatus
+import com.example.livoappofbooks.navigation.Screen
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
 import com.example.livoappofbooks.ui.components.PrimaryButton
@@ -38,6 +39,7 @@ import com.example.livoappofbooks.ui.components.Status
 import com.example.livoappofbooks.ui.theme.AlertColor
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.theme.PrincipalColor
+
 @Composable
 fun ViewBook(
     title: String,
@@ -50,16 +52,16 @@ fun ViewBook(
     pageCount: String,
     status: String,
     shelf: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRegisterClick: () -> Unit  // <-- nova lambda
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
 
-    val displayedSinopse =
-        if (isExpanded.value || !shouldTruncate) sinopse
-        else sinopse.take(previewLimit) + "..."
+    val displayedSinopse = if (isExpanded.value || !shouldTruncate) sinopse
+    else sinopse.take(previewLimit) + "..."
 
     Box(
         modifier = Modifier
@@ -79,7 +81,6 @@ fun ViewBook(
                     .height(350.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
-
                 AsyncImage(
                     model = imageUrl,
                     placeholder = painterResource(id = R.drawable.initiallogo_svg),
@@ -91,7 +92,6 @@ fun ViewBook(
                         .blur(10.dp)
                         .shadow(20.dp)
                 )
-
 
                 Box(
                     modifier = Modifier
@@ -117,20 +117,17 @@ fun ViewBook(
                         .shadow(16.dp, RoundedCornerShape(8.dp))
                         .align(Alignment.BottomCenter)
                 )
-
             }
 
             Column(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 Spacer(Modifier.height(16.dp))
 
                 Row(verticalAlignment = Alignment.Bottom) {
                     Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.Start
+                        modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start
                     ) {
                         Text(
                             text = title,
@@ -139,9 +136,7 @@ fun ViewBook(
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            text = author,
-                            style = AppTypography.bodyMedium,
-                            color = Color.DarkGray
+                            text = author, style = AppTypography.bodyMedium, color = Color.DarkGray
                         )
                     }
                     StarRating(rating = rate)
@@ -163,33 +158,19 @@ fun ViewBook(
                 Divider(color = Gray)
                 Spacer(Modifier.height(8.dp))
 
-                Row(
+                // Botão Registrar Leitura agora usa a lambda
+                PrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    PrimaryButton(
-                        modifier = Modifier.weight(2f),
-                        text = shelf.take(8),
-                        onClick = {},
-                        icon = Bookshelf
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Status(modifier = Modifier.weight(1f), status = BookStatus.fromString(status), onClick = {})
-                }
+                    icon = Pencil,
+                    text = "Registrar Leitura",
+                    onClick = onRegisterClick
+                )
 
                 Spacer(Modifier.height(16.dp))
 
-                Column(){
-                    PrimaryButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        icon = Pencil,
-                        text = "Registrar Leitura",
-                        onClick = {}
-                    )
+                Column {
                     RatingButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {})
+                        modifier = Modifier.fillMaxWidth(), onClick = {})
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -201,15 +182,12 @@ fun ViewBook(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Column(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Sinopse",
-                            style = AppTypography.titleMedium.copy(
-                                color = Color.Black,
-                                fontWeight = FontWeight.SemiBold
+                            text = "Sinopse", style = AppTypography.titleMedium.copy(
+                                color = Color.Black, fontWeight = FontWeight.SemiBold
                             )
                         )
 
@@ -224,24 +202,20 @@ fun ViewBook(
                             Text(
                                 text = if (isExpanded.value) "Ver menos" else "Ver mais",
                                 style = AppTypography.bodyMedium.copy(
-                                    color = PrincipalColor,
-                                    fontWeight = FontWeight.SemiBold
+                                    color = PrincipalColor, fontWeight = FontWeight.SemiBold
                                 ),
                                 modifier = Modifier
                                     .padding(top = 4.dp)
-                                    .clickable { isExpanded.value = !isExpanded.value }
-                            )
+                                    .clickable { isExpanded.value = !isExpanded.value })
                         }
                     }
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        text = "Remover livro",
-                        style = AppTypography.titleMedium.copy(
+                        text = "Remover livro", style = AppTypography.titleMedium.copy(
                             color = AlertColor,
                             fontWeight = FontWeight.SemiBold,
                             textDecoration = TextDecoration.Underline
-                        ),
-                        modifier = Modifier
+                        ), modifier = Modifier
                             .padding(bottom = 60.dp)
                             .clickable(onClick = {})
                     )
@@ -263,32 +237,13 @@ fun ViewBook(
                 tint = Color.Black,
             )
         }
+
         ProgressBarBook(
             currentPage = 108,
             totalPages = 240,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-            )
+        )
     }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun ViewBookPreview() {
-    ViewBook(
-        title = "Peter Pan in Wonderland",
-        author = "Samira Sales",
-        rate = 3.7,
-        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguem ficar fazendo zuada no meu pé do ouvido",
-        imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
-        publishYear = "2025",
-        publisher = "Bila-Bilu",
-        shelf = "Romances",
-        pageCount = "240",
-        status = "ABANDONADO",
-        onBackClick = {}
-    )
 }

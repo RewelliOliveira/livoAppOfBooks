@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
+import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -57,7 +58,14 @@ fun AppNavigation() {
                     pageCount = "240",
                     status = "ABANDONADO",
                     shelf = "Romances",
-                    onBackClick = { navController.popBackStack() }
+                    onBackClick = { navController.popBackStack() },
+                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) } // <-- aqui
+                )
+            }
+
+            composable(Screen.RegisterReading.route) {
+                RegisterReadingScreen(
+                    onNavigate = { navController.popBackStack() } // volta para a tela anterior
                 )
             }
         }

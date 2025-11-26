@@ -26,6 +26,11 @@ sealed class Screen(
         "Visualizar Livro",
         null
     )
+    object RegisterReading : Screen(
+        "register_reading",
+        "Registrar Leitura",
+        null
+    )
 }
 
 sealed class ScreenIcon {
