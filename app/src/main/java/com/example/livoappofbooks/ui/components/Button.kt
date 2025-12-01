@@ -16,8 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.PrincipalColor
+import com.example.livoappofbooks.ui.theme.DarkColor
 import androidx.compose.material.icons.filled.Add
-import com.example.livoappofbooks.ui.icons.MarcaPagina // Exemplo para o preview
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun PrimaryButton(
@@ -25,22 +26,30 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    useDarkColor: Boolean = false,
+    height: Dp? = null,
+    width: Dp? = null
 ) {
+    val backgroundColor =
+        if (useDarkColor) DarkColor else PrincipalColor
+
     Button(
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = PrincipalColor,
+            containerColor = backgroundColor,
             disabledContainerColor = Color.Gray.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .defaultMinSize(minHeight = 40.dp)
-            .shadow(
-                elevation = if (enabled) 4.dp else 0.dp,
-                shape = RoundedCornerShape(50)
+            .then(
+                if (width != null) Modifier.width(width) else Modifier
             )
+            .then(
+                if (height != null) Modifier.height(height) else Modifier
+            )
+            .padding(horizontal= 10.dp)
     ) {
         if (icon != null) {
             Icon(
@@ -53,7 +62,8 @@ fun PrimaryButton(
         }
         Text(
             text = text,
-            style = AppTypography.titleSmall.copy(color = Color.White)
+            maxLines = 1,
+            style = AppTypography.labelMedium.copy(color = Color.White)
         )
     }
 }
