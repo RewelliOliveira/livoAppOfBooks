@@ -691,9 +691,76 @@ val User: ImageVector
         return _User!!
     }
 
+
+val CheckCircle: ImageVector
+    get() {
+        if (_CheckCircle != null) return _CheckCircle!!
+
+        _CheckCircle = ImageVector.Builder(
+            name = "CheckCircle",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(9f, 12.75f)
+                lineTo(11.25f, 15f)
+                lineTo(15f, 9.75f)
+                moveTo(21f, 12f)
+                curveTo(21f, 16.9706f, 16.9706f, 21f, 12f, 21f)
+                curveTo(7.02944f, 21f, 3f, 16.9706f, 3f, 12f)
+                curveTo(3f, 7.02944f, 7.02944f, 3f, 12f, 3f)
+                curveTo(16.9706f, 3f, 21f, 7.02944f, 21f, 12f)
+                close()
+            }
+        }.build()
+
+        return _CheckCircle!!
+    }
+
+
+val PlusCircle: ImageVector
+    get() {
+        if (_PlusCircle != null) return _PlusCircle!!
+
+        _PlusCircle = ImageVector.Builder(
+            name = "PlusCircle",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(12f, 9f)
+                verticalLineTo(15f)
+                moveTo(15f, 12f)
+                horizontalLineTo(9f)
+                moveTo(21f, 12f)
+                curveTo(21f, 16.9706f, 16.9706f, 21f, 12f, 21f)
+                curveTo(7.02944f, 21f, 3f, 16.9706f, 3f, 12f)
+                curveTo(3f, 7.02944f, 7.02944f, 3f, 12f, 3f)
+                curveTo(16.9706f, 3f, 21f, 7.02944f, 21f, 12f)
+                close()
+            }
+        }.build()
+
+        return _PlusCircle!!
+    }
+
+private var _PlusCircle: ImageVector? = null
+private var _CheckCircle: ImageVector? = null
 private var _User: ImageVector? = null
-
-
 private var _Pencil: ImageVector? = null
 private var _StarFull: ImageVector? = null
 private var _StarHalf: ImageVector? = null
