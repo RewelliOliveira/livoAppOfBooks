@@ -125,28 +125,6 @@ fun LibraryScreen(
                             .height(30.dp)
                             .width(100.dp)
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    IconButton(
-                        onClick = { themeState.toggleTheme() }
-                    ) {
-                        val iconRes = if (isDark) {
-                            R.drawable.ic_dark_mode
-                        } else {
-                            R.drawable.ic_light_mode
-                        }
-
-                        Image(
-                            painter = painterResource(id = iconRes),
-                            contentDescription = if (isDark) {
-                                "Mudar para tema claro"
-                            } else {
-                                "Mudar para tema escuro"
-                            },
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
                 }
 
                 SearchBar(
