@@ -172,7 +172,7 @@ fun LibraryScreen(
                         text = "Nenhum livro encontrado",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }

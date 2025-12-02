@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,13 +24,13 @@ fun InfoItem(icon: ImageVector, text: String) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.tertiary
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = text,
             style = AppTypography.bodyMedium,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.tertiary
         )
     }
 }

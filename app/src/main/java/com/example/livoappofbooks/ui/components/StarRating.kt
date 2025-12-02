@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,7 @@ fun StarRating(
     rating: Double,
     maxStars: Int = 5,
     starSize: Int = 24,
-    starColor: Color = PrincipalColor,
+    starColor: Color = MaterialTheme.colorScheme.primary,
     onRatingChange: ((Double) -> Unit)? = null
 ) {
     Row {

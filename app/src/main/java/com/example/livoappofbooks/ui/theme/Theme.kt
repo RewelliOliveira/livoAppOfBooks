@@ -13,13 +13,13 @@ private val DarkColorScheme = darkColorScheme(
     primary = BackgroundLight,
     secondary = PrincipalColor,
     tertiary = BackgroundLight,
-    background = Black,
-    //surface = LightGray,
-    //error = AlertColor,
-    //onPrimary = BackgroundLight,
+    background = BackgroundDark,
+    surface = ProgressBarDark,
+    error = AlertColor,
+    //onPrimary = ProgressBarDark,
     //onSecondary = BackgroundLight,
     //onTertiary = BackgroundLight,
-    //onBackground = BackgroundLight,
+    onBackground = BackgroundLight,
     //onSurface = BackgroundLight
 )
 
@@ -29,12 +29,12 @@ private val LightColorScheme = lightColorScheme(
     secondary = BackgroundLight,
     tertiary = DarkColor,
     background = BackgroundLight,
-    //surface = Gray,
-    //error = AlertColor,
-    //onPrimary = Gray,
+    surface = ProgressBarLight,
+    error = AlertColor,
+    //onPrimary = ProgressBarLight,
     //onSecondary = BackgroundLight,
     //onTertiary = PrincipalColor,
-    //onBackground = DarkColor,
+    onBackground = BackgroundDark,
     //onSurface = DarkColor
 )
 

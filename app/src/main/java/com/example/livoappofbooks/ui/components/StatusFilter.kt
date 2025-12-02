@@ -66,7 +66,7 @@ fun FilterBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(if (isDark) Color(0xFF666666) else Color(0xFFB8D5D3))
+                    .background(MaterialTheme.colorScheme.surface)
             )
 
             textPositions[selectedFilter]?.let { (xPx, sizePx) ->

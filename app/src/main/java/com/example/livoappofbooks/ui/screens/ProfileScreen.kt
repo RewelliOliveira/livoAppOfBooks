@@ -241,7 +241,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = AlertColor
+                    contentColor = MaterialTheme.colorScheme.error
                 ),
                 border = BorderStroke(1.dp, AlertColor)
             ) {
