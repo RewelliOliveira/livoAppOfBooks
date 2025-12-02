@@ -14,5 +14,6 @@ import androidx.compose.ui.graphics.Color
 // 🌑 Tons neutros e auxiliares
 @Stable val Black = Color(0xFF000000)
 @Stable val White = Color(0xFFFFFFFF)
+@Stable val LightGray = Color(0xFFAAAAAA)
 @Stable val Gray = Color(0xFF808080)
 @Stable val Transparent = Color(0x00000000)

@@ -33,8 +33,8 @@ fun InfoCard(
     Surface(
         modifier = modifier.height(100.dp),
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiary)
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -45,7 +45,7 @@ fun InfoCard(
                 numero,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiary
+                color = MaterialTheme.colorScheme.primary
             )
 
             Row(
@@ -68,7 +68,7 @@ fun InfoCard(
                 Text(
                     texto,
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

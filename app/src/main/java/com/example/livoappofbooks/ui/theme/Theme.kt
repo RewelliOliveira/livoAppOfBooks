@@ -10,32 +10,32 @@ import androidx.compose.ui.platform.LocalContext
 
 // 🌙 Tema Escuro
 private val DarkColorScheme = darkColorScheme(
-    primary = PrincipalColor,
-    secondary = PositiveActions,
-    tertiary = SubtitlesColor,
+    primary = BackgroundLight,
+    secondary = PrincipalColor,
+    tertiary = BackgroundLight,
     background = Black,
-    surface = Black,
-    error = AlertColor,
-    onPrimary = BackgroundLight,
-    onSecondary = BackgroundLight,
-    onTertiary = BackgroundLight,
-    onBackground = BackgroundLight,
-    onSurface = BackgroundLight
+    //surface = LightGray,
+    //error = AlertColor,
+    //onPrimary = BackgroundLight,
+    //onSecondary = BackgroundLight,
+    //onTertiary = BackgroundLight,
+    //onBackground = BackgroundLight,
+    //onSurface = BackgroundLight
 )
 
 // 🌞 Tema Claro
 private val LightColorScheme = lightColorScheme(
     primary = PrincipalColor,
-    secondary = PositiveActions,
-    tertiary = SubtitlesColor,
+    secondary = BackgroundLight,
+    tertiary = DarkColor,
     background = BackgroundLight,
-    surface = BackgroundLight,
-    error = AlertColor,
-    onPrimary = PrincipalColor,
-    onSecondary = BackgroundLight,
-    onTertiary = PrincipalColor,
-    onBackground = DarkColor,
-    onSurface = DarkColor
+    //surface = Gray,
+    //error = AlertColor,
+    //onPrimary = Gray,
+    //onSecondary = BackgroundLight,
+    //onTertiary = PrincipalColor,
+    //onBackground = DarkColor,
+    //onSurface = DarkColor
 )
 
 // Gerenciamento do tema

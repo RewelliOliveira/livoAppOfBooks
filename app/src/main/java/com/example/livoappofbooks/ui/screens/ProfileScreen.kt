@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.ConfigSection
+import com.example.livoappofbooks.ui.components.CustomSwitch
 import com.example.livoappofbooks.ui.components.InfoCard
 import com.example.livoappofbooks.ui.theme.AlertColor
 import com.example.livoappofbooks.ui.theme.rememberThemeState
@@ -36,13 +37,13 @@ fun ProfileScreen(onNavigate: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(horizontal = 25.dp) // Alinhado com Library (25.dp horizontal)
+                .padding(horizontal = 25.dp)
         ) {
             // Header igual ao da Library
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp, bottom = 32.dp), // Top igual, bottom maior para separação
+                    .padding(top = 16.dp, bottom = 32.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -54,10 +55,10 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                         .height(30.dp)
                         .width(100.dp)
                 )
-                // Mantém o logo centralizado como na Library
+
             }
 
-            // Informações do usuário
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -76,12 +77,12 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                         "Nome do usuário",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                     Text(
                         "example@mail.com",
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
                     )
                 }
 
@@ -104,7 +105,6 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
             Spacer(modifier = Modifier.height(25.dp))
 
-            // Cards de estatísticas
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -125,7 +125,6 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Configurações
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -165,17 +164,17 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                                     "Modo escuro",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.tertiary
                                 )
                                 Text(
                                     "Reduz o cansaço visual",
                                     fontSize = 13.sp,
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
                                 )
                             }
                         }
 
-                        Switch(
+                        CustomSwitch(
                             checked = isDark,
                             onCheckedChange = { themeState.toggleTheme() }
                         )
@@ -217,16 +216,16 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                                     "Ativar as notificações",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onBackground
+                                    color = MaterialTheme.colorScheme.tertiary
                                 )
                                 Text(
                                     "Receba lembretes todos os dias",
                                     fontSize = 13.sp,
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
                                 )
                             }
                         }
-                        Switch(
+                        CustomSwitch(
                             checked = false,
                             onCheckedChange = { /* TODO: Implementar notificações */ }
                         )
@@ -236,12 +235,11 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botão de sair
             OutlinedButton(
                 onClick = { /* TODO: Implementar logout */ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp), // Padding bottom para não ficar colado
+                    .padding(bottom = 32.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = AlertColor
                 ),

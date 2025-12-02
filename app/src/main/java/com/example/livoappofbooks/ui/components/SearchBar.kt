@@ -19,6 +19,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.Gray
 
 @Composable
 fun SearchBar(
@@ -26,16 +27,15 @@ fun SearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val colors = MaterialTheme.colorScheme
 
     Box(
         modifier = modifier
             .height(41.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(colors.surface)
+            .background(MaterialTheme.colorScheme.background)
             .border(
                 width = 2.dp,
-                color = colors.onPrimary,
+                color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -49,10 +49,10 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = colors.onSurface,
+                    color = MaterialTheme.colorScheme.background,
                     fontSize = 16.sp
                 ),
-                cursorBrush = SolidColor(colors.primary),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -66,9 +66,9 @@ fun SearchBar(
                                 text = "Pesquisar na minha biblioteca",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Normal,
-                                    fontSize = 10.sp,
+                                    fontSize = 12.sp,
                                     lineHeight = 10.sp,
-                                    color = colors.onSurface.copy(alpha = 0.6f)
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             )
                         }
@@ -82,7 +82,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
-                tint = colors.onPrimary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(28.dp)
             )
         }

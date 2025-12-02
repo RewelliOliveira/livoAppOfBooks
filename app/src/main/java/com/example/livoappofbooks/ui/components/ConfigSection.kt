@@ -25,8 +25,8 @@ fun ConfigSection(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiary)
+        color = MaterialTheme.colorScheme.background,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Text(

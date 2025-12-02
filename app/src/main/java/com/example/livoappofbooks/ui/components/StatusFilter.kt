@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.Gray
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
@@ -27,7 +28,6 @@ fun FilterBar(
     val filters = listOf("Todos", "Lendo", "Lido", "Quero Ler", "Abandonado")
 
     val isDark = rememberThemeState().isDarkTheme
-    val cs = MaterialTheme.colorScheme
 
     var textPositions by remember { mutableStateOf<Map<String, Pair<Float, IntSize>>>(emptyMap()) }
     var rowWidth by remember { mutableStateOf(0) }
@@ -49,9 +49,9 @@ fun FilterBar(
                     fontSize = 14.sp,
                     fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal,
                     color = if (selectedFilter == filter)
-                        if (isDark) cs.onBackground else cs.primary
+                        MaterialTheme.colorScheme.primary
                     else
-                        if (isDark) Color(0xFFAAAAAA) else Color.Gray,
+                        Gray,
                     modifier = Modifier
                         .clickable { onFilterSelected(filter) }
                         .onGloballyPositioned {
@@ -94,7 +94,7 @@ fun FilterBar(
                         .offset(x = with(density) { left.toDp() })
                         .width(with(density) { (right - left).toDp() })
                         .height(2.dp)
-                        .background(if (isDark) cs.onBackground else cs.primary)
+                        .background(MaterialTheme.colorScheme.primary)
                 )
             }
         }

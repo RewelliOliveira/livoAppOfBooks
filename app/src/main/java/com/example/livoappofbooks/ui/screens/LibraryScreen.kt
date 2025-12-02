@@ -155,7 +155,7 @@ fun LibraryScreen(
                                     progress = livro.progress,
                                     evaluate = livro.evaluate,
                                     imageUrl = livro.imageUrl,
-                                    onClick = { onBookClick(livro) } // <-- função que vamos definir
+                                    onClick = { onBookClick(livro) }
                                 )
                             }
                         }
