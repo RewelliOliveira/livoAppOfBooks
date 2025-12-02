@@ -36,32 +36,30 @@ fun ProfileScreen(onNavigate: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 25.dp) // Alinhado com Library (25.dp horizontal)
         ) {
+            // Header igual ao da Library
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                    .padding(top = 16.dp, bottom = 32.dp), // Top igual, bottom maior para separação
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (isDark) {
-                            R.drawable.livo_dark
-                        } else {
-                            R.drawable.livo
-                        }
+                        id = if (isDark) R.drawable.livo_dark else R.drawable.livo
                     ),
                     contentDescription = "LIVO Logo",
                     modifier = Modifier
                         .height(30.dp)
                         .width(100.dp)
                 )
+                // Mantém o logo centralizado como na Library
             }
 
+            // Informações do usuário
             Row(
-                Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
@@ -73,7 +71,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                Column(Modifier.weight(1f)) {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         "Nome do usuário",
                         fontSize = 18.sp,
@@ -104,8 +102,9 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 }
             }
 
-            Spacer(Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
+            // Cards de estatísticas
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -124,118 +123,125 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 )
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            ConfigSection(
-                titulo = "Aparência",
-                modifier = Modifier.fillMaxWidth()
+            // Configurações
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                ConfigSection(
+                    titulo = "Aparência",
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        val iconRes = if (isDark) {
-                            R.drawable.ic_theme_dark
-                        } else {
-                            R.drawable.ic_theme_light
-                        }
-
-                        Image(
-                            painter = painterResource(id = iconRes),
-                            contentDescription = if (isDark) {
-                                "Modo escuro ativado"
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val iconRes = if (isDark) {
+                                R.drawable.ic_theme_dark
                             } else {
-                                "Modo claro ativado"
-                            },
-                            modifier = Modifier.size(24.dp)
-                        )
+                                R.drawable.ic_theme_light
+                            }
 
-                        Spacer(modifier = Modifier.width(12.dp))
+                            Image(
+                                painter = painterResource(id = iconRes),
+                                contentDescription = if (isDark) {
+                                    "Modo escuro ativado"
+                                } else {
+                                    "Modo claro ativado"
+                                },
+                                modifier = Modifier.size(24.dp)
+                            )
 
-                        Column {
-                            Text(
-                                "Modo escuro",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Text(
-                                "Reduz o cansaço visual",
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column {
+                                Text(
+                                    "Modo escuro",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    "Reduz o cansaço visual",
+                                    fontSize = 13.sp,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                )
+                            }
                         }
-                    }
 
-                    Switch(
-                        checked = isDark,
-                        onCheckedChange = { themeState.toggleTheme() }
-                    )
+                        Switch(
+                            checked = isDark,
+                            onCheckedChange = { themeState.toggleTheme() }
+                        )
+                    }
+                }
+
+                ConfigSection(
+                    titulo = "Notificações",
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            val notiIconRes = if (isDark) {
+                                R.drawable.ic_noti_light
+                            } else {
+                                R.drawable.ic_noti_dark
+                            }
+
+                            Image(
+                                painter = painterResource(id = notiIconRes),
+                                contentDescription = if (isDark) {
+                                    "Ícone de notificações modo escuro"
+                                } else {
+                                    "Ícone de notificações modo claro"
+                                },
+                                modifier = Modifier.size(24.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column {
+                                Text(
+                                    "Ativar as notificações",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                Text(
+                                    "Receba lembretes todos os dias",
+                                    fontSize = 13.sp,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                                )
+                            }
+                        }
+                        Switch(
+                            checked = false,
+                            onCheckedChange = { /* TODO: Implementar notificações */ }
+                        )
+                    }
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-            ConfigSection(
-                titulo = "Notificações",
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        val notiIconRes = if (isDark) {
-                            R.drawable.ic_noti_light
-                        } else {
-                            R.drawable.ic_noti_dark
-                        }
-
-                        Image(
-                            painter = painterResource(id = notiIconRes),
-                            contentDescription = if (isDark) {
-                                "Ícone de notificações modo escuro"
-                            } else {
-                                "Ícone de notificações modo claro"
-                            },
-                            modifier = Modifier.size(24.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        Column {
-                            Text(
-                                "Ativar as notificações",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Text(
-                                "Receba lembretes todos os dias",
-                                fontSize = 13.sp,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                            )
-                        }
-                    }
-                    Switch(
-                        checked = false,
-                        onCheckedChange = { /* TODO: Implementar notificações */ }
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(20.dp))
-
+            // Botão de sair
             OutlinedButton(
                 onClick = { /* TODO: Implementar logout */ },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp), // Padding bottom para não ficar colado
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = AlertColor
                 ),
