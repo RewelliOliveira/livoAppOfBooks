@@ -39,7 +39,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 .windowInsetsPadding(WindowInsets.statusBars)
                 .padding(horizontal = 25.dp)
         ) {
-            // Header igual ao da Library
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,7 +123,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Column(
                 modifier = Modifier.fillMaxWidth(),

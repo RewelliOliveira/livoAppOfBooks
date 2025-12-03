@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 @Stable val PositiveActions = Color(0xFF2BA80C)  // Verde claro para ações positivas
 @Stable val AlertColor = Color(0xFFB30808)       // Vermelho para alertas / erros
 @Stable val BackgroundLight = Color(0xFFFDFBED)  // Fundo claro (amarelado suave)
-@Stable val BackgroundDark = Color(0xFF141B1C)
+@Stable val BackgroundDark = Color(0xFF121517)
 
 // 🌑 Tons neutros e auxiliares
 @Stable val Black = Color(0xFF000000)

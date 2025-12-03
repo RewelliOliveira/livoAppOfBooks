@@ -88,7 +88,7 @@ fun ViewBook(
                         .height(320.dp)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, White.copy(alpha = 1f)),
+                                colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background),
                                 startY = 250f
                             )
                         )
@@ -147,7 +147,7 @@ fun ViewBook(
                 }
 
                 Spacer(Modifier.height(16.dp))
-                HorizontalDivider(color = Gray)
+                HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
                 Spacer(Modifier.height(8.dp))
 
                 Row(
@@ -197,14 +197,14 @@ fun ViewBook(
                         Text(
                             text = "Sinopse",
                             style = AppTypography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.tertiary,
-                                fontWeight = FontWeight.SemiBold
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontWeight = FontWeight.Bold
                             )
                         )
 
                         Text(
                             text = displayedSinopse,
-                            style = AppTypography.bodyMedium.copy(color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)),
+                            style = AppTypography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
                             textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(top = 8.dp)
                         )

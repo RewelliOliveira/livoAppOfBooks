@@ -24,13 +24,13 @@ fun InfoItem(icon: ImageVector, text: String) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.tertiary
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = text,
             style = AppTypography.bodyMedium,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

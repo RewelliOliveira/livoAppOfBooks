@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 // 🌙 Tema Escuro
@@ -16,7 +17,7 @@ private val DarkColorScheme = darkColorScheme(
     background = BackgroundDark,
     surface = ProgressBarDark,
     error = AlertColor,
-    //onPrimary = ProgressBarDark,
+    //onPrimary = BackgroundLight,
     //onSecondary = BackgroundLight,
     //onTertiary = BackgroundLight,
     onBackground = BackgroundLight,
@@ -31,11 +32,11 @@ private val LightColorScheme = lightColorScheme(
     background = BackgroundLight,
     surface = ProgressBarLight,
     error = AlertColor,
-    //onPrimary = ProgressBarLight,
+    //onPrimary = Black,
     //onSecondary = BackgroundLight,
     //onTertiary = PrincipalColor,
     onBackground = BackgroundDark,
-    //onSurface = DarkColor
+    //onSurface = Color.Black,
 )
 
 // Gerenciamento do tema
@@ -74,18 +75,10 @@ fun rememberThemeState(): ThemeState {
 @Composable
 fun LivoAppOfBooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context)
-            else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
