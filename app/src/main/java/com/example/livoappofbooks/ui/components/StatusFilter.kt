@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.Gray
-import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun FilterBar(

@@ -13,7 +13,7 @@ private val DarkColorScheme = darkColorScheme(
     background = BackgroundDark,
     surface = ProgressBarDark,
     error = AlertColor,
-    onBackground = BackgroundLight
+    onBackground = BackgroundLight,
 )
 
 // 🌞 Tema Claro
@@ -27,7 +27,6 @@ private val LightColorScheme = lightColorScheme(
     onBackground = BackgroundDark
 )
 
-// Gerenciamento do tema
 data class ThemeState(
     val isDarkTheme: Boolean,
     val toggleTheme: () -> Unit

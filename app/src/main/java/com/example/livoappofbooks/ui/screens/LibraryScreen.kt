@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.ui.graphics.ColorFilter
 import com.example.livoappofbooks.ui.components.FilterBar
-import com.example.livoappofbooks.viewmodel.ThemeViewModel
 
 data class Livro(
     val status: String,

@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
@@ -53,7 +51,7 @@ fun CardBook(
                 ambientColor = Color(0x40000000)
             )
             .height(140.dp)
-            .background(color = BackgroundLight, shape = RoundedCornerShape(10.dp))
+            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp))
             .padding(10.dp)
     ) {
         Row {
@@ -73,13 +71,13 @@ fun CardBook(
                 Text(
                     text = title,
                     style = AppTypography.titleMedium,
-                    color = Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Text(
                     text = author,
                     style = AppTypography.bodyMedium,
-                    color = SubtitlesColor
+                    color = MaterialTheme.colorScheme.tertiary
                 )
 
                 Spacer(Modifier.height(10.dp))
