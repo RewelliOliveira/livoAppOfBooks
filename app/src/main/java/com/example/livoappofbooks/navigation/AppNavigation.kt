@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
+import com.example.livoappofbooks.ui.screens.SearchScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -34,6 +35,12 @@ fun AppNavigation() {
                     onBookClick = { livro ->
                         navController.navigate(Screen.ViewBook.route)
                     }
+                )
+            }
+
+            composable(Screen.Profile.route) {
+                SearchScreen(
+                    onNavigate = { navController.navigate(Screen.Search.route) }
                 )
             }
 
