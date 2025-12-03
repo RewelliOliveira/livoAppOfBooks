@@ -121,7 +121,7 @@ fun ViewBook(
                         Text(
                             text = title,
                             style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
