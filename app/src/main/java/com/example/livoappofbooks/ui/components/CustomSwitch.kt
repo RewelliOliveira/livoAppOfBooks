@@ -17,10 +17,10 @@ fun CustomSwitch(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = MaterialTheme.colorScheme.onBackground,
-            checkedTrackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f),
-            uncheckedThumbColor = MaterialTheme.colorScheme.surfaceVariant,
-            uncheckedTrackColor = MaterialTheme.colorScheme.outline
+            checkedThumbColor = MaterialTheme.colorScheme.background,
+            checkedTrackColor = MaterialTheme.colorScheme.tertiary,
+            uncheckedThumbColor = MaterialTheme.colorScheme.primary,
+            uncheckedTrackColor = MaterialTheme.colorScheme.background
         )
     )
 }

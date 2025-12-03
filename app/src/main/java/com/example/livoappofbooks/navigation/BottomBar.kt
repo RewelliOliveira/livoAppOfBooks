@@ -60,9 +60,14 @@ fun BottomBar(navController: NavController) {
                         else -> {}
                     }
                 },
-                label = {
-                    Text(text = screen.label)
-                }
+                label = { Text(text = screen.label) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary, // cor do ícone selecionado
+                    unselectedIconColor = MaterialTheme.colorScheme.tertiary, // cor do ícone não selecionado
+                    selectedTextColor = MaterialTheme.colorScheme.primary, // cor do label selecionado
+                    unselectedTextColor = MaterialTheme.colorScheme.tertiary, // cor do label não selecionado
+                    indicatorColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f) // <- bordinha
+                )
             )
         }
     }

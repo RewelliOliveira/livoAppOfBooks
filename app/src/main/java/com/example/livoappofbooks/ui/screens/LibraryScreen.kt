@@ -22,8 +22,8 @@ import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.ui.graphics.ColorFilter
 import com.example.livoappofbooks.ui.components.FilterBar
-import com.example.livoappofbooks.ui.theme.rememberThemeState
 import com.example.livoappofbooks.viewmodel.ThemeViewModel
 
 data class Livro(
@@ -117,9 +117,8 @@ fun LibraryScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(
-                            id = if (isDark) R.drawable.livo_dark else R.drawable.livo
-                        ),
+                        painter = painterResource(R.drawable.livo),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)

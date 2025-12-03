@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -26,17 +27,17 @@ fun Input(label: String, modifier: Modifier = Modifier){
         onValueChange = { newText -> text = newText },
         label = { Text(
             label,
-            color = Color(0xFF000000),
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.Bold
         ) },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFF6200EE),      // cor da borda ao focar
-            unfocusedBorderColor = Color(0xFFAAAAAA),    // cor da borda normal
-            focusedLabelColor = Color(0xFF6200EE),       // cor do label focado
-            unfocusedLabelColor = Color(0xFF777777),     // label quando não focado
-            cursorColor = Color(0xFF6200EE).copy(alpha = 0.8f) // cursor com opacidade
+            focusedBorderColor = MaterialTheme.colorScheme.onBackground,      // cor da borda ao focar
+            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,    // cor da borda normal
+            focusedLabelColor = MaterialTheme.colorScheme.background,       // cor do label focado
+            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,     // label quando não focado
+            cursorColor = MaterialTheme.colorScheme.background.copy(alpha = 0.8f) // cursor com opacidade
         )
     )
     Spacer(modifier = Modifier.height(15.dp))

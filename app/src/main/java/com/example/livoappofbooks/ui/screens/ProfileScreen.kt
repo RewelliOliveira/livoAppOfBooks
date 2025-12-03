@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,9 +47,8 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(
-                        id = if (isDark) R.drawable.livo_dark else R.drawable.livo
-                    ),
+                    painter = painterResource(R.drawable.livo),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = "LIVO Logo",
                     modifier = Modifier
                         .height(30.dp)
@@ -86,10 +86,9 @@ fun ProfileScreen(
 
                 IconButton(onClick = { }) {
                     Image(
-                        painter = painterResource(
-                            id = if (isDark) R.drawable.ic_edit_dark else R.drawable.ic_edit_light
-                        ),
+                        painter = painterResource(R.drawable.ic_edit),
                         contentDescription = "Editar perfil",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -136,10 +135,10 @@ fun ProfileScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
 
-                            val iconRes = if (isDark) R.drawable.ic_theme_dark else R.drawable.ic_theme_light
                             Image(
-                                painter = painterResource(id = iconRes),
+                                painter = painterResource(R.drawable.ic_theme),
                                 contentDescription = "Tema",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                                 modifier = Modifier.size(24.dp)
                             )
 
@@ -180,10 +179,10 @@ fun ProfileScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
 
-                            val notiIconRes = if (isDark) R.drawable.ic_noti_light else R.drawable.ic_noti_dark
                             Image(
-                                painter = painterResource(id = notiIconRes),
+                                painter = painterResource(R.drawable.ic_noti),
                                 contentDescription = "Notificações",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                                 modifier = Modifier.size(24.dp)
                             )
 

@@ -3,6 +3,7 @@ package com.example.livoappofbooks.ui.theme
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.graphics.Color
 
 // 🌙 Tema Escuro
 private val DarkColorScheme = darkColorScheme(

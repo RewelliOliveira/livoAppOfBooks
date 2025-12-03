@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,8 @@ fun RegisterScreen(
 ) {
     Scaffold(
         topBar = { Header(onBackClick) },
-        bottomBar = { CadastroFooter(onRegisterComplete) }
+        bottomBar = { RegisterFooter(onRegisterComplete) },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -51,13 +53,14 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(50.dp)
     ) {
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = Color(0xFF003D3A),
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
@@ -66,6 +69,7 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.livo),
             contentDescription = "Icone Livo",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -78,12 +82,14 @@ private fun Main(modifier: Modifier = Modifier) {
     Text(
         "Seja Bem vindo",
         fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onBackground
     )
     Spacer(modifier = Modifier.height(5.dp))
     Text(
         "Insira seus dados para acessar sua conta",
-        fontSize = 15.sp
+        fontSize = 15.sp,
+        color = MaterialTheme.colorScheme.tertiary
     )
     Spacer(modifier = Modifier.height(30.dp))
     Input("Nome e sobrenome")
@@ -93,13 +99,13 @@ private fun Main(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CadastroFooter(onRegisterComplete: () -> Unit) {
+fun RegisterFooter(onRegisterComplete: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(280.dp)
             .clip(TopDiagonalShape(280f))
-            .background(Color(0xFF003D3A))
+            .background(PrincipalColor)
     ) {
         Button(
             onClick = { onRegisterComplete() },
@@ -111,18 +117,18 @@ fun CadastroFooter(onRegisterComplete: () -> Unit) {
                 .offset(y = (-80).dp)
                 .border(
                     width = 2.dp,
-                    color = PrincipalColor,
+                    color = MaterialTheme.colorScheme.background,
                     shape = buttonShape
                 ),
             shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.background
             )
         ) {
             Text(
                 text = "Avançar",
                 fontSize = 20.sp,
-                color = Color(0xFF003D3A)
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }
