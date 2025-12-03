@@ -83,8 +83,8 @@ fun LibraryScreen(
             "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
         ),
         Livro(
-            "Abandonado",
-            40,
+            "Quero Ler",
+            0,
             0,
             "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
         ),
