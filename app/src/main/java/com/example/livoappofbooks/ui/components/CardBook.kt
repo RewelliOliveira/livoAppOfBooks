@@ -48,7 +48,7 @@ fun CardBook(
         Modifier
             .fillMaxWidth()
             .shadow(
-                elevation = 4.dp,
+                elevation = 10.dp,
                 spotColor = Color(0x40000000),
                 ambientColor = Color(0x40000000)
             )
@@ -58,7 +58,7 @@ fun CardBook(
     ) {
         Row {
             AsyncImage(
-                model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                model = imageUrl,
                 placeholder = painterResource(id = R.drawable.livro_teste),
                 contentDescription = null,
                 modifier = Modifier.fillMaxHeight()
@@ -84,7 +84,7 @@ fun CardBook(
 
                 Spacer(Modifier.height(10.dp))
 
-                StarRating(3.7)
+                StarRating(rate)
 
                 Spacer(Modifier.height(10.dp))
 
@@ -129,32 +129,4 @@ fun CardBook(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardBookPreview() {
-    CardBook(
-        title = "Peter Pan in Wonderland",
-        author = "Samira Sales",
-        rate = 3.7,
-        imageUrl = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
-        publishYear = "2025",
-        pageCount = 240,
-        personalLibrary = false
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardBookPreview2() {
-    CardBook(
-        title = "Peter Pan in Wonderland",
-        author = "Samira Sales",
-        rate = 3.7,
-        imageUrl = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
-        publishYear = "2025",
-        pageCount = 240,
-        personalLibrary = true
-    )
 }
