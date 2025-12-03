@@ -8,7 +8,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.viewmodel.ThemeViewModel
-import com.example.livoappofbooks.ui.screens.*
+import com.example.livoappofbooks.ui.screens.LibraryScreen
+import com.example.livoappofbooks.ui.screens.ProfileScreen
+import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
+import com.example.livoappofbooks.ui.screens.SearchScreen
+import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
 fun AppNavigation(themeViewModel: ThemeViewModel) {
@@ -30,6 +34,12 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                     onNavigate = { navController.navigate(Screen.Profile.route) },
                     onBookClick = { navController.navigate(Screen.ViewBook.route) },
                     themeViewModel = themeViewModel
+                )
+            }
+
+            composable(Screen.Profile.route) {
+                SearchScreen(
+                    onNavigate = { navController.navigate(Screen.Search.route) }
                 )
             }
 

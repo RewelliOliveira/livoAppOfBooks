@@ -70,7 +70,7 @@ fun ViewBook(
                 contentAlignment = Alignment.TopCenter
             ) {
                 AsyncImage(
-                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                    model = imageUrl.takeIf { it.isNotBlank() },
                     placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -94,7 +94,7 @@ fun ViewBook(
                 )
 
                 AsyncImage(
-                    model = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
+                    model = imageUrl.takeIf { it.isNotBlank() },
                     placeholder = painterResource(id = R.drawable.livro_teste),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,

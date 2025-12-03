@@ -9,16 +9,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.PrincipalColor
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
-import com.example.livoappofbooks.ui.icons.MarcaPagina // Exemplo para o preview
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun PrimaryButton(
@@ -26,7 +24,10 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    useDarkColor: Boolean = false,
+    height: Dp? = null,
+    width: Dp? = null
 ) {
     Button(
         onClick = onClick,
@@ -37,11 +38,13 @@ fun PrimaryButton(
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .defaultMinSize(minHeight = 40.dp)
-            .shadow(
-                elevation = if (enabled) 4.dp else 0.dp,
-                shape = RoundedCornerShape(50)
+            .then(
+                if (width != null) Modifier.width(width) else Modifier
             )
+            .then(
+                if (height != null) Modifier.height(height) else Modifier
+            )
+            .padding(horizontal= 10.dp)
     ) {
         if (icon != null) {
             Icon(
@@ -54,7 +57,8 @@ fun PrimaryButton(
         }
         Text(
             text = text,
-            style = AppTypography.titleSmall.copy(color = MaterialTheme.colorScheme.background)
+            maxLines = 1,
+            style = AppTypography.labelMedium.copy(color = MaterialTheme.colorScheme.background)
         )
     }
 }

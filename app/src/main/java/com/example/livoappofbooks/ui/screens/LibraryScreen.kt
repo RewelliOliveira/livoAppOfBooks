@@ -82,11 +82,17 @@ fun LibraryScreen(
             "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
         ),
         Livro(
-            "Abandonado",
-            40,
+            "Quero Ler",
+            0,
             0,
             "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
-        )
+        ),
+        Livro(
+            "Abandonado",
+        40,
+        0,
+        ""
+    )
     )
 
     val filteredLivros = when (selectedFilter) {
@@ -102,18 +108,16 @@ fun LibraryScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(horizontal = 25.dp)
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 24.dp),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
@@ -126,13 +130,16 @@ fun LibraryScreen(
                     )
                 }
 
+                Spacer(modifier = Modifier.height(32.dp))
+
                 SearchBar(
                     query = searchQuery,
                     onQueryChange = { searchQuery = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 FilterBar(
                     selectedFilter = selectedFilter,
@@ -141,6 +148,8 @@ fun LibraryScreen(
                         .fillMaxWidth()
                         .padding(bottom = 24.dp)
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
 
                 if (filteredLivros.isNotEmpty()) {
                     LazyVerticalGrid(

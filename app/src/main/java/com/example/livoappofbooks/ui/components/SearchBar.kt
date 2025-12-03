@@ -2,6 +2,7 @@ package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -19,12 +20,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.theme.Gray
 
 @Composable
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    onSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -66,7 +67,7 @@ fun SearchBar(
                                 text = "Pesquisar na minha biblioteca",
                                 style = TextStyle(
                                     fontWeight = FontWeight.Normal,
-                                    fontSize = 12.sp,
+                                    fontSize = 10.sp,
                                     lineHeight = 10.sp,
                                     color = MaterialTheme.colorScheme.primary
                                 )
@@ -83,7 +84,7 @@ fun SearchBar(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(28.dp).clickable { onSearch() }
             )
         }
     }
