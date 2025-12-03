@@ -16,6 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
+import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -24,7 +28,7 @@ fun Book(
     status: String,
     progress: Int,
     evaluate: Int,
-    imageUrl: String? = null,
+    imageUrl: String,
     onClick: (() -> Unit)? = null
 ) {
     val isDark = rememberThemeState().isDarkTheme
@@ -44,19 +48,14 @@ fun Book(
                 .clip(RoundedCornerShape(8.dp))
         ) {
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(SubtitlesColor),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "CAPA",
-                    color = BackgroundLight,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+            AsyncImage(
+                model = imageUrl.takeIf { it.isNotBlank() },
+                placeholder = painterResource(id = R.drawable.capa_default),
+                error = painterResource(id = R.drawable.capa_default),
+                contentDescription = "Capa do livro",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
