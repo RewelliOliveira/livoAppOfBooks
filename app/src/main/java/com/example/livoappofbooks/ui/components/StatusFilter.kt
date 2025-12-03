@@ -8,14 +8,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.theme.Gray
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
@@ -26,8 +24,6 @@ fun FilterBar(
     modifier: Modifier = Modifier
 ) {
     val filters = listOf("Todos", "Lendo", "Lido", "Quero Ler", "Abandonado")
-
-    val isDark = rememberThemeState().isDarkTheme
 
     var textPositions by remember { mutableStateOf<Map<String, Pair<Float, IntSize>>>(emptyMap()) }
     var rowWidth by remember { mutableStateOf(0) }

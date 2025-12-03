@@ -36,10 +36,8 @@ data class Livro(
 @Composable
 fun LibraryScreen(
     onNavigate: () -> Unit,
-    onBookClick: (Livro) -> Unit,
-    themeViewModel: ThemeViewModel
+    onBookClick: (Livro) -> Unit
 ) {
-    val isDark = themeViewModel.isDarkTheme.collectAsState().value
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }

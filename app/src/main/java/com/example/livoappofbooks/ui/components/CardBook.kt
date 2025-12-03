@@ -112,7 +112,6 @@ fun CardBook(
                             text = "Já adicionado",
                             icon = CheckCircle,
                             onClick = {},
-                            useDarkColor = true,
                             height = 28.dp,
                             width = 150.dp
                         )

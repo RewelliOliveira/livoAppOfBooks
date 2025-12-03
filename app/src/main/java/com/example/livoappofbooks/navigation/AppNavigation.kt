@@ -32,12 +32,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             composable(Screen.Library.route) {
                 LibraryScreen(
                     onNavigate = { navController.navigate(Screen.Profile.route) },
-                    onBookClick = { navController.navigate(Screen.ViewBook.route) },
-                    themeViewModel = themeViewModel
+                    onBookClick = { navController.navigate(Screen.ViewBook.route) }
                 )
             }
 
-            composable(Screen.Profile.route) {
+            composable(Screen.Search.route) {
                 SearchScreen(
                     onNavigate = { navController.navigate(Screen.Search.route) }
                 )

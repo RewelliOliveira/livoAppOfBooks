@@ -25,7 +25,6 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     enabled: Boolean = true,
-    useDarkColor: Boolean = false,
     height: Dp? = null,
     width: Dp? = null
 ) {
