@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 import com.example.livoappofbooks.ui.components.FilterBar
 import com.example.livoappofbooks.ui.theme.rememberThemeState
+import com.example.livoappofbooks.viewmodel.ThemeViewModel
 
 data class Livro(
     val status: String,
@@ -35,10 +36,10 @@ data class Livro(
 @Composable
 fun LibraryScreen(
     onNavigate: () -> Unit,
-    onBookClick: (Livro) -> Unit
+    onBookClick: (Livro) -> Unit,
+    themeViewModel: ThemeViewModel
 ) {
-    val themeState = rememberThemeState()
-    val isDark = themeState.isDarkTheme
+    val isDark = themeViewModel.isDarkTheme.collectAsState().value
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }

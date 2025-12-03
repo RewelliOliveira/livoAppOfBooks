@@ -44,7 +44,7 @@ fun ViewBook(
     status: String,
     shelf: String,
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
@@ -261,23 +261,4 @@ fun ViewBook(
                 .fillMaxWidth()
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ViewBookPreview() {
-    ViewBook(
-        title = "Peter Pan in Wonderland",
-        author = "Samira Sales",
-        rate = 3.7,
-        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguém ficar fazendo zuada no meu pé do ouvido",
-        imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
-        publishYear = "2025",
-        publisher = "Bila-Bilu",
-        shelf = "Romances",
-        pageCount = "240",
-        status = "LENDO",
-        onBackClick = {},
-        onRegisterClick = {}
-    )
 }

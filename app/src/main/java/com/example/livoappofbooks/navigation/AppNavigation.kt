@@ -7,19 +7,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.livoappofbooks.ui.screens.LibraryScreen
-import com.example.livoappofbooks.ui.screens.ProfileScreen
-import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
-import com.example.livoappofbooks.ui.screens.ViewBook
+import com.example.livoappofbooks.viewmodel.ThemeViewModel
+import com.example.livoappofbooks.ui.screens.*
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(themeViewModel: ThemeViewModel) {
+
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = {
-            BottomBar(navController)
-        }
+        bottomBar = { BottomBar(navController) }
     ) { innerPadding ->
 
         NavHost(
@@ -31,15 +28,15 @@ fun AppNavigation() {
             composable(Screen.Library.route) {
                 LibraryScreen(
                     onNavigate = { navController.navigate(Screen.Profile.route) },
-                    onBookClick = { livro ->
-                        navController.navigate(Screen.ViewBook.route)
-                    }
+                    onBookClick = { navController.navigate(Screen.ViewBook.route) },
+                    themeViewModel = themeViewModel
                 )
             }
 
             composable(Screen.Profile.route) {
                 ProfileScreen(
-                    onNavigate = { navController.navigate(Screen.Library.route) }
+                    onNavigate = { navController.navigate(Screen.Library.route) },
+                    themeViewModel = themeViewModel
                 )
             }
 
@@ -56,13 +53,13 @@ fun AppNavigation() {
                     status = "ABANDONADO",
                     shelf = "Romances",
                     onBackClick = { navController.popBackStack() },
-                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) } // <-- aqui
+                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) },
                 )
             }
 
             composable(Screen.RegisterReading.route) {
                 RegisterReadingScreen(
-                    onNavigate = { navController.popBackStack() }
+                    onNavigate = { navController.popBackStack() },
                 )
             }
         }

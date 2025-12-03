@@ -1,13 +1,8 @@
 package com.example.livoappofbooks.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 
 // 🌙 Tema Escuro
 private val DarkColorScheme = darkColorScheme(
@@ -17,11 +12,7 @@ private val DarkColorScheme = darkColorScheme(
     background = BackgroundDark,
     surface = ProgressBarDark,
     error = AlertColor,
-    //onPrimary = BackgroundLight,
-    //onSecondary = BackgroundLight,
-    //onTertiary = BackgroundLight,
-    onBackground = BackgroundLight,
-    //onSurface = BackgroundLight
+    onBackground = BackgroundLight
 )
 
 // 🌞 Tema Claro
@@ -32,11 +23,7 @@ private val LightColorScheme = lightColorScheme(
     background = BackgroundLight,
     surface = ProgressBarLight,
     error = AlertColor,
-    //onPrimary = Black,
-    //onSecondary = BackgroundLight,
-    //onTertiary = PrincipalColor,
-    onBackground = BackgroundDark,
-    //onSurface = Color.Black,
+    onBackground = BackgroundDark
 )
 
 // Gerenciamento do tema
@@ -51,13 +38,13 @@ val LocalThemeState = compositionLocalOf<ThemeState> {
 
 @Composable
 fun ThemeProvider(
+    isDarkTheme: Boolean,
+    toggleTheme: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    var isDarkTheme by remember { mutableStateOf(false) }
-
     val themeState = ThemeState(
         isDarkTheme = isDarkTheme,
-        toggleTheme = { isDarkTheme = !isDarkTheme }
+        toggleTheme = toggleTheme
     )
 
     CompositionLocalProvider(LocalThemeState provides themeState) {
@@ -74,10 +61,9 @@ fun rememberThemeState(): ThemeState {
 
 @Composable
 fun LivoAppOfBooksTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(

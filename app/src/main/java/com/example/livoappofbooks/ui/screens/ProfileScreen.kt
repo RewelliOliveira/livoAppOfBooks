@@ -14,20 +14,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.ConfigSection
 import com.example.livoappofbooks.ui.components.CustomSwitch
 import com.example.livoappofbooks.ui.components.InfoCard
-import com.example.livoappofbooks.ui.theme.AlertColor
-import com.example.livoappofbooks.ui.theme.rememberThemeState
+import com.example.livoappofbooks.viewmodel.ThemeViewModel
 
 @Composable
-fun ProfileScreen(onNavigate: () -> Unit) {
-    val themeState = rememberThemeState()
-    val isDark = themeState.isDarkTheme
+fun ProfileScreen(
+    onNavigate: () -> Unit,
+    themeViewModel: ThemeViewModel
+) {
+    val isDark by themeViewModel.isDarkTheme.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -40,6 +38,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 .padding(horizontal = 25.dp)
         ) {
 
+            // --- Logo ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -55,10 +54,9 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                         .height(30.dp)
                         .width(100.dp)
                 )
-
             }
 
-
+            // --- Perfil ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -86,17 +84,11 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                     )
                 }
 
-                IconButton(
-                    onClick = { /* TODO: Implementar edição de perfil */ }
-                ) {
-                    val editIconRes = if (isDark) {
-                        R.drawable.ic_edit_dark
-                    } else {
-                        R.drawable.ic_edit_light
-                    }
-
+                IconButton(onClick = { }) {
                     Image(
-                        painter = painterResource(id = editIconRes),
+                        painter = painterResource(
+                            id = if (isDark) R.drawable.ic_edit_dark else R.drawable.ic_edit_light
+                        ),
                         contentDescription = "Editar perfil",
                         modifier = Modifier.size(24.dp)
                     )
@@ -105,6 +97,7 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
             Spacer(modifier = Modifier.height(25.dp))
 
+            // --- Info Cards ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -129,6 +122,8 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
+
+                // --- Aparência ---
                 ConfigSection(
                     titulo = "Aparência",
                     modifier = Modifier.fillMaxWidth()
@@ -138,22 +133,13 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val iconRes = if (isDark) {
-                                R.drawable.ic_theme_dark
-                            } else {
-                                R.drawable.ic_theme_light
-                            }
 
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+
+                            val iconRes = if (isDark) R.drawable.ic_theme_dark else R.drawable.ic_theme_light
                             Image(
                                 painter = painterResource(id = iconRes),
-                                contentDescription = if (isDark) {
-                                    "Modo escuro ativado"
-                                } else {
-                                    "Modo claro ativado"
-                                },
+                                contentDescription = "Tema",
                                 modifier = Modifier.size(24.dp)
                             )
 
@@ -176,11 +162,12 @@ fun ProfileScreen(onNavigate: () -> Unit) {
 
                         CustomSwitch(
                             checked = isDark,
-                            onCheckedChange = { themeState.toggleTheme() }
+                            onCheckedChange = { themeViewModel.toggleTheme() }
                         )
                     }
                 }
 
+                // --- Notificações ---
                 ConfigSection(
                     titulo = "Notificações",
                     modifier = Modifier.fillMaxWidth()
@@ -190,22 +177,13 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val notiIconRes = if (isDark) {
-                                R.drawable.ic_noti_light
-                            } else {
-                                R.drawable.ic_noti_dark
-                            }
 
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+
+                            val notiIconRes = if (isDark) R.drawable.ic_noti_light else R.drawable.ic_noti_dark
                             Image(
                                 painter = painterResource(id = notiIconRes),
-                                contentDescription = if (isDark) {
-                                    "Ícone de notificações modo escuro"
-                                } else {
-                                    "Ícone de notificações modo claro"
-                                },
+                                contentDescription = "Notificações",
                                 modifier = Modifier.size(24.dp)
                             )
 
@@ -225,9 +203,10 @@ fun ProfileScreen(onNavigate: () -> Unit) {
                                 )
                             }
                         }
+
                         CustomSwitch(
                             checked = false,
-                            onCheckedChange = { /* TODO: Implementar notificações */ }
+                            onCheckedChange = { }
                         )
                     }
                 }
@@ -236,14 +215,14 @@ fun ProfileScreen(onNavigate: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
 
             OutlinedButton(
-                onClick = { /* TODO: Implementar logout */ },
+                onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
                     contentColor = MaterialTheme.colorScheme.error
                 ),
-                border = BorderStroke(1.dp, AlertColor)
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
             ) {
                 Text("Sair da conta", fontWeight = FontWeight.Bold)
             }
