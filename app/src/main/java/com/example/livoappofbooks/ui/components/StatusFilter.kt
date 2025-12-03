@@ -46,7 +46,7 @@ fun FilterBar(
             filters.forEach { filter ->
                 Text(
                     text = filter,
-                    fontSize = 14.sp,
+                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
                     fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal,
                     color = if (selectedFilter == filter)
                         if (isDark) cs.onBackground else cs.primary
