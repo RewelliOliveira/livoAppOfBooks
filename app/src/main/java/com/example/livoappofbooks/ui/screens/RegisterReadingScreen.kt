@@ -1,10 +1,9 @@
 package com.example.livoappofbooks.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,54 +34,104 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = {
-                Text(
-                    "Registrar Leitura", fontWeight = FontWeight.Bold, fontSize = 20.sp
-                )
-            }, navigationIcon = {
-                IconButton(onClick = { onNavigate() }) {
-                    Icon(
-                        imageVector = Arrow_back_ios_new, contentDescription = "Voltar"
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Registrar Leitura",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
-                }
-            })
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onNavigate() }) {
+                        Icon(
+                            imageVector = Arrow_back_ios_new,
+                            contentDescription = "Voltar"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
         },
-
         bottomBar = {
-            BottomAppBar(
-                modifier = Modifier.height(70.dp), tonalElevation = 3.dp
+            Surface(
+                color = MaterialTheme.colorScheme.background
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .height(80.dp)
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    OutlinedIconLabelButton(
-                        text = "Cancelar",
+                    OutlinedButton(
                         onClick = {},
-                        color = PrincipalColor,
-                        icon = Close_small,
-                        modifier = Modifier.weight(1f)
-                    )
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Close_small,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                text = "Cancelar",
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
 
-                    PrimaryButton(
-                        text = "Salvar",
+                    Button(
                         onClick = {},
-                        icon = Send,
-                        modifier = Modifier.weight(1f)
-                    )
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(52.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Salvar",
+                                color = MaterialTheme.colorScheme.background
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Icon(
+                                imageVector = Send,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                                tint = MaterialTheme.colorScheme.background
+                            )
+                        }
+                    }
                 }
             }
-        }) { innerPadding ->
-
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
@@ -101,7 +150,10 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
                     Text(
-                        "As Estrelas do Amanhã", fontWeight = FontWeight.Bold, fontSize = 18.sp
+                        "As Estrelas do Amanhã",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
 
                     Row(
@@ -111,13 +163,14 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         Text(
                             "Marina Alves",
                             fontSize = 14.sp,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.weight(1f)
                         )
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
-                                imageVector = BookOpen, contentDescription = "Livro aberto"
+                                imageVector = BookOpen,
+                                contentDescription = "Livro aberto"
                             )
                             Text("367 pags.", fontSize = 12.sp)
                         }
@@ -135,13 +188,16 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                             color = BackgroundLight,
                             modifier = Modifier
                                 .background(
-                                    PrincipalColor, RoundedCornerShape(30.dp)
+                                    PrincipalColor,
+                                    RoundedCornerShape(30.dp)
                                 )
                                 .padding(horizontal = 30.dp, vertical = 3.dp)
                         )
 
                         StarRating(
-                            rating = 3.5, maxStars = 5, starSize = 20
+                            rating = 3.5,
+                            maxStars = 5,
+                            starSize = 20
                         )
                     }
                 }
@@ -188,5 +244,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewRegisterReadingScreen() {
-    RegisterReadingScreen(onNavigate = {})
+    MaterialTheme {
+        RegisterReadingScreen(onNavigate = {})
+    }
 }
