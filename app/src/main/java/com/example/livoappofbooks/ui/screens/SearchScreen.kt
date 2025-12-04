@@ -29,8 +29,8 @@ import com.example.livoappofbooks.ui.theme.BackgroundLight
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.livoappofbooks.ui.viewmodel.SearchViewModel
-import com.example.livoappofbooks.ui.viewmodel.SearchUiState
+import com.example.livoappofbooks.ui.viewModel.SearchViewModel
+import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
 fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()){

@@ -1,6 +1,6 @@
 package com.example.livoappofbooks.ui.screens
 
-import com.example.livoappofbooks.R
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,26 +12,63 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.shapes.TopDiagonalShape
+import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.theme.buttonShape
+import com.example.livoappofbooks.ui.viewModel.RegisterUiState
+import com.example.livoappofbooks.ui.viewModel.RegisterViewModel
+
+class RegisterViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return RegisterViewModel(context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 @Composable
 fun RegisterScreen(
     onBackClick: () -> Unit,
-    onRegisterComplete: (name: String, email: String, password: String) -> Unit
+    onRegisterComplete: () -> Unit
 ) {
+    val context = LocalContext.current.applicationContext
+    val factory = RegisterViewModelFactory(context)
+    val viewModel: RegisterViewModel = viewModel(factory = factory)
+
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        when (val state = uiState) {
+            is RegisterUiState.Success -> {
+                onRegisterComplete()
+                viewModel.resetState() // Reseta o estado para evitar re-navegação
+            }
+            is RegisterUiState.Error -> {
+                errorMessage = state.message
+            }
+            else -> {}
+        }
+    }
 
     Scaffold(
         topBar = { Header(onBackClick) },
@@ -42,9 +79,10 @@ fun RegisterScreen(
                         errorMessage = "As senhas não coincidem"
                     } else {
                         errorMessage = null
-                        onRegisterComplete(name, email, password)
+                        viewModel.register(name, email, password)
                     }
-                }
+                },
+                isLoading = (uiState is RegisterUiState.Loading)
             )
         }
     ) { paddingValues ->
@@ -133,7 +171,10 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CadastroFooter(onRegisterClick: () -> Unit) {
+fun CadastroFooter(
+    onRegisterClick: () -> Unit,
+    isLoading: Boolean
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -143,6 +184,7 @@ fun CadastroFooter(onRegisterClick: () -> Unit) {
     ) {
         Button(
             onClick = onRegisterClick,
+            enabled = !isLoading,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
@@ -159,11 +201,19 @@ fun CadastroFooter(onRegisterClick: () -> Unit) {
                 containerColor = Color.White
             )
         ) {
-            Text(
-                text = "Avançar",
-                fontSize = 20.sp,
-                color = Color(0xFF003D3A)
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = Color(0xFF003D3A),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text(
+                    text = "Avançar",
+                    fontSize = 20.sp,
+                    color = Color(0xFF003D3A)
+                )
+            }
         }
     }
 }

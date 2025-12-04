@@ -60,7 +60,11 @@ fun RootNavigation() {
         composable("register") {
             RegisterScreen(
                 onBackClick = { navController.popBackStack() },
-                onRegisterComplete = { _, _, _ -> navController.popBackStack() }
+                onRegisterComplete = {
+                    navController.navigate("initial") {
+                        popUpTo("register") { inclusive = true }
+                    }
+                }
             )
         }
         composable("app") {
