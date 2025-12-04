@@ -18,27 +18,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Input(label: String, modifier: Modifier = Modifier){
-    var text by remember { mutableStateOf("") }
-
+fun Input(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedTextField(
-        value = text,
-        onValueChange = { newText -> text = newText },
-        label = { Text(
-            label,
-            color = Color(0xFF000000),
-            fontWeight = FontWeight.Bold
-        ) },
-        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            Text(
+                label,
+                color = Color(0xFF000000),
+                fontWeight = FontWeight.Bold
+            )
+        },
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFF6200EE),      // cor da borda ao focar
-            unfocusedBorderColor = Color(0xFFAAAAAA),    // cor da borda normal
-            focusedLabelColor = Color(0xFF6200EE),       // cor do label focado
-            unfocusedLabelColor = Color(0xFF777777),     // label quando não focado
-            cursorColor = Color(0xFF6200EE).copy(alpha = 0.8f) // cursor com opacidade
+            focusedBorderColor = Color(0xFF6200EE),
+            unfocusedBorderColor = Color(0xFFAAAAAA),
+            focusedLabelColor = Color(0xFF6200EE),
+            unfocusedLabelColor = Color(0xFF777777),
+            cursorColor = Color(0xFF6200EE).copy(alpha = 0.8f)
         )
     )
     Spacer(modifier = Modifier.height(15.dp))
-
 }
