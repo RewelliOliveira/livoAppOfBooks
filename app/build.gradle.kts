@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.text.google.fonts)
     implementation(libs.coil.compose)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.compose.foundation)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
 
     testImplementation(libs.junit)
