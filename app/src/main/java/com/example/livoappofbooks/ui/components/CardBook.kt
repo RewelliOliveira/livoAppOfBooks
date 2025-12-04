@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -47,8 +47,8 @@ fun CardBook(
             .fillMaxWidth()
             .shadow(
                 elevation = 10.dp,
-                spotColor = Color(0x40000000),
-                ambientColor = Color(0x40000000)
+                spotColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                ambientColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
             )
             .height(140.dp)
             .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp))

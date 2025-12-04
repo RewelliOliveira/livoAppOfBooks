@@ -31,8 +31,8 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.theme.AppTypography
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.livoappofbooks.ui.viewmodel.SearchViewModel
-import com.example.livoappofbooks.ui.viewmodel.SearchUiState
+import com.example.livoappofbooks.viewmodel.SearchViewModel
+import com.example.livoappofbooks.viewmodel.SearchUiState
 
 @Composable
 fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
