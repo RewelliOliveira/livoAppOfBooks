@@ -6,17 +6,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.example.livoappofbooks.data.ThemePreferences
 import com.example.livoappofbooks.data.ThemeRepository
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.navigation.AppNavigation
 import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LoginScreen
 import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.theme.ThemeProvider
-import com.example.livoappofbooks.viewmodel.ThemeViewModel
-import com.example.livoappofbooks.viewmodel.ThemeViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -47,25 +52,41 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RootNavigation(themeViewModel: ThemeViewModel) {
-    var currentScreen by remember { mutableStateOf("initial") }
+fun RootNavigation() {
+    val navController = rememberNavController()
 
-    when (currentScreen) {
-        "initial" -> InitialScreen(
-            title = "Organize suas leituras com o Livo!",
-            subTitle = "Selecione uma das opções para continuar",
-            onLoginClick = { currentScreen = "login" },
-            onRegisterClick = { currentScreen = "register" }
-        )
-        "login" -> LoginScreen(
-            onLoginSuccess = { currentScreen = "app" },
-            onBackClick = { currentScreen = "initial" }
-        )
-        "register" -> RegisterScreen(
-            onBackClick = { currentScreen = "initial" },
-            onRegisterComplete = { currentScreen = "initial" }
-        )
-        "app" -> AppNavigation(themeViewModel)
+    NavHost(navController = navController, startDestination = "initial") {
+        composable("initial") {
+            InitialScreen(
+                title = "Organize suas leituras com o Livo!",
+                subTitle = "Selecione uma das opções para continuar",
+                onLoginClick = { navController.navigate("login") },
+                onRegisterClick = { navController.navigate("register") }
+            )
+        }
+        composable("login") {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate("app") {
+                        popUpTo("initial") { inclusive = true }
+                    }
+                },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        composable("register") {
+            RegisterScreen(
+                onBackClick = { navController.popBackStack() },
+                onRegisterComplete = {
+                    navController.navigate("initial") {
+                        popUpTo("register") { inclusive = true }
+                    }
+                }
+            )
+        }
+        composable("app") {
+            AppNavigation()//RESOLVER AQUI
+        }
     }
 }
 

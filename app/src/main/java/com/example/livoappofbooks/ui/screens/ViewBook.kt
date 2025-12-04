@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
@@ -260,4 +261,22 @@ fun ViewBook(
                 .fillMaxWidth()
         )
     }
+}
+@Preview(showBackground = true)
+@Composable
+fun PreviewViewBook() {
+    ViewBook(
+        title = "O Senhor dos Anéis",
+        author = "J. R. R. Tolkien",
+        rate = 4.8,
+        sinopse = "Uma aventura épica pela Terra-média, onde Frodo Bolseiro deve destruir o Um Anel antes que Sauron recupere seu poder absoluto. Com a ajuda da Sociedade do Anel, ele enfrenta inúmeros desafios e perigos.",
+        imageUrl = "",
+        publishYear = "1954",
+        publisher = "HarperCollins",
+        pageCount = "1216",
+        status = "LIDO",
+        shelf = "Fantasia",
+        onBackClick = {},
+        onRegisterClick = {}
+    )
 }

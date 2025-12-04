@@ -31,8 +31,8 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.theme.AppTypography
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.livoappofbooks.viewmodel.SearchViewModel
-import com.example.livoappofbooks.viewmodel.SearchUiState
+import com.example.livoappofbooks.ui.viewModel.SearchViewModel
+import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
 fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
@@ -46,7 +46,6 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
             .windowInsetsPadding(WindowInsets.statusBars),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -143,6 +142,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                 ) {
                     Text(text = message, style = AppTypography.bodyMedium)
                     Spacer(modifier = Modifier.height(8.dp))
+                    // Opcional: botões de retry poderiam ser adicionados aqui
                 }
             }
         }

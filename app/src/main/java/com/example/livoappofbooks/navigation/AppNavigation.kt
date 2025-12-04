@@ -3,11 +3,13 @@ package com.example.livoappofbooks.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.livoappofbooks.viewmodel.ThemeViewModel
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
@@ -18,9 +20,15 @@ import com.example.livoappofbooks.ui.screens.ViewBook
 fun AppNavigation(themeViewModel: ThemeViewModel) {
 
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        bottomBar = { BottomBar(navController) }
+        bottomBar = {
+            if (currentRoute in listOf(Screen.Library.route, Screen.Search.route, Screen.Profile.route)) {
+                BottomBar(navController)
+            }
+        }
     ) { innerPadding ->
 
         NavHost(
@@ -68,7 +76,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.RegisterReading.route) {
                 RegisterReadingScreen(
-                    onNavigate = { navController.popBackStack() },
+                    onNavigate = { navController.popBackStack() }
                 )
             }
         }

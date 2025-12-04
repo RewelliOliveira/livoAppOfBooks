@@ -19,18 +19,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Input(label: String, modifier: Modifier = Modifier){
-    var text by remember { mutableStateOf("") }
-
+fun Input(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedTextField(
-        value = text,
-        onValueChange = { newText -> text = newText },
-        label = { Text(
-            label,
-            color = MaterialTheme.colorScheme.tertiary,
-            fontWeight = FontWeight.Bold
-        ) },
-        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            Text(
+                label,
+                color = MaterialTheme.colorScheme.tertiary,
+                fontWeight = FontWeight.Bold
+            )
+        },
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onBackground,      // cor da borda ao focar
@@ -41,5 +46,4 @@ fun Input(label: String, modifier: Modifier = Modifier){
         )
     )
     Spacer(modifier = Modifier.height(15.dp))
-
 }

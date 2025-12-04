@@ -19,7 +19,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.ConfigSection
 import com.example.livoappofbooks.ui.components.CustomSwitch
 import com.example.livoappofbooks.ui.components.InfoCard
-import com.example.livoappofbooks.viewmodel.ThemeViewModel
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars

@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.viewmodel
+package com.example.livoappofbooks.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
