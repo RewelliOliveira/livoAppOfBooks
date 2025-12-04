@@ -39,7 +39,7 @@ class LoginViewModel(
                     LoginRequest(email = email, password = password)
                 )
 
-                response.token?.let { token ->
+                response.acessToken?.let { token ->
                     tokenManager.saveToken(token)
                 }
 
