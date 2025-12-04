@@ -262,3 +262,21 @@ fun ViewBook(
         )
     }
 }
+@Preview(showBackground = true)
+@Composable
+fun PreviewViewBook() {
+    ViewBook(
+        title = "O Senhor dos Anéis",
+        author = "J. R. R. Tolkien",
+        rate = 4.8,
+        sinopse = "Uma aventura épica pela Terra-média, onde Frodo Bolseiro deve destruir o Um Anel antes que Sauron recupere seu poder absoluto. Com a ajuda da Sociedade do Anel, ele enfrenta inúmeros desafios e perigos.",
+        imageUrl = "",
+        publishYear = "1954",
+        publisher = "HarperCollins",
+        pageCount = "1216",
+        status = "LIDO",
+        shelf = "Fantasia",
+        onBackClick = {},
+        onRegisterClick = {}
+    )
+}
