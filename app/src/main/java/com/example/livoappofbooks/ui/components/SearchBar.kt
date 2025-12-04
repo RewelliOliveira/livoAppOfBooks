@@ -2,13 +2,13 @@ package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,23 +19,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    onSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val colors = MaterialTheme.colorScheme
 
     Box(
         modifier = modifier
             .height(41.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(colors.surface)
+            .background(BackgroundLight)
             .border(
                 width = 2.dp,
-                color = colors.onPrimary,
+                color = PrincipalColor,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -49,10 +50,10 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = colors.onSurface,
+                    color = Black,
                     fontSize = 16.sp
                 ),
-                cursorBrush = SolidColor(colors.primary),
+                cursorBrush = SolidColor(PrincipalColor),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -68,7 +69,7 @@ fun SearchBar(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
                                     lineHeight = 10.sp,
-                                    color = colors.onSurface.copy(alpha = 0.6f)
+                                    color = Black.copy(alpha = 0.6f)
                                 )
                             )
                         }
@@ -82,8 +83,8 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
-                tint = colors.onPrimary,
-                modifier = Modifier.size(28.dp)
+                tint = PrincipalColor,
+                modifier = Modifier.size(28.dp).clickable { onSearch() }
             )
         }
     }

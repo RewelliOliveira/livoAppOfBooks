@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.compose.foundation)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,8 +66,12 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
     val nav_version = "2.9.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
-
 }
