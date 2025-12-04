@@ -7,11 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,11 +25,28 @@ import com.example.livoappofbooks.ui.theme.buttonShape
 @Composable
 fun RegisterScreen(
     onBackClick: () -> Unit,
-    onRegisterComplete: () -> Unit
+    onRegisterComplete: (name: String, email: String, password: String) -> Unit
 ) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     Scaffold(
         topBar = { Header(onBackClick) },
-        bottomBar = { CadastroFooter(onRegisterComplete) }
+        bottomBar = {
+            CadastroFooter(
+                onRegisterClick = {
+                    if (password != confirmPassword) {
+                        errorMessage = "As senhas não coincidem"
+                    } else {
+                        errorMessage = null
+                        onRegisterComplete(name, email, password)
+                    }
+                }
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -41,7 +54,55 @@ fun RegisterScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 30.dp)
         ) {
-            Main()
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Text(
+                "Seja Bem vindo",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Text(
+                "Insira seus dados para criar sua conta",
+                fontSize = 15.sp
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Input(
+                label = "Nome e sobrenome",
+                value = name,
+                onValueChange = { name = it }
+            )
+
+            Input(
+                label = "E-mail",
+                value = email,
+                onValueChange = { email = it }
+            )
+
+            Input(
+                label = "Digite sua senha",
+                value = password,
+                onValueChange = { password = it }
+            )
+
+            Input(
+                label = "Confirme sua senha",
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it }
+            )
+
+            if (errorMessage != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = errorMessage ?: "",
+                    color = Color.Red,
+                    fontSize = 14.sp
+                )
+            }
         }
     }
 }
@@ -72,28 +133,7 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Main(modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf("") }
-    Spacer(modifier = modifier.height(30.dp))
-    Text(
-        "Seja Bem vindo",
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
-    )
-    Spacer(modifier = Modifier.height(5.dp))
-    Text(
-        "Insira seus dados para acessar sua conta",
-        fontSize = 15.sp
-    )
-    Spacer(modifier = Modifier.height(30.dp))
-    Input("Nome e sobrenome")
-    Input("E-mail")
-    Input("Digite sua senha")
-    Input("Confirme sua senha")
-}
-
-@Composable
-fun CadastroFooter(onRegisterComplete: () -> Unit) {
+fun CadastroFooter(onRegisterClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +142,7 @@ fun CadastroFooter(onRegisterComplete: () -> Unit) {
             .background(Color(0xFF003D3A))
     ) {
         Button(
-            onClick = { onRegisterComplete() },
+            onClick = onRegisterClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()

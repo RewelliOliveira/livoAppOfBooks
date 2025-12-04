@@ -6,12 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.navigation.AppNavigation
 import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LoginScreen
@@ -37,26 +36,36 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RootNavigation() {
-    var currentScreen by remember { mutableStateOf("initial") }
+    val navController = rememberNavController()
 
-    when (currentScreen) {
-        "initial" -> InitialScreen(
-            title = "Organize suas leituras com o Livo!",
-            subTitle = "Selecione uma das opções para continuar",
-            onLoginClick = { currentScreen = "login" },
-            onRegisterClick = { currentScreen = "register" })
-
-        "login" -> LoginScreen(
-            onLoginSuccess = { currentScreen = "app" },
-            onBackClick = { currentScreen = "initial" }
-        )
-
-        "register" -> RegisterScreen(
-            onBackClick = { currentScreen = "initial" },
-            onRegisterComplete = { currentScreen = "initial" }
-        )
-
-        "app" -> AppNavigation()
+    NavHost(navController = navController, startDestination = "initial") {
+        composable("initial") {
+            InitialScreen(
+                title = "Organize suas leituras com o Livo!",
+                subTitle = "Selecione uma das opções para continuar",
+                onLoginClick = { navController.navigate("login") },
+                onRegisterClick = { navController.navigate("register") }
+            )
+        }
+        composable("login") {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate("app") {
+                        popUpTo("initial") { inclusive = true }
+                    }
+                },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        composable("register") {
+            RegisterScreen(
+                onBackClick = { navController.popBackStack() },
+                onRegisterComplete = { _, _, _ -> navController.popBackStack() }
+            )
+        }
+        composable("app") {
+            AppNavigation()
+        }
     }
 }
 
