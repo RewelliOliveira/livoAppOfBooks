@@ -28,8 +28,8 @@ fun ProgressBarBook(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, PrincipalColor, RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-            .background(White, RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            .border(1.dp, PrincipalColor, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .background(BackgroundLight, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
 
     ) {

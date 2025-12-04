@@ -691,9 +691,109 @@ val User: ImageVector
         return _User!!
     }
 
+
+val CheckCircle: ImageVector
+    get() {
+        if (_CheckCircle != null) return _CheckCircle!!
+
+        _CheckCircle = ImageVector.Builder(
+            name = "CheckCircle",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(9f, 12.75f)
+                lineTo(11.25f, 15f)
+                lineTo(15f, 9.75f)
+                moveTo(21f, 12f)
+                curveTo(21f, 16.9706f, 16.9706f, 21f, 12f, 21f)
+                curveTo(7.02944f, 21f, 3f, 16.9706f, 3f, 12f)
+                curveTo(3f, 7.02944f, 7.02944f, 3f, 12f, 3f)
+                curveTo(16.9706f, 3f, 21f, 7.02944f, 21f, 12f)
+                close()
+            }
+        }.build()
+
+        return _CheckCircle!!
+    }
+
+
+val PlusCircle: ImageVector
+    get() {
+        if (_PlusCircle != null) return _PlusCircle!!
+
+        _PlusCircle = ImageVector.Builder(
+            name = "PlusCircle",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(12f, 9f)
+                verticalLineTo(15f)
+                moveTo(15f, 12f)
+                horizontalLineTo(9f)
+                moveTo(21f, 12f)
+                curveTo(21f, 16.9706f, 16.9706f, 21f, 12f, 21f)
+                curveTo(7.02944f, 21f, 3f, 16.9706f, 3f, 12f)
+                curveTo(3f, 7.02944f, 7.02944f, 3f, 12f, 3f)
+                curveTo(16.9706f, 3f, 21f, 7.02944f, 21f, 12f)
+                close()
+            }
+        }.build()
+
+        return _PlusCircle!!
+    }
+
+val MagnifyingGlass: ImageVector
+    get() {
+        if (_MagnifyingGlass != null) return _MagnifyingGlass!!
+
+        _MagnifyingGlass = ImageVector.Builder(
+            name = "MagnifyingGlass",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                stroke = SolidColor(Color(0xFF0F172A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(21f, 21f)
+                lineTo(15.8033f, 15.8033f)
+                moveTo(15.8033f, 15.8033f)
+                curveTo(17.1605f, 14.4461f, 18f, 12.5711f, 18f, 10.5f)
+                curveTo(18f, 6.35786f, 14.6421f, 3f, 10.5f, 3f)
+                curveTo(6.35786f, 3f, 3f, 6.35786f, 3f, 10.5f)
+                curveTo(3f, 14.6421f, 6.35786f, 18f, 10.5f, 18f)
+                curveTo(12.5711f, 18f, 14.4461f, 17.1605f, 15.8033f, 15.8033f)
+                close()
+            }
+        }.build()
+
+        return _MagnifyingGlass!!
+    }
+
+private var _MagnifyingGlass: ImageVector? = null
+private var _PlusCircle: ImageVector? = null
+private var _CheckCircle: ImageVector? = null
 private var _User: ImageVector? = null
-
-
 private var _Pencil: ImageVector? = null
 private var _StarFull: ImageVector? = null
 private var _StarHalf: ImageVector? = null
