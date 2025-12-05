@@ -4,6 +4,7 @@ import RatingButton
 import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -238,20 +239,28 @@ fun ViewBook(
             }
         }
 
-        IconButton(
-            onClick = onBackClick,
+        Box(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(24.dp, 42.dp)
-                .size(16.dp)
-                .background(Color.White, CircleShape)
+                .padding(start = 24.dp, top = 42.dp)
+                .size(40.dp)
+                .background(Color.White.copy(alpha = 0.5f), CircleShape)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    onBackClick()
+                },
+            contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Arrow_back_ios_new,
                 contentDescription = "Voltar",
-                tint = Color.Black,
+                tint = Color.Black.copy(alpha = 0.8f),
+                modifier = Modifier.size(24.dp)
             )
         }
+
 
         ProgressBarBook(
             currentPage = 108,

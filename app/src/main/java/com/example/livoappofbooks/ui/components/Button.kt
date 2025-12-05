@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.AppTypography
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.Dp
 import com.example.livoappofbooks.ui.theme.*
 @Composable
@@ -37,28 +37,29 @@ fun PrimaryButton(
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
-            .then(
-                if (width != null) Modifier.width(width) else Modifier
-            )
-            .then(
-                if (height != null) Modifier.height(height) else Modifier
-            )
-            .padding(horizontal= 10.dp)
+            .then(if (width != null) Modifier.width(width) else Modifier)
+            .then(if (height != null) Modifier.height(height) else Modifier)
     ) {
-        if (icon != null) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = background,
-                modifier = Modifier.size(18.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = background,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+            }
+            Text(
+                text = text,
+                maxLines = 1,
+                style = AppTypography.labelMedium.copy(color = background)
             )
-            Spacer(Modifier.width(8.dp))
         }
-        Text(
-            text = text,
-            maxLines = 1,
-            style = AppTypography.labelMedium.copy(color = background)
-        )
     }
 }
 
