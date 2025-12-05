@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun SearchBar(
@@ -33,10 +34,10 @@ fun SearchBar(
         modifier = modifier
             .height(41.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.background)
+            .background(background)
             .border(
                 width = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
+                color = primary,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -50,10 +51,10 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.background,
+                    color = background,
                     fontSize = 16.sp
                 ),
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                cursorBrush = SolidColor(primary),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -69,7 +70,7 @@ fun SearchBar(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
                                     lineHeight = 10.sp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = primary
                                 )
                             )
                         }
@@ -83,7 +84,7 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = primary,
                 modifier = Modifier.size(28.dp).clickable { onSearch() }
             )
         }

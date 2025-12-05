@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-// 🌙 Tema Escuro
 private val DarkColorScheme = darkColorScheme(
     primary = BackgroundLight,
     secondary = PrincipalColor,
@@ -16,7 +15,6 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = BackgroundLight,
 )
 
-// 🌞 Tema Claro
 private val LightColorScheme = lightColorScheme(
     primary = PrincipalColor,
     secondary = BackgroundLight,
@@ -73,3 +71,31 @@ fun LivoAppOfBooksTheme(
         content = content
     )
 }
+
+@get:Composable
+val primary: Color
+    get() = MaterialTheme.colorScheme.primary
+
+@get:Composable
+val secondary: Color
+    get() = MaterialTheme.colorScheme.secondary
+
+@get:Composable
+val tertiary: Color
+    get() = MaterialTheme.colorScheme.tertiary
+
+@get:Composable
+val background: Color
+    get() = MaterialTheme.colorScheme.background
+
+@get:Composable
+val surface: Color
+    get() = MaterialTheme.colorScheme.surface
+
+@get:Composable
+val error: Color
+    get() = MaterialTheme.colorScheme.error
+
+@get:Composable
+val onBackground: Color
+    get() = MaterialTheme.colorScheme.onBackground

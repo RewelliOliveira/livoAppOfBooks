@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.runtime.Composable
@@ -29,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
-import com.example.livoappofbooks.ui.theme.AppTypography
+import com.example.livoappofbooks.ui.theme.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.ui.viewModel.SearchViewModel
 import com.example.livoappofbooks.ui.viewModel.SearchUiState
@@ -53,7 +52,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
             Image(
                 painter = painterResource(id = R.drawable.livo),
                 contentDescription = "LIVO Logo",
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                colorFilter = ColorFilter.tint(primary),
                 modifier = Modifier
                     .height(30.dp)
                     .width(100.dp)
@@ -80,7 +79,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                     Text(
                         text = "Livros Populares",
                         style = AppTypography.headlineSmall,
-                        color = MaterialTheme.colorScheme.primary
+                        color = primary
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))

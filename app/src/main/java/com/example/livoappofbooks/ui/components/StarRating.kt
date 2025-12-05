@@ -17,13 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.icons.*
 import kotlin.math.floor
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun StarRating(
     rating: Double,
     maxStars: Int = 5,
     starSize: Int = 24,
-    starColor: Color = MaterialTheme.colorScheme.background,
+    starColor: Color = background,
     onRatingChange: ((Double) -> Unit)? = null
 ) {
     Row {

@@ -17,7 +17,7 @@ import com.example.livoappofbooks.ui.theme.AppTypography
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.Dp
-
+import com.example.livoappofbooks.ui.theme.*
 @Composable
 fun PrimaryButton(
     text: String,
@@ -32,7 +32,7 @@ fun PrimaryButton(
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = primary,
             disabledContainerColor = Color.Gray.copy(alpha = 0.5f)
         ),
         shape = RoundedCornerShape(50),
@@ -49,7 +49,7 @@ fun PrimaryButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.background,
+                tint = background,
                 modifier = Modifier.size(18.dp)
             )
             Spacer(Modifier.width(8.dp))
@@ -57,7 +57,7 @@ fun PrimaryButton(
         Text(
             text = text,
             maxLines = 1,
-            style = AppTypography.labelMedium.copy(color = MaterialTheme.colorScheme.background)
+            style = AppTypography.labelMedium.copy(color = background)
         )
     }
 }

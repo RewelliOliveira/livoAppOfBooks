@@ -57,7 +57,7 @@ fun ViewBook(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(background)
     ) {
         Column(
             modifier = Modifier
@@ -88,7 +88,7 @@ fun ViewBook(
                         .height(320.dp)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background),
+                                colors = listOf(Color.Transparent, background),
                                 startY = 250f
                             )
                         )
@@ -122,13 +122,13 @@ fun ViewBook(
                         Text(
                             text = title,
                             style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = onBackground
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = author,
                             style = AppTypography.bodyMedium,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = tertiary
                         )
                     }
                     StarRating(rating = rate)
@@ -147,7 +147,7 @@ fun ViewBook(
                 }
 
                 Spacer(Modifier.height(16.dp))
-                HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+                HorizontalDivider(color = tertiary)
                 Spacer(Modifier.height(8.dp))
 
                 Row(
@@ -197,14 +197,14 @@ fun ViewBook(
                         Text(
                             text = "Sinopse",
                             style = AppTypography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.onBackground,
+                                color = onBackground,
                                 fontWeight = FontWeight.Bold
                             )
                         )
 
                         Text(
                             text = displayedSinopse,
-                            style = AppTypography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
+                            style = AppTypography.bodyMedium.copy(color = onBackground),
                             textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -213,7 +213,7 @@ fun ViewBook(
                             Text(
                                 text = if (isExpanded.value) "Ver menos" else "Ver mais",
                                 style = AppTypography.bodyMedium.copy(
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = primary,
                                     fontWeight = FontWeight.SemiBold
                                 ),
                                 modifier = Modifier
@@ -226,7 +226,7 @@ fun ViewBook(
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.error,
+                            color = error,
                             fontWeight = FontWeight.SemiBold,
                             textDecoration = TextDecoration.Underline
                         ),

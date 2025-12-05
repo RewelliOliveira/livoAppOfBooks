@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarBook(
@@ -28,8 +29,8 @@ fun ProgressBarBook(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .border(1.dp, primary, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .background(background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
 
     ) {
@@ -41,7 +42,7 @@ fun ProgressBarBook(
             Text(
                 text = "$percentage% do livro foi lido",
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -49,7 +50,7 @@ fun ProgressBarBook(
             Text(
                 text = "$currentPage/$totalPages",
                 style = TextStyle(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -63,14 +64,14 @@ fun ProgressBarBook(
                 .fillMaxWidth()
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(MaterialTheme.colorScheme.surface) // trilho suave
+                .background(surface) // trilho suave
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(progress)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(MaterialTheme.colorScheme.primary) // barra principal
+                    .background(primary) // barra principal
             )
         }
     }

@@ -20,8 +20,7 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.Close_small
 import com.example.livoappofbooks.ui.icons.Send
-import com.example.livoappofbooks.ui.theme.BackgroundLight
-import com.example.livoappofbooks.ui.theme.PrincipalColor
+import com.example.livoappofbooks.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,13 +49,13 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = background
                 )
             )
         },
         bottomBar = {
             Surface(
-                color = MaterialTheme.colorScheme.background
+                color = background
             ) {
                 Row(
                     modifier = Modifier
@@ -72,7 +71,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         modifier = Modifier
                             .weight(1f)
                             .height(52.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(1.dp, primary),
                         shape = RoundedCornerShape(50)
                     ) {
                         Row(
@@ -83,12 +82,12 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                                 imageVector = Close_small,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = primary
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 text = "Cancelar",
-                                color = MaterialTheme.colorScheme.primary
+                                color = primary
                             )
                         }
                     }
@@ -99,7 +98,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                             .weight(1f)
                             .height(52.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary
+                            containerColor = primary
                         ),
                         shape = RoundedCornerShape(50)
                     ) {
@@ -109,28 +108,28 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         ) {
                             Text(
                                 text = "Salvar",
-                                color = MaterialTheme.colorScheme.background
+                                color = background
                             )
                             Spacer(Modifier.width(8.dp))
                             Icon(
                                 imageVector = Send,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.colorScheme.background
+                                tint = background
                             )
                         }
                     }
                 }
             }
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = background
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(background),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
@@ -152,7 +151,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         "As Estrelas do Amanhã",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = onBackground
                     )
 
                     Row(
@@ -162,7 +161,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         Text(
                             "Marina Alves",
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = onBackground,
                             modifier = Modifier.weight(1f)
                         )
 

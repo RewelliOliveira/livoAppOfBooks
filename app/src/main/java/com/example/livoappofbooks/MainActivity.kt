@@ -52,10 +52,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RootNavigation() {
+fun RootNavigation(themeViewModel: ThemeViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "initial") {
+
         composable("initial") {
             InitialScreen(
                 title = "Organize suas leituras com o Livo!",
@@ -64,6 +65,7 @@ fun RootNavigation() {
                 onRegisterClick = { navController.navigate("register") }
             )
         }
+
         composable("login") {
             LoginScreen(
                 onLoginSuccess = {
@@ -74,6 +76,7 @@ fun RootNavigation() {
                 onBackClick = { navController.popBackStack() }
             )
         }
+
         composable("register") {
             RegisterScreen(
                 onBackClick = { navController.popBackStack() },
@@ -84,8 +87,9 @@ fun RootNavigation() {
                 }
             )
         }
+
         composable("app") {
-            AppNavigation()//RESOLVER AQUI
+            AppNavigation(themeViewModel)
         }
     }
 }

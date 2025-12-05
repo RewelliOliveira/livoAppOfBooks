@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.ui.theme.*
 
 
 @Composable
@@ -46,7 +47,7 @@ fun RadioButtonSingleSelection(
                     selected = (text == selectedOption),
                     onClick = null,
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = MaterialTheme.colorScheme.primary,
+                        selectedColor = primary,
                         unselectedColor = Color.Gray
                      )
                 )

@@ -25,8 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
-import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.LivoAppOfBooksTheme
+import com.example.livoappofbooks.ui.theme.*
 
 // 1. ADICIONADOS NOVOS PARÂMETROS
 @Composable
@@ -45,7 +44,7 @@ fun ViewBookScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(background)
     ) {
         Box(
             modifier = Modifier
@@ -71,7 +70,7 @@ fun ViewBookScreen(
                     .height(320.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background.copy(alpha = 1f)),
+                            colors = listOf(Color.Transparent, background.copy(alpha = 1f)),
                             startY = 250f
                         )
                     )
@@ -96,7 +95,7 @@ fun ViewBookScreen(
                     .align(Alignment.TopStart)
                     .padding(16.dp)
                     .size(36.dp)
-                    .background(MaterialTheme.colorScheme.background, CircleShape)
+                    .background(background, CircleShape)
             ) {
                 Icon(
                     imageVector = Arrow_back_ios_new,
@@ -125,13 +124,13 @@ fun ViewBookScreen(
                     Text(
                         text = title,
                         style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = onBackground
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = author,
                         style = AppTypography.bodyMedium,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = tertiary
                     )
                 }
                 StarRating(rating = rate)
@@ -151,13 +150,13 @@ fun ViewBookScreen(
             }
 
             Spacer(Modifier.height(24.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+            HorizontalDivider(color = tertiary)
             Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "Sinopse",
                 style = AppTypography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = onBackground,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier.fillMaxWidth()
@@ -165,7 +164,7 @@ fun ViewBookScreen(
 
             Text(
                 text = sinopse,
-                style = AppTypography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
+                style = AppTypography.bodyMedium.copy(color = onBackground),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -179,14 +178,14 @@ fun ViewBookScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background.copy(alpha = 0.98f))
+                        colors = listOf(Color.Transparent, background.copy(alpha = 0.98f))
                     )
                 )
                 .padding(16.dp)
         ) {
             Button(
                 onClick = { /* ação */ },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                colors = ButtonDefaults.buttonColors(containerColor = primary),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,12 +195,12 @@ fun ViewBookScreen(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Adicionar",
-                    tint = MaterialTheme.colorScheme.background
+                    tint = background
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Adicionar à biblioteca",
-                    style = AppTypography.titleSmall.copy(color = MaterialTheme.colorScheme.background)
+                    style = AppTypography.titleSmall.copy(color = background)
                 )
             }
         }

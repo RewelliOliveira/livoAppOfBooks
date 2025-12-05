@@ -23,6 +23,7 @@ import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProfileScreen(
@@ -33,7 +34,7 @@ fun ProfileScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = background
     ) {
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
@@ -50,7 +51,7 @@ fun ProfileScreen(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                        colorFilter = ColorFilter.tint(primary),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)
@@ -69,7 +70,7 @@ fun ProfileScreen(
                         modifier = Modifier
                             .size(70.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+                            .background(primary.copy(alpha = 0.2f))
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -79,12 +80,12 @@ fun ProfileScreen(
                             "Nome do usuário",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = tertiary
                         )
                         Text(
                             "example@mail.com",
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
+                            color = tertiary.copy(alpha = 0.7f)
                         )
                     }
 
@@ -92,7 +93,7 @@ fun ProfileScreen(
                         Image(
                             painter = painterResource(R.drawable.ic_edit),
                             contentDescription = "Editar perfil",
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                            colorFilter = ColorFilter.tint(primary),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -141,7 +142,7 @@ fun ProfileScreen(
                                 Image(
                                     painter = painterResource(R.drawable.ic_theme),
                                     contentDescription = "Tema",
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                                    colorFilter = ColorFilter.tint(primary),
                                     modifier = Modifier.size(24.dp)
                                 )
 
@@ -152,12 +153,12 @@ fun ProfileScreen(
                                         "Modo escuro",
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.tertiary
+                                        color = tertiary
                                     )
                                     Text(
                                         "Reduz o cansaço visual",
                                         fontSize = 13.sp,
-                                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
+                                        color = tertiary.copy(alpha = 0.7f)
                                     )
                                 }
                             }
@@ -184,7 +185,7 @@ fun ProfileScreen(
                                 Image(
                                     painter = painterResource(R.drawable.ic_noti),
                                     contentDescription = "Notificações",
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                                    colorFilter = ColorFilter.tint(primary),
                                     modifier = Modifier.size(24.dp)
                                 )
 
@@ -195,12 +196,12 @@ fun ProfileScreen(
                                         "Ativar as notificações",
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.tertiary
+                                        color = tertiary
                                     )
                                     Text(
                                         "Receba lembretes todos os dias",
                                         fontSize = 13.sp,
-                                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f)
+                                        color = tertiary.copy(alpha = 0.7f)
                                     )
                                 }
                             }
@@ -222,9 +223,9 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .padding(bottom = 32.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
+                        contentColor = error
                     ),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                    border = BorderStroke(1.dp, error)
                 ) {
                     Text("Sair da conta", fontWeight = FontWeight.Bold)
                 }

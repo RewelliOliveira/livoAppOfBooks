@@ -16,8 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.livoappofbooks.ui.theme.AppTypography
-
+import com.example.livoappofbooks.ui.theme.*
 @Composable
 fun InfoItem(
     icon: ImageVector,
@@ -40,7 +39,7 @@ fun InfoItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onBackground ,
+            tint = onBackground ,
             modifier = Modifier.size(24.dp)
         )
 
@@ -49,7 +48,7 @@ fun InfoItem(
         Text(
             text = text,
             style = AppTypography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = onBackground
         )
     }
 }

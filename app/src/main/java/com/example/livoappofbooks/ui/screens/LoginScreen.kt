@@ -25,8 +25,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.shapes.TopDiagonalShape
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
-import com.example.livoappofbooks.ui.theme.PrincipalColor
-import com.example.livoappofbooks.ui.theme.buttonShape
+import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LoginUiState
 import com.example.livoappofbooks.ui.viewModel.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -91,7 +90,7 @@ fun LoginScreen(
                 isLoading = isLoading
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = background
     ) { paddingValues ->
 
         Column(
@@ -136,7 +135,7 @@ private fun Header(
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = primary,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
@@ -145,7 +144,7 @@ private fun Header(
         Image(
             painter = painterResource(R.drawable.livo),
             contentDescription = "Icone Livo",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -165,7 +164,7 @@ private fun Main(
         "Seja Bem vindo",
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onBackground
+        color = onBackground
     )
 
     Spacer(modifier = Modifier.height(5.dp))
@@ -173,13 +172,13 @@ private fun Main(
     Text(
         "Insira seus dados para acessar sua conta",
         fontSize = 15.sp,
-        color = MaterialTheme.colorScheme.tertiary
+        color = tertiary
     )
 
     Spacer(modifier = Modifier.height(30.dp))
 
     Input(
-        label = "E-mail ou usuário",
+        label = "E-mail",
         value = email,
         onValueChange = onEmailChange
     )
@@ -215,25 +214,25 @@ fun Footer(
                 .offset(y = (-80).dp)
                 .border(
                     width = 2.dp,
-                    color = MaterialTheme.colorScheme.background,
+                    color = background,
                     shape = buttonShape
                 ),
             shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.background
+                containerColor = background
             )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = Color(0xFF003D3A),
+                    color = background,
                     strokeWidth = 2.dp
                 )
             } else {
                 Text(
                     text = "Avançar",
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.primary
+                    color = primary
                 )
             }
         }

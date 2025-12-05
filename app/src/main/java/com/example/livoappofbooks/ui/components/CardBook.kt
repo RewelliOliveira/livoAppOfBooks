@@ -26,7 +26,6 @@ import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.CalendarDays
 import com.example.livoappofbooks.ui.icons.CheckCircle
 import com.example.livoappofbooks.ui.icons.PlusCircle
-
 import kotlin.String
 import com.example.livoappofbooks.ui.theme.*
 
@@ -46,11 +45,11 @@ fun CardBook(
             .fillMaxWidth()
             .shadow(
                 elevation = 10.dp,
-                spotColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-                ambientColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                spotColor = onBackground.copy(alpha = 0.5f),
+                ambientColor = onBackground.copy(alpha = 0.5f)
             )
             .height(140.dp)
-            .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(10.dp))
+            .background(color = background, shape = RoundedCornerShape(10.dp))
             .padding(10.dp)
     ) {
         Row {
@@ -70,13 +69,13 @@ fun CardBook(
                 Text(
                     text = title,
                     style = AppTypography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = onBackground
                 )
 
                 Text(
                     text = author,
                     style = AppTypography.bodyMedium,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = tertiary
                 )
 
                 Spacer(Modifier.height(10.dp))

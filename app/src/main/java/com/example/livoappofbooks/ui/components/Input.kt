@@ -9,14 +9,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun Input(
@@ -31,18 +27,18 @@ fun Input(
         label = {
             Text(
                 label,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = tertiary,
                 fontWeight = FontWeight.Bold
             )
         },
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.onBackground,      // cor da borda ao focar
-            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,    // cor da borda normal
-            focusedLabelColor = MaterialTheme.colorScheme.background,       // cor do label focado
-            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,     // label quando não focado
-            cursorColor = MaterialTheme.colorScheme.background.copy(alpha = 0.8f) // cursor com opacidade
+            focusedBorderColor = onBackground,      // cor da borda ao focar
+            unfocusedBorderColor = onBackground,    // cor da borda normal
+            focusedLabelColor = background,       // cor do label focado
+            unfocusedLabelColor = onBackground,     // label quando não focado
+            cursorColor = background.copy(alpha = 0.8f) // cursor com opacidade
         )
     )
     Spacer(modifier = Modifier.height(15.dp))

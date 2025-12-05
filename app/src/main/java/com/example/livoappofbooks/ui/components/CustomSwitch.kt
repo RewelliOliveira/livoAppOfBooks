@@ -5,6 +5,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun CustomSwitch(
@@ -17,10 +18,10 @@ fun CustomSwitch(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = MaterialTheme.colorScheme.background,
-            checkedTrackColor = MaterialTheme.colorScheme.tertiary,
-            uncheckedThumbColor = MaterialTheme.colorScheme.primary,
-            uncheckedTrackColor = MaterialTheme.colorScheme.background
+            checkedThumbColor = background,
+            checkedTrackColor = tertiary,
+            uncheckedThumbColor = primary,
+            uncheckedTrackColor = background
         )
     )
 }

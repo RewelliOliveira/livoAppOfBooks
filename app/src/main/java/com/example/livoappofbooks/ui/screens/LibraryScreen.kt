@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -24,6 +23,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.ui.graphics.ColorFilter
 import com.example.livoappofbooks.ui.components.FilterBar
+import com.example.livoappofbooks.ui.theme.*
 
 data class Livro(
     val status: String,
@@ -103,7 +103,7 @@ fun LibraryScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = background
     ) {
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
@@ -119,7 +119,7 @@ fun LibraryScreen(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                        colorFilter = ColorFilter.tint(primary),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)
@@ -178,7 +178,7 @@ fun LibraryScreen(
                         text = "Nenhum livro encontrado",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f),
+                        color = tertiary.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }
