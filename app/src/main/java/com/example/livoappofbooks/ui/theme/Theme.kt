@@ -12,7 +12,7 @@ private val DarkColorScheme = darkColorScheme(
     background = BackgroundDark,
     surface = ProgressBarDark,
     error = AlertColor,
-    onBackground = BackgroundLight,
+    onBackground = BackgroundLight
 )
 
 private val LightColorScheme = lightColorScheme(

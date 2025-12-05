@@ -27,6 +27,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.modals.ModalHeader
 import com.example.livoappofbooks.ui.components.RadioButtonSingleSelection
 import kotlinx.coroutines.launch
+import com.example.livoappofbooks.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,13 +38,13 @@ fun BookStatusBottomSheet(
     onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true // Abre sempre totalmente
+        skipPartiallyExpanded = true
     )
     val scope = rememberCoroutineScope()
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = background,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
         Column(

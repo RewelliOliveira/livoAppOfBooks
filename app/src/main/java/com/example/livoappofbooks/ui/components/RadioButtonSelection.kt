@@ -54,6 +54,7 @@ fun RadioButtonSingleSelection(
                 Text(
                     text = text,
                     style = MaterialTheme.typography.bodyLarge,
+                    color = onBackground,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
