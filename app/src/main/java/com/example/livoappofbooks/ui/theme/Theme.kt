@@ -1,60 +1,101 @@
 package com.example.livoappofbooks.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 
-// 🌙 Tema escuro
 private val DarkColorScheme = darkColorScheme(
-    primary = PrincipalColor,
-    secondary = PositiveActions,
-    tertiary = SubtitlesColor,
-    background = DarkColor,
-    surface = DarkColor,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White
+    primary = BackgroundLight,
+    secondary = PrincipalColor,
+    tertiary = BackgroundLight,
+    background = BackgroundDark,
+    surface = ProgressBarDark,
+    error = AlertColor,
+    onBackground = BackgroundLight
 )
 
-// 🌞 Tema claro
 private val LightColorScheme = lightColorScheme(
     primary = PrincipalColor,
-    secondary = PositiveActions,
-    tertiary = SubtitlesColor,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black
+    secondary = BackgroundLight,
+    tertiary = DarkColor,
+    background = BackgroundLight,
+    surface = ProgressBarLight,
+    error = AlertColor,
+    onBackground = BackgroundDark
 )
+
+data class ThemeState(
+    val isDarkTheme: Boolean,
+    val toggleTheme: () -> Unit
+)
+
+val LocalThemeState = compositionLocalOf<ThemeState> {
+    error("ThemeState not provided")
+}
+
+@Composable
+fun ThemeProvider(
+    isDarkTheme: Boolean,
+    toggleTheme: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    val themeState = ThemeState(
+        isDarkTheme = isDarkTheme,
+        toggleTheme = toggleTheme
+    )
+
+    CompositionLocalProvider(LocalThemeState provides themeState) {
+        LivoAppOfBooksTheme(darkTheme = isDarkTheme) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun rememberThemeState(): ThemeState {
+    return LocalThemeState.current
+}
 
 @Composable
 fun LivoAppOfBooksTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true, // suporte a cores dinâmicas Android 12+
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context)
-            else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
         shapes = Shapes,
         content = content
     )
 }
+
+@get:Composable
+val primary: Color
+    get() = MaterialTheme.colorScheme.primary
+
+@get:Composable
+val secondary: Color
+    get() = MaterialTheme.colorScheme.secondary
+
+@get:Composable
+val tertiary: Color
+    get() = MaterialTheme.colorScheme.tertiary
+
+@get:Composable
+val background: Color
+    get() = MaterialTheme.colorScheme.background
+
+@get:Composable
+val surface: Color
+    get() = MaterialTheme.colorScheme.surface
+
+@get:Composable
+val error: Color
+    get() = MaterialTheme.colorScheme.error
+
+@get:Composable
+val onBackground: Color
+    get() = MaterialTheme.colorScheme.onBackground
