@@ -11,9 +11,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.LibraryScreen
+import com.example.livoappofbooks.ui.screens.Prateleira
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
+import com.example.livoappofbooks.ui.screens.ShelfsScreen // Adicione este import
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -25,7 +27,13 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute in listOf(Screen.Library.route, Screen.Search.route, Screen.Profile.route)) {
+            // Adicione Screen.Shelfs.route à lista de telas que mostram a BottomBar
+            if (currentRoute in listOf(
+                    Screen.Library.route,
+                    Screen.Search.route,
+                    Screen.Profile.route,
+                    Screen.Shelfs.route // Adicione aqui
+                )) {
                 BottomBar(navController)
             }
         }
@@ -33,7 +41,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
         NavHost(
             navController = navController,
-            startDestination = Screen.Library.route,
+            startDestination = Screen.Library.route, // Ou Screen.Shelfs.route se quiser começar aqui
             modifier = Modifier.padding(innerPadding)
         ) {
 
@@ -54,6 +62,18 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) },
                     themeViewModel = themeViewModel
+                )
+            }
+
+            composable(Screen.Shelfs.route) {
+                ShelfsScreen(
+                    navController = navController,
+                    onShelfClick = {
+                        TODO("TELA DA PRATELEIRA")
+                    },
+                    onAddShelfClick = {
+                        TODO("TELA DE ADICIONAR PRATELEIRA" )
+                    }
                 )
             }
 
