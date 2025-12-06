@@ -25,9 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.InfoItem
-import com.example.livoappofbooks.ui.theme.AppTypography
-import com.example.livoappofbooks.ui.theme.BackgroundLight
-import com.example.livoappofbooks.ui.theme.PrincipalColor
+import com.example.livoappofbooks.ui.theme.*
 
 // 1. ADICIONADOS NOVOS PARÂMETROS
 @Composable
@@ -46,7 +44,7 @@ fun ViewBookScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundLight)
+            .background(background)
     ) {
         Box(
             modifier = Modifier
@@ -72,7 +70,7 @@ fun ViewBookScreen(
                     .height(320.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, BackgroundLight.copy(alpha = 1f)),
+                            colors = listOf(Color.Transparent, background.copy(alpha = 1f)),
                             startY = 250f
                         )
                     )
@@ -97,7 +95,7 @@ fun ViewBookScreen(
                     .align(Alignment.TopStart)
                     .padding(16.dp)
                     .size(36.dp)
-                    .background(Color.White, CircleShape)
+                    .background(background, CircleShape)
             ) {
                 Icon(
                     imageVector = Arrow_back_ios_new,
@@ -126,13 +124,13 @@ fun ViewBookScreen(
                     Text(
                         text = title,
                         style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = PrincipalColor
+                        color = onBackground
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = author,
                         style = AppTypography.bodyMedium,
-                        color = Color.DarkGray
+                        color = tertiary
                     )
                 }
                 StarRating(rating = rate)
@@ -152,13 +150,13 @@ fun ViewBookScreen(
             }
 
             Spacer(Modifier.height(24.dp))
-            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.6f))
+            HorizontalDivider(color = tertiary)
             Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "Sinopse",
                 style = AppTypography.titleMedium.copy(
-                    color = Color.Black,
+                    color = onBackground,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier.fillMaxWidth()
@@ -166,7 +164,7 @@ fun ViewBookScreen(
 
             Text(
                 text = sinopse,
-                style = AppTypography.bodyMedium.copy(color = Color.DarkGray),
+                style = AppTypography.bodyMedium.copy(color = onBackground),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.padding(top = 8.dp)
             )
@@ -180,14 +178,14 @@ fun ViewBookScreen(
                 .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, BackgroundLight.copy(alpha = 0.98f))
+                        colors = listOf(Color.Transparent, background.copy(alpha = 0.98f))
                     )
                 )
                 .padding(16.dp)
         ) {
             Button(
                 onClick = { /* ação */ },
-                colors = ButtonDefaults.buttonColors(containerColor = PrincipalColor),
+                colors = ButtonDefaults.buttonColors(containerColor = primary),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -197,12 +195,12 @@ fun ViewBookScreen(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Adicionar",
-                    tint = Color.White
+                    tint = background
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Adicionar à biblioteca",
-                    style = AppTypography.titleSmall.copy(color = Color.White)
+                    style = AppTypography.titleSmall.copy(color = background)
                 )
             }
         }
@@ -213,16 +211,18 @@ fun ViewBookScreen(
 @Preview(showBackground = true)
 @Composable
 fun ViewBookScreenPreview() {
-    ViewBookScreen(
-        title = "Peter Pan in Wonderland",
-        author = "Samira Sales",
-        rate = 3.7,
-        sinopse = "Em um mundo onde prestam atenção em cada detalhe do teste do livro, eu mudei o nome que estava antes para ficar mais coerente com a capa e ninguem ficar fazendo zuada no meu pé do ouvido",
-        imageUrl = "url_qualquer",
-        publishYear = "2025",
-        publisher = "Bila-Bilu",
-        language = "Português - BR",
-        pageCount = "240",
-        onBackClick = {}
-    )
+    LivoAppOfBooksTheme (darkTheme = false){
+        ViewBookScreen(
+            title = "Peter Pan in Wonderland",
+            author = "Samira Sales",
+            rate = 3.7,
+            sinopse = "Em um mundo onde prestam atenção em cada detalhe...",
+            imageUrl = "url_qualquer",
+            publishYear = "2025",
+            publisher = "Bila-Bilu",
+            language = "Português - BR",
+            pageCount = "240",
+            onBackClick = {}
+        )
+    }
 }

@@ -3,6 +3,7 @@ package com.example.livoappofbooks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.livoappofbooks.ui.theme.PrincipalColor
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarSimple(
@@ -30,14 +31,14 @@ fun ProgressBarSimple(
                 .weight(1f)
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(PrincipalColor.copy(alpha = 0.25f))
+                .background(surface)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(progress)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(PrincipalColor)
+                    .background(primary)
             )
         }
 
@@ -45,7 +46,7 @@ fun ProgressBarSimple(
 
         Text(
             text = "$percentage%", style = TextStyle(
-                color = PrincipalColor, fontSize = 12.sp, fontWeight = FontWeight.Bold
+                color = primary, fontSize = 12.sp, fontWeight = FontWeight.Bold
             )
         )
     }

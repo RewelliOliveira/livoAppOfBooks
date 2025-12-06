@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -23,9 +21,9 @@ import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.ColorFilter
 import com.example.livoappofbooks.ui.components.FilterBar
-import com.example.livoappofbooks.ui.theme.rememberThemeState
+import com.example.livoappofbooks.ui.theme.*
 
 data class Livro(
     val status: String,
@@ -39,8 +37,6 @@ fun LibraryScreen(
     onNavigate: () -> Unit,
     onBookClick: (Livro) -> Unit
 ) {
-    val themeState = rememberThemeState()
-    val isDark = themeState.isDarkTheme
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
@@ -107,7 +103,7 @@ fun LibraryScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = background
     ) {
         Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
@@ -122,36 +118,13 @@ fun LibraryScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(
-                            id = if (isDark) R.drawable.livo_dark else R.drawable.livo
-                        ),
+                        painter = painterResource(R.drawable.livo),
+                        colorFilter = ColorFilter.tint(primary),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)
                             .width(100.dp)
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    IconButton(
-                        onClick = { themeState.toggleTheme() }
-                    ) {
-                        val iconRes = if (isDark) {
-                            R.drawable.ic_dark_mode
-                        } else {
-                            R.drawable.ic_light_mode
-                        }
-
-                        Image(
-                            painter = painterResource(id = iconRes),
-                            contentDescription = if (isDark) {
-                                "Mudar para tema claro"
-                            } else {
-                                "Mudar para tema escuro"
-                            },
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -170,6 +143,7 @@ fun LibraryScreen(
                     onFilterSelected = { selectedFilter = it },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = 24.dp)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -187,7 +161,7 @@ fun LibraryScreen(
                                     progress = livro.progress,
                                     evaluate = livro.evaluate,
                                     imageUrl = livro.imageUrl,
-                                    onClick = { onBookClick(livro) } // <-- função que vamos definir
+                                    onClick = { onBookClick(livro) }
                                 )
                             }
                         }
@@ -204,7 +178,7 @@ fun LibraryScreen(
                         text = "Nenhum livro encontrado",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        color = tertiary.copy(alpha = 0.6f),
                         textAlign = TextAlign.Center
                     )
                 }

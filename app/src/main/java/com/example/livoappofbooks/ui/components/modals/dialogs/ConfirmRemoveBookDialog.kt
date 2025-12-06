@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.livoappofbooks.ui.components.OutlinedIconLabelButton
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ConfirmRemoveBookDialog(
@@ -32,6 +33,7 @@ fun ConfirmRemoveBookDialog(
     ) {
         Surface(
             shape = RoundedCornerShape(16.dp),
+            color = background,
             tonalElevation = 4.dp
         ) {
             Column(
@@ -44,10 +46,12 @@ fun ConfirmRemoveBookDialog(
                 Text(
                     text = "Remover livro",
                     style = MaterialTheme.typography.titleLarge,
+                    color = onBackground,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "Esse livro será removido da sua biblioteca, juntamente com todos os registros de leituras associados a ele ",
+                    color = onBackground,
                     style = MaterialTheme.typography.bodyMedium,
                 )
 
@@ -58,13 +62,13 @@ fun ConfirmRemoveBookDialog(
                 ){
                     OutlinedIconLabelButton(
                         text = "Cancelar",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = primary,
                         onClick = onDismiss
                     )
                     OutlinedIconLabelButton(
                         text = "Remover",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_trash_bin),
-                        color = MaterialTheme.colorScheme.error,
+                        color = error,
                         onClick = onConfirm
                     )
                 }

@@ -1,16 +1,13 @@
 package com.example.livoappofbooks.ui.components.modals.dialogs
 
-import android.R.attr.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.components.modals.ModalHeader
-import com.example.livoappofbooks.ui.theme.ThemeProvider
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun RatingDialog(
@@ -37,6 +34,7 @@ fun RatingDialog(
     ) {
         Surface(
             shape = RoundedCornerShape(16.dp),
+            color = background,
             tonalElevation = 4.dp
         ) {
             Column(
@@ -56,6 +54,7 @@ fun RatingDialog(
                 StarRating(
                     rating = rating,
                     starSize = 56,
+                    starColor = onBackground,
                     onRatingChange = onRatingChange
                 )
             }
@@ -71,7 +70,7 @@ fun RatingDialogPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            //.background(MaterialTheme.colorScheme.surface)
+            .background(surface)
     ) {
         RatingDialog(
             rating = rating,

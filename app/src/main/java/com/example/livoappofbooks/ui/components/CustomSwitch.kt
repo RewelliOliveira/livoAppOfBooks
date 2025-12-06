@@ -1,0 +1,27 @@
+package com.example.livoappofbooks.ui.components
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.example.livoappofbooks.ui.theme.*
+
+@Composable
+fun CustomSwitch(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Switch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        modifier = modifier,
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = background,
+            checkedTrackColor = tertiary,
+            uncheckedThumbColor = primary,
+            uncheckedTrackColor = background
+        )
+    )
+}

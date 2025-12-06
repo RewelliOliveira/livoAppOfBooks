@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,8 +25,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.shapes.TopDiagonalShape
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
-import com.example.livoappofbooks.ui.theme.PrincipalColor
-import com.example.livoappofbooks.ui.theme.buttonShape
+import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LoginUiState
 import com.example.livoappofbooks.ui.viewModel.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -89,7 +89,8 @@ fun LoginScreen(
                 onLoginClick = { viewModel.login(email, password) },
                 isLoading = isLoading
             )
-        }
+        },
+        containerColor = background
     ) { paddingValues ->
 
         Column(
@@ -126,6 +127,7 @@ private fun Header(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(50.dp)
     ) {
@@ -133,7 +135,7 @@ private fun Header(
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = Color(0xFF003D3A),
+            tint = primary,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
@@ -142,6 +144,7 @@ private fun Header(
         Image(
             painter = painterResource(R.drawable.livo),
             contentDescription = "Icone Livo",
+            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -160,20 +163,22 @@ private fun Main(
     Text(
         "Seja Bem vindo",
         fontSize = 18.sp,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
+        color = onBackground
     )
 
     Spacer(modifier = Modifier.height(5.dp))
 
     Text(
         "Insira seus dados para acessar sua conta",
-        fontSize = 15.sp
+        fontSize = 15.sp,
+        color = tertiary
     )
 
     Spacer(modifier = Modifier.height(30.dp))
 
     Input(
-        label = "E-mail ou usuário",
+        label = "E-mail",
         value = email,
         onValueChange = onEmailChange
     )
@@ -195,7 +200,7 @@ fun Footer(
             .fillMaxWidth()
             .height(280.dp)
             .clip(TopDiagonalShape(280f))
-            .background(Color(0xFF003D3A))
+            .background(PrincipalColor)
     ) {
 
         Button(
@@ -209,25 +214,25 @@ fun Footer(
                 .offset(y = (-80).dp)
                 .border(
                     width = 2.dp,
-                    color = PrincipalColor,
+                    color = background,
                     shape = buttonShape
                 ),
             shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White
+                containerColor = background
             )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = Color(0xFF003D3A),
+                    color = background,
                     strokeWidth = 2.dp
                 )
             } else {
                 Text(
                     text = "Avançar",
                     fontSize = 20.sp,
-                    color = Color(0xFF003D3A)
+                    color = primary
                 )
             }
         }

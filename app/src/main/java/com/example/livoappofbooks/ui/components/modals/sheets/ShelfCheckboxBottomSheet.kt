@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.components.CheckboxSelection
 import com.example.livoappofbooks.ui.components.modals.ModalHeader
 import kotlinx.coroutines.launch
+import com.example.livoappofbooks.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun ShelfCheckboxBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = background,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
         Column(
