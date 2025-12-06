@@ -21,9 +21,9 @@ import com.example.livoappofbooks.ui.components.HistoryCard
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.ProgressBarSimple
 import com.example.livoappofbooks.ui.components.StarRating
-import com.example.livoappofbooks.ui.theme.BackgroundLight
-import com.example.livoappofbooks.ui.theme.PrincipalColor
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.theme.onBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,12 +48,18 @@ fun HistoryScreen(
                             contentDescription = "Voltar"
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = background
+                )
             )
         },
 
         bottomBar = {
-            Surface(shadowElevation = 8.dp) {
+            Surface(
+                shadowElevation = 8.dp,
+                color = background
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -94,7 +100,8 @@ fun HistoryScreen(
                     Text(
                         "As Estrelas do Amanhã",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = onBackground
                     )
 
                     Row(
@@ -104,7 +111,7 @@ fun HistoryScreen(
                         Text(
                             "Marina Alves",
                             fontSize = 14.sp,
-                            color = Color.Gray,
+                            color = tertiary,
                             modifier = Modifier.weight(1f)
                         )
 
@@ -123,13 +130,13 @@ fun HistoryScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
+                        Text( //APARENTEMENTE MOCKADO
                             "Lendo",
                             fontSize = 12.sp,
-                            color = BackgroundLight,
+                            color = background,
                             modifier = Modifier
                                 .background(
-                                    PrincipalColor,
+                                    primary,
                                     RoundedCornerShape(30.dp)
                                 )
                                 .padding(horizontal = 30.dp, vertical = 3.dp)

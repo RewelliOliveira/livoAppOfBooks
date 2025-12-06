@@ -5,11 +5,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun BottomBar(navController: NavController) {
@@ -21,7 +21,7 @@ fun BottomBar(navController: NavController) {
     )
 
     NavigationBar(
-        containerColor = Color.White
+        containerColor = background
     ) {
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -61,9 +61,14 @@ fun BottomBar(navController: NavController) {
                         else -> {}
                     }
                 },
-                label = {
-                    Text(text = screen.label)
-                }
+                label = { Text(text = screen.label) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = primary, // cor do ícone selecionado
+                    unselectedIconColor = tertiary, // cor do ícone não selecionado
+                    selectedTextColor = primary, // cor do label selecionado
+                    unselectedTextColor = tertiary, // cor do label não selecionado
+                    indicatorColor = tertiary.copy(alpha = 0.1f) // <- bordinha
+                )
             )
         }
     }

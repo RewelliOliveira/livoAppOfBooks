@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,8 +29,8 @@ fun ProgressBarBook(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, PrincipalColor, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(BackgroundLight, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .border(1.dp, primary, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .background(background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
 
     ) {
@@ -41,7 +42,7 @@ fun ProgressBarBook(
             Text(
                 text = "$percentage% do livro foi lido",
                 style = TextStyle(
-                    color = PrincipalColor,
+                    color = primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -49,7 +50,7 @@ fun ProgressBarBook(
             Text(
                 text = "$currentPage/$totalPages",
                 style = TextStyle(
-                    color = PrincipalColor,
+                    color = primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -63,14 +64,14 @@ fun ProgressBarBook(
                 .fillMaxWidth()
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(PrincipalColor.copy(alpha = 0.25f)) // trilho suave
+                .background(surface) // trilho suave
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(progress)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(PrincipalColor) // barra principal
+                    .background(primary) // barra principal
             )
         }
     }

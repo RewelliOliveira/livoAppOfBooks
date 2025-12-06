@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,8 +26,7 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.shapes.TopDiagonalShape
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
-import com.example.livoappofbooks.ui.theme.PrincipalColor
-import com.example.livoappofbooks.ui.theme.buttonShape
+import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.RegisterUiState
 import com.example.livoappofbooks.ui.viewModel.RegisterViewModel
 
@@ -84,7 +84,8 @@ fun RegisterScreen(
                 },
                 isLoading = (uiState is RegisterUiState.Loading)
             )
-        }
+        },
+        containerColor = background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -150,13 +151,14 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(50.dp)
     ) {
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = Color(0xFF003D3A),
+            tint = primary,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
@@ -165,6 +167,7 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.livo),
             contentDescription = "Icone Livo",
+            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -180,7 +183,7 @@ fun CadastroFooter(
             .fillMaxWidth()
             .height(280.dp)
             .clip(TopDiagonalShape(280f))
-            .background(Color(0xFF003D3A))
+            .background(PrincipalColor)
     ) {
         Button(
             onClick = onRegisterClick,
@@ -193,25 +196,25 @@ fun CadastroFooter(
                 .offset(y = (-80).dp)
                 .border(
                     width = 2.dp,
-                    color = PrincipalColor,
+                    color = background,
                     shape = buttonShape
                 ),
             shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White
+                containerColor = background
             )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = Color(0xFF003D3A),
+                    color = primary,
                     strokeWidth = 2.dp
                 )
             } else {
                 Text(
                     text = "Avançar",
                     fontSize = 20.sp,
-                    color = Color(0xFF003D3A)
+                    color = primary
                 )
             }
         }

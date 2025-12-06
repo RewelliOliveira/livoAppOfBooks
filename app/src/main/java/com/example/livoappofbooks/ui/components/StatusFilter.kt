@@ -8,15 +8,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.ui.theme.rememberThemeState
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun FilterBar(
@@ -25,9 +23,6 @@ fun FilterBar(
     modifier: Modifier = Modifier
 ) {
     val filters = listOf("Todos", "Lendo", "Lido", "Quero Ler", "Abandonado")
-
-    val isDark = rememberThemeState().isDarkTheme
-    val cs = MaterialTheme.colorScheme
 
     var textPositions by remember { mutableStateOf<Map<String, Pair<Float, IntSize>>>(emptyMap()) }
     var rowWidth by remember { mutableStateOf(0) }
@@ -49,9 +44,9 @@ fun FilterBar(
                     fontSize = MaterialTheme.typography.labelMedium.fontSize,
                     fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal,
                     color = if (selectedFilter == filter)
-                        if (isDark) cs.onBackground else cs.primary
+                        primary
                     else
-                        if (isDark) Color(0xFFAAAAAA) else Color.Gray,
+                        Gray,
                     modifier = Modifier
                         .clickable { onFilterSelected(filter) }
                         .onGloballyPositioned {
@@ -66,7 +61,7 @@ fun FilterBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(if (isDark) Color(0xFF666666) else Color(0xFFB8D5D3))
+                    .background(surface)
             )
 
             textPositions[selectedFilter]?.let { (xPx, sizePx) ->
@@ -94,7 +89,7 @@ fun FilterBar(
                         .offset(x = with(density) { left.toDp() })
                         .width(with(density) { (right - left).toDp() })
                         .height(2.dp)
-                        .background(if (isDark) cs.onBackground else cs.primary)
+                        .background(primary)
                 )
             }
         }

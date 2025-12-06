@@ -17,12 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.R
-
+import com.example.livoappofbooks.ui.theme.*
 @Composable
 fun InfoCard(
     modifier: Modifier = Modifier,
@@ -33,8 +34,8 @@ fun InfoCard(
     Surface(
         modifier = modifier.height(100.dp),
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiary)
+        color = background,
+        border = BorderStroke(1.dp, onBackground)
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -45,21 +46,16 @@ fun InfoCard(
                 numero,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiary
+                color = onBackground
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val bookIconRes = if (isDark) {
-                    R.drawable.ic_book_dark
-                } else {
-                    R.drawable.ic_book_light
-                }
-
                 Image(
-                    painter = painterResource(id = bookIconRes),
+                    painter = painterResource(R.drawable.ic_book),
                     contentDescription = "Ícone de livro",
+                    colorFilter = ColorFilter.tint(primary),
                     modifier = Modifier.size(16.dp)
                 )
 
@@ -68,7 +64,7 @@ fun InfoCard(
                 Text(
                     texto,
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = primary
                 )
             }
         }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ConfigSection(
@@ -25,13 +26,13 @@ fun ConfigSection(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onTertiary)
+        color = background,
+        border = BorderStroke(1.dp, primary)
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Text(
                 titulo,
-                color = MaterialTheme.colorScheme.primary,
+                color = primary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )

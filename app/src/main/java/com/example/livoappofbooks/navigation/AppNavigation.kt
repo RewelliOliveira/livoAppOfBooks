@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
@@ -16,7 +17,8 @@ import com.example.livoappofbooks.ui.screens.SearchScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(themeViewModel: ThemeViewModel) {
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -38,9 +40,7 @@ fun AppNavigation() {
             composable(Screen.Library.route) {
                 LibraryScreen(
                     onNavigate = { navController.navigate(Screen.Profile.route) },
-                    onBookClick = { livro ->
-                        navController.navigate(Screen.ViewBook.route)
-                    }
+                    onBookClick = { navController.navigate(Screen.ViewBook.route) }
                 )
             }
 
@@ -52,7 +52,8 @@ fun AppNavigation() {
 
             composable(Screen.Profile.route) {
                 ProfileScreen(
-                    onNavigate = { navController.navigate(Screen.Library.route) }
+                    onNavigate = { navController.navigate(Screen.Library.route) },
+                    themeViewModel = themeViewModel
                 )
             }
 
@@ -69,7 +70,7 @@ fun AppNavigation() {
                     status = "ABANDONADO",
                     shelf = "Romances",
                     onBackClick = { navController.popBackStack() },
-                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) } // <-- aqui
+                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) },
                 )
             }
 

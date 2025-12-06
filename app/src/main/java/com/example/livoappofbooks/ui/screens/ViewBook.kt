@@ -4,6 +4,7 @@ import RatingButton
 import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -44,7 +45,7 @@ fun ViewBook(
     status: String,
     shelf: String,
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
 ) {
 
     val isExpanded = remember { mutableStateOf(false) }
@@ -57,7 +58,7 @@ fun ViewBook(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundLight)
+            .background(background)
     ) {
         Column(
             modifier = Modifier
@@ -88,7 +89,7 @@ fun ViewBook(
                         .height(320.dp)
                         .background(
                             Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, White.copy(alpha = 1f)),
+                                colors = listOf(Color.Transparent, background),
                                 startY = 250f
                             )
                         )
@@ -122,13 +123,13 @@ fun ViewBook(
                         Text(
                             text = title,
                             style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = PrincipalColor
+                            color = onBackground
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = author,
                             style = AppTypography.bodyMedium,
-                            color = Color.DarkGray
+                            color = tertiary
                         )
                     }
                     StarRating(rating = rate)
@@ -147,7 +148,7 @@ fun ViewBook(
                 }
 
                 Spacer(Modifier.height(16.dp))
-                Divider(color = Gray)
+                HorizontalDivider(color = tertiary)
                 Spacer(Modifier.height(8.dp))
 
                 Row(
@@ -197,14 +198,14 @@ fun ViewBook(
                         Text(
                             text = "Sinopse",
                             style = AppTypography.titleMedium.copy(
-                                color = Color.Black,
-                                fontWeight = FontWeight.SemiBold
+                                color = onBackground,
+                                fontWeight = FontWeight.Bold
                             )
                         )
 
                         Text(
                             text = displayedSinopse,
-                            style = AppTypography.bodyMedium.copy(color = Color.DarkGray),
+                            style = AppTypography.bodyMedium.copy(color = onBackground),
                             textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -213,7 +214,7 @@ fun ViewBook(
                             Text(
                                 text = if (isExpanded.value) "Ver menos" else "Ver mais",
                                 style = AppTypography.bodyMedium.copy(
-                                    color = PrincipalColor,
+                                    color = primary,
                                     fontWeight = FontWeight.SemiBold
                                 ),
                                 modifier = Modifier
@@ -226,7 +227,7 @@ fun ViewBook(
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
-                            color = AlertColor,
+                            color = error,
                             fontWeight = FontWeight.SemiBold,
                             textDecoration = TextDecoration.Underline
                         ),
@@ -238,20 +239,28 @@ fun ViewBook(
             }
         }
 
-        IconButton(
-            onClick = onBackClick,
+        Box(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(24.dp, 42.dp)
-                .size(16.dp)
-                .background(Color.White, CircleShape)
+                .padding(start = 24.dp, top = 42.dp)
+                .size(40.dp)
+                .background(Color.White.copy(alpha = 0.5f), CircleShape)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    onBackClick()
+                },
+            contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Arrow_back_ios_new,
                 contentDescription = "Voltar",
-                tint = Color.Black,
+                tint = Color.Black.copy(alpha = 0.8f),
+                modifier = Modifier.size(24.dp)
             )
         }
+
 
         ProgressBarBook(
             currentPage = 108,
