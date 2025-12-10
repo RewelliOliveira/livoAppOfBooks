@@ -24,7 +24,7 @@ fun StarRating(
     rating: Double,
     maxStars: Int = 5,
     starSize: Int = 24,
-    starColor: Color = background,
+    starColor: Color = outline,
     onRatingChange: ((Double) -> Unit)? = null
 ) {
     Row {
