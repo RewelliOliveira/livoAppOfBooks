@@ -6,24 +6,98 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = BackgroundLight,
-    secondary = PrincipalColor,
-    tertiary = BackgroundLight,
-    background = BackgroundDark,
-    surface = ProgressBarDark,
+
+    // --- Primary ---
+    primary = PrincipalColor,               // mantém verde como identidade
+    onPrimary = BackgroundLight,            // texto claro sobre o verde
+    primaryContainer = PrincipalColor,
+    onPrimaryContainer = BackgroundLight,
+
+    // --- Secondary ---
+    secondary = BackgroundDark,             // tons escuros para itens
+    onSecondary = BackgroundLight,
+    secondaryContainer = BackgroundDark,
+    onSecondaryContainer = BackgroundLight,
+
+    // --- Tertiary ---
+    tertiary = BackgroundLight,             // elementos claros (títulos, chips)
+    onTertiary = DarkColor,                 // texto escuro sobre fundo claro
+    tertiaryContainer = BackgroundLight,
+    onTertiaryContainer = DarkColor,
+
+    // --- Background / Surface ---
+    background = BackgroundDark,            // 0xFF121517
+    onBackground = BackgroundLight,         // 0xFFFDFBED
+
+    surface = BackgroundDark,               // cards e navegadores
+    onSurface = BackgroundLight,
+
+    surfaceVariant = BackgroundDark,
+    onSurfaceVariant = BackgroundLight,
+
+    surfaceTint = PrincipalColor,
+
+    // --- Outline / Dividers ---
+    outline = BackgroundLight,
+    outlineVariant = Gray,
+
+    // --- Errors ---
     error = AlertColor,
-    onBackground = BackgroundLight
+    onError = BackgroundLight,
+
+    // --- Inverted roles ---
+    inversePrimary = Gray,
+    inverseSurface = BackgroundLight,
+    inverseOnSurface = DarkColor
 )
 
+
 private val LightColorScheme = lightColorScheme(
-    primary = PrincipalColor,
+
+    // --- Primary ---
+    primary = PrincipalColor,               // verde
+    onPrimary = BackgroundLight,
+    primaryContainer = PrincipalColor,
+    onPrimaryContainer = BackgroundLight,
+
+    // --- Secondary ---
     secondary = BackgroundLight,
+    onSecondary = DarkColor,
+    secondaryContainer = BackgroundLight,
+    onSecondaryContainer = DarkColor,
+
+    // --- Tertiary ---
     tertiary = DarkColor,
+    onTertiary = BackgroundLight,
+    tertiaryContainer = DarkColor,
+    onTertiaryContainer = BackgroundLight,
+
+    // --- Background / Surface ---
     background = BackgroundLight,
-    surface = ProgressBarLight,
+    onBackground = BackgroundDark,
+
+    surface = White,
+    onSurface = Black,
+
+    surfaceVariant = BackgroundLight,
+    onSurfaceVariant = DarkColor,
+
+    surfaceTint = PrincipalColor,
+
+    // --- Outline / Dividers ---
+    outline = PrincipalColor,
+    outlineVariant = Gray,
+
+    // --- Errors ---
     error = AlertColor,
-    onBackground = BackgroundDark
+    onError = BackgroundLight,
+
+    // --- Inverted roles ---
+    inversePrimary = DarkColor,
+    inverseSurface = DarkColor,
+    inverseOnSurface = BackgroundLight
 )
+
 
 data class ThemeState(
     val isDarkTheme: Boolean,
@@ -93,9 +167,17 @@ val surface: Color
     get() = MaterialTheme.colorScheme.surface
 
 @get:Composable
+val outline: Color
+    get() = MaterialTheme.colorScheme.outline
+
+@get:Composable
 val error: Color
     get() = MaterialTheme.colorScheme.error
 
 @get:Composable
 val onBackground: Color
     get() = MaterialTheme.colorScheme.onBackground
+
+@get:Composable
+val inversePrimary: Color
+    get() = MaterialTheme.colorScheme.inversePrimary
