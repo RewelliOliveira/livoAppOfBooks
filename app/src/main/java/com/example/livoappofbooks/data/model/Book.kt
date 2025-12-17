@@ -1,6 +1,6 @@
-package com.example.livoappofbooks.domain.model
+package com.example.livoappofbooks.data.model
 
-import com.example.livoappofbooks.data.model.LibraryBookReponse
+import com.example.livoappofbooks.domain.model.BookStatus
 
 data class Book(
     val id: String,
@@ -19,18 +19,16 @@ data class Book(
     val userBookId: Long? = null,
     val bookStatus: BookStatus? = null,
     val readingProgress: Int = 0,
-    val personalRating: Int? = null
+    val personalRatting: Int? = null
 )
 
-fun LibraryBookReponse.toDomainBook(): Book {
-    return Book(
-        id = this.googleBookId,
-        title = this.title,
-        thumbnail = this.thumbnail,
-        personalLibrary = true,
-        userBookId = this.userBookId,
-        bookStatus = this.toBookStatus(),
-        readingProgress = this.readingProgress,
-        personalRating = this.personalRating
-    )
-}
+fun LibraryBookReponse.toDomainBook(): Book = Book(
+    id = bookId,
+    title = title,
+    thumbnail = thumbnail,
+    personalLibrary = true,
+    userBookId = id,
+    bookStatus = toBookStatus(),
+    readingProgress = readingProgress,
+    personalRatting = personalRatting
+)

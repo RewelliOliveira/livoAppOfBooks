@@ -3,12 +3,13 @@ package com.example.livoappofbooks.ui.viewModel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.service.LibraryService
-import com.example.livoappofbooks.domain.model.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed interface LibraryUiState {
@@ -28,15 +29,14 @@ class LibraryViewModel(
     private val repository = LibraryRepository(service)
 
     private val _books = MutableStateFlow<List<Book>>(emptyList())
-    val books: StateFlow<List<Book>> = _books
+    val books: StateFlow<List<Book>> = _books.asStateFlow()
 
     private val _uiState = MutableStateFlow<LibraryUiState>(LibraryUiState.Idle)
-    val uiState: StateFlow<LibraryUiState> = _uiState
+    val uiState: StateFlow<LibraryUiState> = _uiState.asStateFlow()
 
     fun loadBooks() {
         viewModelScope.launch {
             _uiState.value = LibraryUiState.Loading
-
             repository.getUserBooks()
                 .onSuccess {
                     _books.value = it

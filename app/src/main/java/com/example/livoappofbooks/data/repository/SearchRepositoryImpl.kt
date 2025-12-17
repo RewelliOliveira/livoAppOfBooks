@@ -1,6 +1,6 @@
 package com.example.livoappofbooks.data.repository
 
-import com.example.livoappofbooks.domain.model.Book
+import com.example.livoappofbooks.data.model.Book
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray

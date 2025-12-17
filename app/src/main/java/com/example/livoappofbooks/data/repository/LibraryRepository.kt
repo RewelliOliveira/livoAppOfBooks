@@ -1,16 +1,18 @@
 package com.example.livoappofbooks.data.repository
 
-
-import com.example.livoappofbooks.domain.model.Book
+import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.service.LibraryService
-import com.example.livoappofbooks.domain.model.toDomainBook
+import com.example.livoappofbooks.data.model.toDomainBook
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class LibraryRepository(
     private val libraryService: LibraryService
 ) {
-    suspend fun getUserBooks(): Result<List<Book>> {
-        return try {
+    suspend fun getUserBooks(): Result<List<Book>> = withContext(Dispatchers.IO) {
+        try {
             val response = libraryService.getUserBooks()
+
             if (response.isSuccessful) {
                 val userBooks = response.body() ?: emptyList()
                 val books = userBooks.map { it.toDomainBook() }

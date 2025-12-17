@@ -13,7 +13,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object RetrofitInstance {
 
     //bota teu ip aq
-    private const val BASE_URL = "http://192.168.0.3:8080/"
+    private const val BASE_URL = "http://TEUIP:8080/"
 
     fun <T> createService(
         context: Context,
@@ -26,7 +26,6 @@ object RetrofitInstance {
             val originalRequest = chain.request()
             val path = originalRequest.url.encodedPath
 
-            // 🔐 NÃO adiciona Authorization no login e registro
             if (path.contains("/auth") || path.contains("/user")) {
                 return@Interceptor chain.proceed(originalRequest)
             }

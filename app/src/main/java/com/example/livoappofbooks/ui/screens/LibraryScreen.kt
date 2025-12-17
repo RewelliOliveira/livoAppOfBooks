@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 import com.example.livoappofbooks.R
-import com.example.livoappofbooks.domain.model.Book
+import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.components.Book
 import com.example.livoappofbooks.ui.components.SearchBar
@@ -164,7 +164,7 @@ fun LibraryScreen(
                                     Book(
                                         status = book.bookStatus ?: BookStatus.QUERO_LER,
                                         progress = book.readingProgress,
-                                        evaluate = book.personalRating ?: 0,
+                                        evaluate = book.personalRatting ?: 0,
                                         imageUrl = book.thumbnail.orEmpty(),
                                         onClick = { onBookClick(book) }
                                     )
