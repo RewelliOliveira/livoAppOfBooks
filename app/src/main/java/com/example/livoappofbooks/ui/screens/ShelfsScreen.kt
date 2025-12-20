@@ -1,6 +1,5 @@
 package com.example.livoappofbooks.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,11 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
@@ -39,8 +36,8 @@ fun ShelfsScreen(
     val capa4 = null
 
     val prateleirasMock = listOf(
-        Prateleira("Fantasia", 12, listOf(capa1, capa2, capa3)),
-        Prateleira("Tecnologia", 5, listOf(capa4, capa2, capa1)),
+        Prateleira("Fantasia", 2, listOf(capa1, capa2)),
+        Prateleira("Tecnologia", 1, listOf(capa1)),
         Prateleira("Favoritos", 8, listOf(capa3, capa4, capa2))
     )
 

@@ -19,6 +19,8 @@ import com.example.livoappofbooks.ui.icons.Arrow_forward_ios_new
 import com.example.livoappofbooks.ui.screens.Prateleira
 import com.example.livoappofbooks.ui.theme.primary
 import com.example.livoappofbooks.ui.theme.tertiary
+import androidx.compose.ui.res.painterResource
+import com.example.livoappofbooks.R
 
 @Composable
 fun ShelfItem(
@@ -39,28 +41,42 @@ fun ShelfItem(
                 .width(105.dp)
                 .height(90.dp)
         ) {
-            prateleira.capas
+
+            val capasOrdenadas = prateleira.capas
+                .sortedBy { it == null }
                 .take(3)
                 .asReversed()
-                .forEachIndexed { index, url ->
-                    val realIndex = 2 - index
 
-                    Box(
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(90.dp)
-                            .offset(x = (realIndex * 28).dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(tertiary.copy(alpha = 0.2f))
-                    ) {
-                        AsyncImage(
-                            model = url,
-                            contentDescription = "Capa do livro",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
+            val total = capasOrdenadas.size
+            val overlap = 28
+            val baseOffset = when (total) {
+                1 -> overlap
+                2 -> overlap / 2
+                else -> 0
+            }
+
+            capasOrdenadas.forEachIndexed { index, url ->
+                val realIndex = (total - 1) - index
+                val offsetX = baseOffset + realIndex * overlap
+
+                Box(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(90.dp)
+                        .offset(x = offsetX.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(tertiary.copy(alpha = 0.2f))
+                ) {
+                    AsyncImage(
+                        model = url,
+                        contentDescription = "Capa do livro",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(R.drawable.capa_default),
+                        error = painterResource(R.drawable.capa_default)
+                    )
                 }
+            }
         }
 
         Spacer(Modifier.width(20.dp))
