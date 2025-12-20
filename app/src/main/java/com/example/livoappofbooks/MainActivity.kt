@@ -12,9 +12,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.example.livoappofbooks.data.ThemePreferences
 import com.example.livoappofbooks.data.ThemeRepository
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.livoappofbooks.navigation.AppNavigation
 import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LoginScreen
@@ -66,14 +68,22 @@ fun RootNavigation(themeViewModel: ThemeViewModel) {
             )
         }
 
-        composable("login") {
+        composable(
+            route = "login?show_success_snackbar={show_success_snackbar}",
+            arguments = listOf(navArgument("show_success_snackbar") {
+                type = NavType.BoolType
+                defaultValue = false
+            })
+        ) { backStackEntry ->
+            val showSnackbar = backStackEntry.arguments?.getBoolean("show_success_snackbar") ?: false
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate("app") {
                         popUpTo("initial") { inclusive = true }
                     }
                 },
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                showSuccessSnackbar = showSnackbar
             )
         }
 
@@ -81,8 +91,8 @@ fun RootNavigation(themeViewModel: ThemeViewModel) {
             RegisterScreen(
                 onBackClick = { navController.popBackStack() },
                 onRegisterComplete = {
-                    navController.navigate("initial") {
-                        popUpTo("register") { inclusive = true }
+                    navController.navigate("login?show_success_snackbar=true") {
+                        popUpTo("initial")
                     }
                 }
             )

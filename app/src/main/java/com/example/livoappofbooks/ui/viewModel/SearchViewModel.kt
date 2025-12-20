@@ -2,9 +2,9 @@ package com.example.livoappofbooks.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.repository.SearchRepository
 import com.example.livoappofbooks.data.repository.SearchRepositoryImpl
+import com.example.livoappofbooks.data.model.Book
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

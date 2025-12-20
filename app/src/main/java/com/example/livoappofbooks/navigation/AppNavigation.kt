@@ -47,7 +47,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    onNavigate = { navController.navigate(Screen.Profile.route) },
+                    context = navController.context,
                     onBookClick = { navController.navigate(Screen.ViewBook.route) }
                 )
             }

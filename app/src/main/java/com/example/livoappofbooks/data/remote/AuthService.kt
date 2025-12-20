@@ -3,7 +3,6 @@ package com.example.livoappofbooks.data.remote
 import com.example.livoappofbooks.data.remote.dto.LoginRequest
 import com.example.livoappofbooks.data.remote.dto.LoginResponse
 import com.example.livoappofbooks.data.remote.dto.RegisterRequest
-import com.example.livoappofbooks.data.remote.dto.RegisterResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -17,5 +16,5 @@ interface AuthService {
     @POST("/user")
     suspend fun register(
         @Body body: RegisterRequest
-    ): RegisterResponse
+    ): Unit
 }
