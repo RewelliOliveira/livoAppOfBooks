@@ -24,7 +24,8 @@ class LoginViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val authService: AuthService = RetrofitInstance.getApi(context)
+    private val authService = RetrofitInstance
+        .createService(context, AuthService::class.java)
     private val repository: AuthRepository = AuthRepository(authService)
     private val tokenManager = TokenManager(context)
 
