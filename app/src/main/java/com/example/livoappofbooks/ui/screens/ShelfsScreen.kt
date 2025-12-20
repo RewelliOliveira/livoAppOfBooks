@@ -1,16 +1,19 @@
 package com.example.livoappofbooks.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
+import com.example.livoappofbooks.ui.components.SearchBar
 import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
@@ -26,13 +29,11 @@ fun ShelfsScreen(
     onShelfClick: (Prateleira) -> Unit = {},
     onAddShelfClick: () -> Unit = {}
 ) {
+    var search by remember { mutableStateOf("") }
 
-    val capa1 =
-        "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa2 =
-        "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa3 =
-        "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    val capa1 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    val capa2 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    val capa3 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
     val capa4 = null
 
     val prateleirasMock = listOf(
@@ -41,36 +42,67 @@ fun ShelfsScreen(
         Prateleira("Favoritos", 8, listOf(capa3, capa4, capa2))
     )
 
+    val prateleirasFiltradas = remember(search) {
+        if (search.isBlank()) prateleirasMock
+        else prateleirasMock.filter {
+            it.nome.contains(search, ignoreCase = true)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
+            .windowInsetsPadding(WindowInsets.statusBars),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.livo),
+                contentDescription = "LIVO Logo",
+                colorFilter = ColorFilter.tint(primary),
+                modifier = Modifier
+                    .height(30.dp)
+                    .width(100.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        SearchBar(
+            query = search,
+            onQueryChange = { search = it },
+            placeholder = "Pesquisar prateleira",
+            onSearch = {},
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Prateleiras",
+            style = AppTypography.headlineSmall,
             color = primary,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            items(prateleirasMock) { prateleira ->
+            items(prateleirasFiltradas) { prateleira ->
                 ShelfItem(
                     prateleira = prateleira,
                     onClick = { onShelfClick(prateleira) }
                 )
             }
-
-            item { Spacer(modifier = Modifier.height(100.dp)) }
         }
 
         PrimaryButton(
@@ -79,7 +111,7 @@ fun ShelfsScreen(
             onClick = onAddShelfClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(vertical = 16.dp)
         )
     }
 }

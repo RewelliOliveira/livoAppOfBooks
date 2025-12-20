@@ -78,7 +78,6 @@ fun LibraryScreen(
                     .windowInsetsPadding(WindowInsets.statusBars)
             ) {
 
-                // LOGO
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -95,16 +94,15 @@ fun LibraryScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // SEARCH
                 SearchBar(
                     query = searchQuery,
+                    placeholder = "Pesquisar na minha biblioteca",
                     onQueryChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                // FILTER
                 FilterBar(
                     selectedFilter = selectedFilter,
                     onFilterSelected = { selectedFilter = it },
