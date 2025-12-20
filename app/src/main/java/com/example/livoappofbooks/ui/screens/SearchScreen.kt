@@ -1,6 +1,8 @@
 package com.example.livoappofbooks.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
@@ -35,14 +38,23 @@ import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
 fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
+
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+
+    val logoRes = if (isDarkTheme) {
+        R.drawable.livo
+    } else {
+        R.drawable.livo
+    }
     val query by viewModel.query.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .windowInsetsPadding(WindowInsets.statusBars),
+            .padding(16.dp)
+            .background(background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -50,7 +62,7 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.livo),
+                painter = painterResource(id = logoRes),
                 contentDescription = "LIVO Logo",
                 colorFilter = ColorFilter.tint(primary),
                 modifier = Modifier
@@ -78,20 +90,40 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
 
                     Text(
                         text = "Livros Populares",
-                        style = AppTypography.headlineSmall,
-                        color = primary
+                        style = AppTypography.headlineMedium,
+                        color = outline
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     CardBook(
-                        title = "Peter Pan in Wonderland",
-                        author = "Samira Sales",
-                        rate = 3.7,
-                        imageUrl = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
-                        publishYear = "2025",
-                        pageCount = 240,
-                        personalLibrary = true
+                        title = "Harry Potter and the Sorcerer's Stone",
+                        author = "J.K. Rowling",
+                        rate = 4.8,
+                        imageUrl = "https://covers.openlibrary.org/b/id/10521240-L.jpg",
+                        publishYear = "1997",
+                        pageCount = 309,
+                        personalLibrary = false
+                    )
+
+                    CardBook(
+                        title = "The Hobbit",
+                        author = "J.R.R. Tolkien",
+                        rate = 4.7,
+                        imageUrl = "https://covers.openlibrary.org/b/id/6979861-L.jpg",
+                        publishYear = "1937",
+                        pageCount = 310,
+                        personalLibrary = false
+                    )
+
+                    CardBook(
+                        title = "1984",
+                        author = "George Orwell",
+                        rate = 4.6,
+                        imageUrl = "https://covers.openlibrary.org/b/id/7222246-L.jpg",
+                        publishYear = "1949",
+                        pageCount = 328,
+                        personalLibrary = false
                     )
                 }
             }
@@ -141,9 +173,16 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                 ) {
                     Text(text = message, style = AppTypography.bodyMedium)
                     Spacer(modifier = Modifier.height(8.dp))
-                    // Opcional: botões de retry poderiam ser adicionados aqui
                 }
             }
         }
+    }
+}
+
+@Preview()
+@Composable
+fun SearchScreenPreview() {
+    LivoAppOfBooksTheme(darkTheme = true) {
+        SearchScreen(onNavigate = {})
     }
 }
