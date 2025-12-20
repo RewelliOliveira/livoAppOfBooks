@@ -42,7 +42,8 @@ class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Fa
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    showSuccessSnackbar: Boolean = false
 ) {
     val context = LocalContext.current.applicationContext
     val factory = LoginViewModelFactory(context)
@@ -53,6 +54,12 @@ fun LoginScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(showSuccessSnackbar) {
+        if (showSuccessSnackbar) {
+            snackbarHostState.showSnackbar("Usuário cadastrado com sucesso!")
+        }
+    }
 
     LaunchedEffect(uiState) {
         when (val state = uiState) {
