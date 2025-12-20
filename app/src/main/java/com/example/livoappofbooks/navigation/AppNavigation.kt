@@ -11,11 +11,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.LibraryScreen
-import com.example.livoappofbooks.ui.screens.Prateleira
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
-import com.example.livoappofbooks.ui.screens.ShelfsScreen // Adicione este import
+import com.example.livoappofbooks.ui.screens.ShelfsScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -27,12 +26,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
     Scaffold(
         bottomBar = {
-            // Adicione Screen.Shelfs.route à lista de telas que mostram a BottomBar
             if (currentRoute in listOf(
                     Screen.Library.route,
                     Screen.Search.route,
                     Screen.Profile.route,
-                    Screen.Shelfs.route // Adicione aqui
+                    Screen.Shelfs.route
                 )) {
                 BottomBar(navController)
             }
@@ -41,7 +39,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
         NavHost(
             navController = navController,
-            startDestination = Screen.Library.route, // Ou Screen.Shelfs.route se quiser começar aqui
+            startDestination = Screen.Library.route,
             modifier = Modifier.padding(innerPadding)
         ) {
 
@@ -67,7 +65,6 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Shelfs.route) {
                 ShelfsScreen(
-                    navController = navController,
                     onShelfClick = {
                         TODO("TELA DA PRATELEIRA")
                     },
