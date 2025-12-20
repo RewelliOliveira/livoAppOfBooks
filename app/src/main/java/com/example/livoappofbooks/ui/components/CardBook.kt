@@ -2,6 +2,7 @@ package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
@@ -55,16 +58,17 @@ fun CardBook(
                     .clip(RoundedCornerShape(15.dp))
             )
 
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(4.dp))
 
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 Text(
                     text = title,
-                    style = AppTypography.titleMedium,
-                    color = onBackground
+                    style = AppTypography.headlineSmall,
+                    color = onBackground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(Modifier.height(2.dp))
@@ -83,8 +87,8 @@ fun CardBook(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
                     Column(
@@ -93,25 +97,56 @@ fun CardBook(
                         InfoItem(
                             icon = CalendarDays,
                             text = publishYear,
-                            height = 22.dp
                         )
                         InfoItem(
                             icon = BookOpen,
                             text = "$pageCount págs",
-                            height = 22.dp
                         )
                     }
-
+                    Spacer(Modifier.width(10.dp))
                     PrimaryButton(
-                        text = if (!personalLibrary) "Já adicionado" else "Adicionar",
-                        icon = if (!personalLibrary) CheckCircle else PlusCircle,
+                        text = if (!personalLibrary) "Adicionar" else "Adicionado",
+                        enabled = if(!personalLibrary) true else false,
+                        icon = if (!personalLibrary) PlusCircle else  CheckCircle,
                         onClick = {},
-                        height = 36.dp,
-                        width = 140.dp
+                        height = 30.dp,
                     )
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CardBookPreview() {
+    LivoAppOfBooksTheme(darkTheme = false) {
+        CardBook(
+            title = "O Senhor dos Anéis: A Sociedade do Anel",
+            author = "J.R.R. Tolkien",
+            rate = 4.8,
+            publishYear = "1954",
+            pageCount = 423,
+            imageUrl = R.drawable.capa_default.toString(),
+            personalLibrary = true
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun CardBookPreview2() {
+    LivoAppOfBooksTheme(darkTheme = true) {
+        CardBook(
+            title = "O Senhor dos Anéis: A Sociedade do Anel",
+            author = "J.R.R. Tolkien",
+            rate = 4.8,
+            publishYear = "1954",
+            pageCount = 423,
+            imageUrl = "",
+            personalLibrary = true
+        )
     }
 }
 
