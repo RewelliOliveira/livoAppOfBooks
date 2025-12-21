@@ -26,6 +26,7 @@ import com.example.livoappofbooks.ui.theme.*
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    placeholder: String,
     onSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -65,7 +66,7 @@ fun SearchBar(
                     ) {
                         if (query.isEmpty()) {
                             Text(
-                                text = "Pesquisar na minha biblioteca",
+                                text = placeholder,
                                 style = TextStyle(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
@@ -85,7 +86,9 @@ fun SearchBar(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Pesquisar",
                 tint = primary,
-                modifier = Modifier.size(28.dp).clickable { onSearch() }
+                modifier = Modifier
+                    .size(28.dp)
+                    .clickable { onSearch() }
             )
         }
     }

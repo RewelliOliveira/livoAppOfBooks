@@ -70,7 +70,7 @@ fun RatingDialogPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(surface)
+            .background(progressBar)
     ) {
         RatingDialog(
             rating = rating,

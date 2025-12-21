@@ -14,6 +14,7 @@ import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
+import com.example.livoappofbooks.ui.screens.ShelfsScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -25,7 +26,12 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute in listOf(Screen.Library.route, Screen.Search.route, Screen.Profile.route)) {
+            if (currentRoute in listOf(
+                    Screen.Library.route,
+                    Screen.Search.route,
+                    Screen.Profile.route,
+                    Screen.Shelfs.route
+                )) {
                 BottomBar(navController)
             }
         }
@@ -54,6 +60,17 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) },
                     themeViewModel = themeViewModel
+                )
+            }
+
+            composable(Screen.Shelfs.route) {
+                ShelfsScreen(
+                    onShelfClick = {
+                        TODO("TELA DA PRATELEIRA")
+                    },
+                    onAddShelfClick = {
+                        TODO("TELA DE ADICIONAR PRATELEIRA" )
+                    }
                 )
             }
 

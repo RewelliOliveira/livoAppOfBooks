@@ -2,6 +2,7 @@ package com.example.livoappofbooks.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.BookmarkOutlined
 import com.example.livoappofbooks.ui.icons.MagnifyingGlass
 import com.example.livoappofbooks.ui.icons.User
 
@@ -28,11 +29,18 @@ sealed class Screen(
         ScreenIcon.Vector(MagnifyingGlass)
     )
 
+    object Shelfs : Screen(
+        "shelfs",
+        "Prateleiras",
+        ScreenIcon.Vector(BookmarkOutlined)
+    )
+
     object ViewBook : Screen(
         "view_book",
         "Visualizar Livro",
         null
     )
+
     object RegisterReading : Screen(
         "register_reading",
         "Registrar Leitura",

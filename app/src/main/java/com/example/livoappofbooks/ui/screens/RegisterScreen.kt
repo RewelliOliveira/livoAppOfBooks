@@ -76,7 +76,7 @@ fun RegisterScreen(
     Scaffold(
         topBar = { Header(onBackClick) },
         bottomBar = {
-            CadastroFooter(
+            RegisterFooter(
                 onRegisterClick = {
                     if (password != confirmPassword) {
                         val scope = CoroutineScope(Dispatchers.Main)
@@ -175,7 +175,7 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CadastroFooter(
+fun RegisterFooter(
     onRegisterClick: () -> Unit,
     isLoading: Boolean,
     snackbarHostState: SnackbarHostState
