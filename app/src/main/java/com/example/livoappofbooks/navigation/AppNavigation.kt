@@ -5,15 +5,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
+import com.example.livoappofbooks.ui.screens.AddShelfScreen
+import com.example.livoappofbooks.ui.screens.HistoryScreen
+import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LibraryScreen
+import com.example.livoappofbooks.ui.screens.LoginScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
+import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
+import com.example.livoappofbooks.ui.screens.ShelfDetailsScreen
 import com.example.livoappofbooks.ui.screens.ShelvesScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
@@ -65,12 +73,29 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Shelfs.route) {
                 ShelvesScreen(
-                    onShelfClick = {
-                        TODO("TELA DA PRATELEIRA")
+                    onShelfClick = { shelf ->
+                        navController.navigate(Screen.ShelfDetails.createRoute(shelf.id))
                     },
                     onAddShelfClick = {
-                        TODO("TELA DE ADICIONAR PRATELEIRA" )
+                        navController.navigate(Screen.AddShelf.route)
                     }
+                )
+            }
+
+            composable(
+                route = Screen.ShelfDetails.route,
+                arguments = listOf(navArgument("shelfId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val shelfId = backStackEntry.arguments?.getString("shelfId")
+                ShelfDetailsScreen(
+                    shelfId = shelfId,
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+
+            composable(Screen.AddShelf.route) {
+                AddShelfScreen(
+                    onBackClick = { navController.popBackStack() }
                 )
             }
 
