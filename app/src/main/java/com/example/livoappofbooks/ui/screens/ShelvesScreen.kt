@@ -3,48 +3,59 @@ package com.example.livoappofbooks.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
+import com.example.livoappofbooks.ui.components.Shelf
+import androidx.compose.foundation.lazy.items
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.SearchBar
 import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 
-data class Prateleira(
-    val nome: String,
-    val quantidadeLivros: Int,
-    val capas: List<String?>
-)
+
 
 @Composable
-fun ShelfsScreen(
-    onShelfClick: (Prateleira) -> Unit = {},
-    onAddShelfClick: () -> Unit = {}
+fun ShelvesScreen(
+    onShelfClick: (Shelf) -> Unit = {},
+    onAddShelfClick: () -> Unit = {},
+    viewModel: ShelvesViewModel = viewModel()
 ) {
+
+    val shelvesResponse by viewModel.shelves.observeAsState(emptyList())
+    val loading by viewModel.loading.observeAsState(false)
+    val error by viewModel.error.observeAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadShelves()
+    }
+
     var search by remember { mutableStateOf("") }
 
-    val capa1 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa2 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa3 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa4 = null
+    val shelves = remember(shelvesResponse) {
+        shelvesResponse.map { shelf ->
+            Shelf(
+                id = shelf.id,
+                nome = shelf.name,
+                quantidadeLivros = shelf.quantity,
+                capas = List(shelf.quantity.coerceAtMost(3)) { null } // Placeholders, as URL is not available
+            )
+        }
+    }
 
-    val prateleirasMock = listOf(
-        Prateleira("Fantasia", 2, listOf(capa1, capa2)),
-        Prateleira("Tecnologia", 1, listOf(capa1)),
-        Prateleira("Favoritos", 8, listOf(capa3, capa4, capa2))
-    )
-
-    val prateleirasFiltradas = remember(search) {
-        if (search.isBlank()) prateleirasMock
-        else prateleirasMock.filter {
+    val shelvesFiltradas = remember(search, shelves) {
+        if (search.isBlank()) shelves
+        else shelves.filter {
             it.nome.contains(search, ignoreCase = true)
         }
     }
@@ -76,7 +87,7 @@ fun ShelfsScreen(
         SearchBar(
             query = search,
             onQueryChange = { search = it },
-            placeholder = "Pesquisar prateleira",
+            placeholder = "Pesquisar shelf",
             onSearch = {},
             modifier = Modifier.fillMaxWidth()
         )
@@ -84,7 +95,7 @@ fun ShelfsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Prateleiras",
+            text = "Shelves",
             style = AppTypography.headlineSmall,
             color = primary,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -97,16 +108,16 @@ fun ShelfsScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            items(prateleirasFiltradas) { prateleira ->
+            items(shelvesFiltradas) { shelf ->
                 ShelfItem(
-                    prateleira = prateleira,
-                    onClick = { onShelfClick(prateleira) }
+                    prateleira = shelf,
+                    onClick = { onShelfClick(shelf) }
                 )
             }
         }
 
         PrimaryButton(
-            text = "Criar prateleira",
+            text = "Criar shelf",
             icon = PlusCircle,
             onClick = onAddShelfClick,
             modifier = Modifier

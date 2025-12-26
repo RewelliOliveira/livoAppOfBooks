@@ -14,7 +14,7 @@ import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
-import com.example.livoappofbooks.ui.screens.ShelfsScreen
+import com.example.livoappofbooks.ui.screens.ShelvesScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -64,7 +64,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(Screen.Shelfs.route) {
-                ShelfsScreen(
+                ShelvesScreen(
                     onShelfClick = {
                         TODO("TELA DA PRATELEIRA")
                     },
