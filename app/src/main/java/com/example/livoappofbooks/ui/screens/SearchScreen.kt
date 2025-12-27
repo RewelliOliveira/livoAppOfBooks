@@ -37,7 +37,10 @@ import com.example.livoappofbooks.ui.viewModel.SearchViewModel
 import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
-fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
+fun SearchScreen(
+    viewModel: SearchViewModel = viewModel(),
+    onBookClick: (bookId: String, isInLibrary: Boolean) -> Unit
+) {
 
     val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
         .getOrElse { isSystemInDarkTheme() }
@@ -96,35 +99,6 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    CardBook(
-                        title = "Harry Potter and the Sorcerer's Stone",
-                        author = "J.K. Rowling",
-                        rate = 4.8,
-                        imageUrl = "https://covers.openlibrary.org/b/id/10521240-L.jpg",
-                        publishYear = "1997",
-                        pageCount = 309,
-                        personalLibrary = false
-                    )
-
-                    CardBook(
-                        title = "The Hobbit",
-                        author = "J.R.R. Tolkien",
-                        rate = 4.7,
-                        imageUrl = "https://covers.openlibrary.org/b/id/6979861-L.jpg",
-                        publishYear = "1937",
-                        pageCount = 310,
-                        personalLibrary = false
-                    )
-
-                    CardBook(
-                        title = "1984",
-                        author = "George Orwell",
-                        rate = 4.6,
-                        imageUrl = "https://covers.openlibrary.org/b/id/7222246-L.jpg",
-                        publishYear = "1949",
-                        pageCount = 328,
-                        personalLibrary = false
-                    )
                 }
             }
 
@@ -151,13 +125,17 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(results) { book ->
                             CardBook(
+                                bookId = book.id,
                                 title = book.title,
                                 author = book.authors.firstOrNull() ?: "Desconhecido",
                                 rate = book.averageRating ?: 0.0,
                                 imageUrl = book.thumbnail ?: "",
                                 publishYear = book.publishedDate?.take(4) ?: "--",
                                 pageCount = book.pageCount ?: 0,
-                                personalLibrary = book.personalLibrary
+                                personalLibrary = book.personalLibrary,
+                                onClick = { id ->
+                                    onBookClick(id, book.personalLibrary)
+                                }
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -176,13 +154,5 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                 }
             }
         }
-    }
-}
-
-@Preview()
-@Composable
-fun SearchScreenPreview() {
-    LivoAppOfBooksTheme(darkTheme = true) {
-        SearchScreen(onNavigate = {})
     }
 }
