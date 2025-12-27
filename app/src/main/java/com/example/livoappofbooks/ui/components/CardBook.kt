@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,17 +25,20 @@ import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun CardBook(
+    bookId: String,
     title: String,
     author: String,
     rate: Double,
     publishYear: String,
     pageCount: Int,
     imageUrl: String,
-    personalLibrary: Boolean
+    personalLibrary: Boolean,
+    onClick: (String) -> Unit
 ) {
     Box(
         Modifier
             .fillMaxWidth()
+            .clickable { onClick(bookId) }
             .shadow(
                 elevation = 10.dp,
                 spotColor = onBackground.copy(alpha = 0.5f),
@@ -114,39 +118,6 @@ fun CardBook(
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardBookPreview() {
-    LivoAppOfBooksTheme(darkTheme = false) {
-        CardBook(
-            title = "O Senhor dos Anéis: A Sociedade do Anel",
-            author = "J.R.R. Tolkien",
-            rate = 4.8,
-            publishYear = "1954",
-            pageCount = 423,
-            imageUrl = R.drawable.capa_default.toString(),
-            personalLibrary = true
-        )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun CardBookPreview2() {
-    LivoAppOfBooksTheme(darkTheme = true) {
-        CardBook(
-            title = "O Senhor dos Anéis: A Sociedade do Anel",
-            author = "J.R.R. Tolkien",
-            rate = 4.8,
-            publishYear = "1954",
-            pageCount = 423,
-            imageUrl = "",
-            personalLibrary = true
-        )
     }
 }
 
