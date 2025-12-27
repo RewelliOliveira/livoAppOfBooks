@@ -46,7 +46,13 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Search.route) {
                 SearchScreen(
-                    onNavigate = { navController.navigate(Screen.Search.route) }
+                    onBookClick = { bookId, isInLibrary ->
+                        if (isInLibrary) {
+                            navController.navigate(Screen.ViewBook.createRoute(bookId))
+                        } else {
+                            navController.navigate(Screen.ViewBookInit.createRoute(bookId))
+                        }
+                    }
                 )
             }
 
