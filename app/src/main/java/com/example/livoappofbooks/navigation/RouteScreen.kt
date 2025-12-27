@@ -29,10 +29,21 @@ sealed class Screen(
     )
 
     object ViewBook : Screen(
-        "view_book",
+        "view_book/{bookId}",
         "Visualizar Livro",
         null
-    )
+    ) {
+        fun createRoute(bookId: String) = "view_book/$bookId"
+    }
+
+    object ViewBookInit : Screen(
+        "view_book_init/{bookId}",
+        "Visualizar Livro Inicial",
+        null
+    ) {
+        fun createRoute(bookId: String) = "view_book_init/$bookId"
+    }
+
     object RegisterReading : Screen(
         "register_reading",
         "Registrar Leitura",
