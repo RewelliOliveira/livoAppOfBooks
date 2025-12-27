@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -29,6 +29,9 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.RegisterUiState
 import com.example.livoappofbooks.ui.viewModel.RegisterViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RegisterViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -53,18 +56,19 @@ fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    val snackbarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState) {
         when (val state = uiState) {
             is RegisterUiState.Success -> {
                 onRegisterComplete()
-                viewModel.resetState() // Reseta o estado para evitar re-navegação
+                viewModel.resetState()
             }
             is RegisterUiState.Error -> {
-                errorMessage = state.message
+                snackbarHostState.showSnackbar(state.message)
+                viewModel.resetState()
             }
             else -> {}
         }
@@ -76,13 +80,16 @@ fun RegisterScreen(
             CadastroFooter(
                 onRegisterClick = {
                     if (password != confirmPassword) {
-                        errorMessage = "As senhas não coincidem"
+                        val scope = CoroutineScope(Dispatchers.Main)
+                        scope.launch {
+                            snackbarHostState.showSnackbar("As senhas não coincidem")
+                        }
                     } else {
-                        errorMessage = null
                         viewModel.register(name, email, password)
                     }
                 },
-                isLoading = (uiState is RegisterUiState.Loading)
+                isLoading = (uiState is RegisterUiState.Loading),
+                snackbarHostState = snackbarHostState
             )
         },
         containerColor = background
@@ -98,14 +105,16 @@ fun RegisterScreen(
             Text(
                 "Seja Bem vindo",
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = onBackground
             )
 
             Spacer(modifier = Modifier.height(5.dp))
 
             Text(
                 "Insira seus dados para criar sua conta",
-                fontSize = 15.sp
+                fontSize = 15.sp,
+                color = tertiary
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -125,23 +134,16 @@ fun RegisterScreen(
             Input(
                 label = "Digite sua senha",
                 value = password,
-                onValueChange = { password = it }
+                onValueChange = { password = it },
+                isPassword = true
             )
 
             Input(
                 label = "Confirme sua senha",
                 value = confirmPassword,
-                onValueChange = { confirmPassword = it }
+                onValueChange = { confirmPassword = it },
+                isPassword = true
             )
-
-            if (errorMessage != null) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = errorMessage ?: "",
-                    color = Color.Red,
-                    fontSize = 14.sp
-                )
-            }
         }
     }
 }
@@ -176,7 +178,8 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun CadastroFooter(
     onRegisterClick: () -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
+    snackbarHostState: SnackbarHostState
 ) {
     Box(
         modifier = Modifier
@@ -218,5 +221,12 @@ fun CadastroFooter(
                 )
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
     }
 }

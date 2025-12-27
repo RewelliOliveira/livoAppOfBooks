@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
@@ -151,6 +151,7 @@ fun SearchScreen(
                 ) {
                     Text(text = message, style = AppTypography.bodyMedium)
                     Spacer(modifier = Modifier.height(8.dp))
+                    // Opcional: botões de retry poderiam ser adicionados aqui
                 }
             }
         }
