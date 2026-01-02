@@ -42,4 +42,10 @@ interface ShelvesService {
         @Path("id") shelfId: String,
         @Path("term") term: String
     ): List<SearchBookResponse>
+
+    @retrofit2.http.PUT("/library/shelfs/{id}")
+    suspend fun updateShelf(
+        @Path("id") id: String,
+        @Body body: ShelfRequest
+    ): ShelfResponse
 }

@@ -31,4 +31,21 @@ class ShelvesRepository(
     suspend fun deleteShelf(id: String) {
         service.deleteShelf(id)
     }
+
+    suspend fun getShelfById(id: String): ShelfResponse {
+        return service.getShelfById(id)
+    }
+
+    suspend fun updateShelf(
+        id: String,
+        name: String,
+        description: String?
+    ): ShelfResponse {
+        val body = ShelfRequest(
+            name = name,
+            description = description,
+            books = emptyList()
+        )
+        return service.updateShelf(id, body)
+    }
 }

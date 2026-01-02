@@ -5,5 +5,7 @@ data class BookShelf(
     val bookId: Long,
     val status: String,
     val addedAt: String,
-    val rating: Float?
+    val rating: Float?,
+    val title: String? = null,
+    val thumbnail: String? = null
 )

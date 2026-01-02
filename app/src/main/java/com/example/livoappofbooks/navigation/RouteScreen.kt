@@ -55,6 +55,14 @@ sealed class Screen(
         fun createRoute(shelfId: String) = "shelf_details/$shelfId"
     }
 
+    object EditShelf : Screen(
+        "edit_shelf/{shelfId}",
+        "Editar Prateleira",
+        null
+    ) {
+        fun createRoute(shelfId: String) = "edit_shelf/$shelfId"
+    }
+
     object AddShelf : Screen(
         "add_shelf",
         "Criar Prateleira",
