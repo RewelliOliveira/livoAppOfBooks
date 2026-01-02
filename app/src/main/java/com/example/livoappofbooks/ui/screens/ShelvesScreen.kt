@@ -117,16 +117,51 @@ fun ShelvesScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        LazyColumn(
+        Box(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            contentAlignment = Alignment.Center
         ) {
-            items(shelvesFiltradas) { shelf ->
-                ShelfItem(
-                    prateleira = shelf,
-                    onClick = { onShelfClick(shelf) }
-                )
+            when {
+                loading -> {
+                    CircularProgressIndicator(color = primary)
+                }
+                error != null -> {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = error ?: "Erro desconhecido",
+                            color = tertiary,
+                            style = AppTypography.bodyMedium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClick = { viewModel.loadShelves() }) {
+                            Text("Tentar novamente", color = primary)
+                        }
+                    }
+                }
+                shelvesFiltradas.isEmpty() -> {
+                    Text(
+                        text = if (search.isBlank()) "Nenhuma prateleira encontrada" else "Nenhum resultado para \"$search\"",
+                        color = tertiary.copy(alpha = 0.6f),
+                        style = AppTypography.bodyMedium
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp)
+                    ) {
+                        items(shelvesFiltradas) { shelf ->
+                            ShelfItem(
+                                prateleira = shelf,
+                                onClick = { onShelfClick(shelf) }
+                            )
+                        }
+                    }
+                }
             }
         }
 
