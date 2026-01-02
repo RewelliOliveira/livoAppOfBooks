@@ -26,25 +26,14 @@ import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 
-class ShelvesViewModelFactory(private val context: android.content.Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ShelvesViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ShelvesViewModel(context) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
 @Composable
 fun ShelvesScreen(
     onShelfClick: (Shelf) -> Unit = {},
     onAddShelfClick: () -> Unit = {},
+    viewModel: ShelvesViewModel,
     themeViewModel: ThemeViewModel
 ) {
-    val context = LocalContext.current.applicationContext
-    val factory = remember { ShelvesViewModelFactory(context) }
-    val viewModel: ShelvesViewModel = viewModel(factory = factory)
+    // viewModel agora é injetado
 
     val shelvesResponse by viewModel.shelves.observeAsState(emptyList())
     val loading by viewModel.loading.observeAsState(false)
@@ -62,7 +51,8 @@ fun ShelvesScreen(
                 id = shelf.id,
                 nome = shelf.name,
                 quantidadeLivros = shelf.quantity,
-                capas = List(shelf.quantity.coerceAtMost(3)) { null } // Placeholders, as URL is not available
+                // Pega as thumbnails dos primeiros 3 livros da prateleira
+                capas = shelf.bookShelfDto.map { it.thumbnail }.take(3)
             )
         }
     }
