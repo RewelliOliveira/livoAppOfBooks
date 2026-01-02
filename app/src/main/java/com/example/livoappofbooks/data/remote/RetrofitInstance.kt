@@ -12,8 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitInstance {
 
-    //bota teu ip aq
-    private const val BASE_URL = "http://TEUIP:8080/"
+    private const val BASE_URL = "https://gateway-production-4bd0.up.railway.app/"
 
     fun <T> createService(
         context: Context,

@@ -13,13 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.AddShelfScreen
-import com.example.livoappofbooks.ui.screens.HistoryScreen
-import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LibraryScreen
-import com.example.livoappofbooks.ui.screens.LoginScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
-import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
 import com.example.livoappofbooks.ui.screens.ShelfDetailsScreen
 import com.example.livoappofbooks.ui.screens.ShelvesScreen
