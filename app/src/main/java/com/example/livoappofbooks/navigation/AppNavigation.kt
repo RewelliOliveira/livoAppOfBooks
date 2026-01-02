@@ -69,12 +69,9 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Shelfs.route) {
                 ShelvesScreen(
-                    onShelfClick = { shelf ->
-                        navController.navigate(Screen.ShelfDetails.createRoute(shelf.id))
-                    },
-                    onAddShelfClick = {
-                        navController.navigate(Screen.AddShelf.route)
-                    }
+                    onShelfClick = { shelf -> navController.navigate(Screen.ShelfDetails.createRoute(shelf.id)) },
+                    onAddShelfClick = { navController.navigate(Screen.AddShelf.route) },
+                    themeViewModel = themeViewModel
                 )
             }
 

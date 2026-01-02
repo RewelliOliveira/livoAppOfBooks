@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import com.example.livoappofbooks.ui.components.Shelf
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
@@ -22,15 +24,27 @@ import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 
-
+class ShelvesViewModelFactory(private val context: android.content.Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ShelvesViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ShelvesViewModel(context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
 
 @Composable
 fun ShelvesScreen(
     onShelfClick: (Shelf) -> Unit = {},
     onAddShelfClick: () -> Unit = {},
-    viewModel: ShelvesViewModel = viewModel()
+    themeViewModel: ThemeViewModel
 ) {
+    val context = LocalContext.current.applicationContext
+    val factory = remember { ShelvesViewModelFactory(context) }
+    val viewModel: ShelvesViewModel = viewModel(factory = factory)
 
     val shelvesResponse by viewModel.shelves.observeAsState(emptyList())
     val loading by viewModel.loading.observeAsState(false)
