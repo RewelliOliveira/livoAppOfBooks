@@ -93,7 +93,8 @@ fun ShelfItem(
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop,
                             placeholder = painterResource(R.drawable.capa_default),
-                            error = painterResource(R.drawable.capa_default)
+                            error = painterResource(R.drawable.capa_default),
+                            fallback = painterResource(R.drawable.capa_default)
                         )
                     }
                 }

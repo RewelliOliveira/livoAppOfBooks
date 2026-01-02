@@ -53,6 +53,7 @@ fun Book(
                 model = imageUrl.takeIf { it.isNotBlank() },
                 placeholder = painterResource(id = R.drawable.capa_default),
                 error = painterResource(id = R.drawable.capa_default),
+                fallback = painterResource(id = R.drawable.capa_default),
                 contentDescription = "Capa do livro",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
