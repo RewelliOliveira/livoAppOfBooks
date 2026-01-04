@@ -25,7 +25,8 @@ fun ShelfDetailsScreen(
     shelfId: String?,
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit,
-    onEditClick: (String) -> Unit
+    onEditClick: (String) -> Unit,
+    onBookClick: (Long) -> Unit
 ) {
     val shelf by viewModel.selectedShelf.observeAsState()
     val loading by viewModel.loading.observeAsState(false)
@@ -138,7 +139,7 @@ fun ShelfDetailsScreen(
                                  progress = 0, // Placeholder
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
-                                 onClick = { /* Navegar para detalhes do livro? */ }
+                                 onClick = { onBookClick(book.bookId) }
                              )
                          }
                      }

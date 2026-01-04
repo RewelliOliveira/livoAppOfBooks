@@ -60,7 +60,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             composable(Screen.Library.route) {
                 LibraryScreen(
                     context = navController.context,
-                    onBookClick = { navController.navigate(Screen.ViewBook.route) }
+                    onBookClick = { book ->
+                        book.userBookId?.let { id ->
+                            navController.navigate(Screen.ViewBook.createRoute(id))
+                        }
+                    }
                 )
             }
 
@@ -81,8 +85,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 ShelvesScreen(
                     onShelfClick = { shelf -> navController.navigate(Screen.ShelfDetails.createRoute(shelf.id)) },
                     onAddShelfClick = { navController.navigate(Screen.AddShelf.route) },
-                    viewModel = shelvesViewModel,
-                    themeViewModel = themeViewModel
+                    viewModel = shelvesViewModel
                 )
             }
 
@@ -95,7 +98,8 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                     shelfId = shelfId,
                     viewModel = shelvesViewModel,
                     onBackClick = { navController.popBackStack() },
-                    onEditClick = { id -> navController.navigate(Screen.EditShelf.createRoute(id)) }
+                    onEditClick = { id -> navController.navigate(Screen.EditShelf.createRoute(id)) },
+                    onBookClick = { bookId -> navController.navigate(Screen.ViewBook.createRoute(bookId)) }
                 )
             }
 
@@ -119,7 +123,12 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 )
             }
 
-            composable(Screen.ViewBook.route) {
+            composable(
+                route = Screen.ViewBook.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                 val bookId = backStackEntry.arguments?.getLong("bookId")
+                 // TODO: Carregar detalhes do livro com bookId
                 ViewBook(
                     title = "Peter Pan in Wonderland",
                     author = "Samira Sales",

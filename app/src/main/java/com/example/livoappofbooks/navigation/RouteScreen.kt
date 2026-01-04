@@ -36,10 +36,12 @@ sealed class Screen(
     )
 
     object ViewBook : Screen(
-        "view_book",
+        "view_book/{bookId}",
         "Visualizar Livro",
         null
-    )
+    ) {
+        fun createRoute(bookId: Long) = "view_book/$bookId"
+    }
 
     object RegisterReading : Screen(
         "register_reading",

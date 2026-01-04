@@ -13,10 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.components.Shelf
 import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.SearchBar
@@ -31,7 +27,6 @@ fun ShelvesScreen(
     onShelfClick: (Shelf) -> Unit = {},
     onAddShelfClick: () -> Unit = {},
     viewModel: ShelvesViewModel,
-    themeViewModel: ThemeViewModel
 ) {
     // viewModel agora é injetado
 
@@ -51,8 +46,10 @@ fun ShelvesScreen(
                 id = shelf.id,
                 nome = shelf.name,
                 quantidadeLivros = shelf.quantity,
-                // Pega as thumbnails dos primeiros 3 livros da prateleira
-                capas = shelf.bookShelfDto.map { it.thumbnail }.take(3)
+                // Pega as thumbnails dos primeiros 3 livros da prateleira, tratando strings vazias como null
+                capas = shelf.bookShelfDto
+                    .map { it.thumbnail?.takeIf { url -> url.isNotBlank() } }
+                    .take(3)
             )
         }
     }
