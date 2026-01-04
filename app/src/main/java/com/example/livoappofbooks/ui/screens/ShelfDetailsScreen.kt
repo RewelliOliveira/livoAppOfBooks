@@ -116,6 +116,17 @@ fun ShelfDetailsScreen(
                     .filter { book ->
                         (book.title ?: "").contains(searchQuery, ignoreCase = true)
                     }
+                    .filter { book ->
+                        val bookStatusEnum = BookStatus.fromString(book.status)
+                        when (selectedFilter) {
+                            "Todos" -> true
+                            "Lendo" -> bookStatusEnum == BookStatus.LENDO
+                            "Lido" -> bookStatusEnum == BookStatus.LIDO
+                            "Quero Ler" -> bookStatusEnum == BookStatus.QUERO_LER
+                            "Abandonado" -> bookStatusEnum == BookStatus.ABANDONADO
+                            else -> true
+                        }
+                    }
 
                  if (filteredBooks.isEmpty()) {
                      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -136,7 +147,7 @@ fun ShelfDetailsScreen(
                          items(filteredBooks) { book ->
                              Book(
                                  status = BookStatus.fromString(book.status),
-                                 progress = 0, // Placeholder
+                                 progress = book.readingProgress,
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
                                  onClick = { onBookClick(book.bookId) }
