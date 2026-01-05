@@ -4,6 +4,7 @@ import com.example.livoappofbooks.data.remote.shelves.dto.BookShelf
 import com.example.livoappofbooks.data.remote.shelves.dto.SearchBookResponse
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
+import com.example.livoappofbooks.data.remote.shelves.dto.ShelfUpdateRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -46,6 +47,6 @@ interface ShelvesService {
     @retrofit2.http.PUT("/library/shelfs/{id}")
     suspend fun updateShelf(
         @Path("id") id: String,
-        @Body body: ShelfRequest
+        @Body body: ShelfUpdateRequest
     ): ShelfResponse
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
+import com.example.livoappofbooks.data.remote.shelves.dto.ShelfUpdateRequest
 
 class ShelvesRepository(
     context: Context
@@ -41,10 +42,9 @@ class ShelvesRepository(
         name: String,
         description: String?
     ): ShelfResponse {
-        val body = ShelfRequest(
+        val body = ShelfUpdateRequest(
             name = name,
-            description = description,
-            books = emptyList()
+            description = description
         )
         return service.updateShelf(id, body)
     }
