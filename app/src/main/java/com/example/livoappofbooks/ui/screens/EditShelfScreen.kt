@@ -7,8 +7,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.theme.AppTypography
@@ -16,7 +16,6 @@ import com.example.livoappofbooks.ui.theme.background
 import com.example.livoappofbooks.ui.theme.primary
 import com.example.livoappofbooks.ui.theme.tertiary
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
-import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 
@@ -31,19 +30,33 @@ fun EditShelfScreen(
     val success by viewModel.operationSuccess.observeAsState(false)
     val error by viewModel.error.observeAsState()
 
-    var name by remember { mutableStateOf(shelf?.name ?: "") }
-    var description by remember { mutableStateOf("") }
-    // Assumindo que a lógica de detalhes da prateleira possa buscar isso, mas ShelfResponse pode não ter descrição.
-    // ShelfResponse: id, name, quantity, bookShelfDto. Sem descrição?
-    // Verificando ShelfResponse.kt novamente. Ele NÃO tem descrição.
-    // Se ShelfResponse não tem descrição, não posso pré-preencher.
-    // Vou manter a lógica do campo, mas ele começará vazio se não for encontrado.
+    // Estados locais vinculados ao ViewModel para sobreviver à rotação
+    var name by remember { mutableStateOf(viewModel.formName) }
+    var description by remember { mutableStateOf(viewModel.formDescription) }
+    var initialized by remember { mutableStateOf(false) }
 
+    // Estados para os modais de confirmação
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var showSaveDialog by remember { mutableStateOf(false) }
+
+    // Inicializa os campos com os dados da prateleira
     LaunchedEffect(shelf) {
-        shelf?.let {
-            name = it.name
-            // description = it.description // Missing in ShelfResponse
+        if (!initialized && shelf != null) {
+            name = shelf?.name ?: ""
+            description = shelf?.description ?: ""
+            viewModel.formName = name
+            viewModel.formDescription = description
+            initialized = true
         }
+    }
+
+    // Sincroniza com ViewModel quando os valores mudam
+    LaunchedEffect(name) {
+        viewModel.formName = name
+    }
+
+    LaunchedEffect(description) {
+        viewModel.formDescription = description
     }
 
     LaunchedEffect(success) {
@@ -51,6 +64,82 @@ fun EditShelfScreen(
             viewModel.resetOperationSuccess()
             onDeleteSuccess()
         }
+    }
+
+    // Modal de confirmação para excluir
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text(
+                    text = "Excluir Prateleira",
+                    style = AppTypography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Tem certeza que deseja excluir a prateleira \"${shelf?.name}\"? Esta ação não pode ser desfeita.",
+                    style = AppTypography.bodyMedium
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        shelf?.id?.let { viewModel.deleteShelf(it) }
+                    }
+                ) {
+                    Text("Excluir", color = Color.Red, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar", color = tertiary)
+                }
+            },
+            containerColor = background
+        )
+    }
+
+    // Modal de confirmação para salvar
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = {
+                Text(
+                    text = "Salvar Alterações",
+                    style = AppTypography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Deseja salvar as alterações na prateleira?",
+                    style = AppTypography.bodyMedium
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showSaveDialog = false
+                        if (name.isNotBlank()) {
+                            shelf?.let { currentShelf ->
+                                viewModel.updateShelf(currentShelf.id, name, description)
+                            }
+                        }
+                    }
+                ) {
+                    Text("Salvar", color = primary, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSaveDialog = false }) {
+                    Text("Cancelar", color = tertiary)
+                }
+            },
+            containerColor = background
+        )
     }
 
     Scaffold(
@@ -61,9 +150,12 @@ fun EditShelfScreen(
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = onBackClick) {
+                IconButton(onClick = {
+                    viewModel.clearFormState()
+                    onBackClick()
+                }) {
                     Icon(
-                        imageVector = com.example.livoappofbooks.ui.icons.Arrow_back_ios_new,
+                        imageVector = Arrow_back_ios_new,
                         contentDescription = "Voltar",
                         tint = primary
                     )
@@ -105,9 +197,7 @@ fun EditShelfScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             TextButton(
-                onClick = {
-                    shelf?.id?.let { viewModel.deleteShelf(it) }
-                }
+                onClick = { showDeleteDialog = true }
             ) {
                 Text(
                     text = "Excluir Prateleira",
@@ -118,27 +208,23 @@ fun EditShelfScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (loading) {
-                CircularProgressIndicator(color = primary)
-            } else {
-                PrimaryButton(
-                    text = "Salvar",
-                    onClick = {
-                        if (name.isNotBlank()) {
-                            shelf?.id?.let { id ->
-                                viewModel.updateShelf(id, name, description)
-                            }
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
-                )
-            }
-            
             if (error != null) {
                 Text(
                     text = error ?: "",
                     color = Color.Red,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            if (loading) {
+                CircularProgressIndicator(color = primary)
+                Spacer(modifier = Modifier.height(32.dp))
+            } else {
+                PrimaryButton(
+                    text = "Salvar",
+                    onClick = { showSaveDialog = true },
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
                 )
             }
         }
