@@ -3,9 +3,12 @@ package com.example.livoappofbooks.ui.viewModel
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import kotlinx.coroutines.launch
@@ -40,6 +43,16 @@ class ShelvesViewModel(
 
     private val _operationSuccess = MutableLiveData<Boolean>()
     val operationSuccess: LiveData<Boolean> = _operationSuccess
+
+    // Estado do formulário para sobreviver à rotação de tela
+    var formName: String = ""
+    var formDescription: String = ""
+
+    // Limpa o estado do formulário ao abrir uma nova tela
+    fun clearFormState() {
+        formName = ""
+        formDescription = ""
+    }
 
     fun resetOperationSuccess() {
         _operationSuccess.value = false
@@ -85,7 +98,10 @@ class ShelvesViewModel(
             try {
                 repository.createShelf(name, description)
                 _operationSuccess.value = true
-                loadShelves() // recarrega a lista
+                // Limpa o formulário após sucesso
+                formName = ""
+                formDescription = ""
+                loadShelves()
             } catch (e: Exception) {
                 _error.value = "Erro ao criar prateleira"
             } finally {
@@ -93,7 +109,6 @@ class ShelvesViewModel(
             }
         }
     }
-
 
     fun updateShelf(
         id: String,
@@ -106,6 +121,9 @@ class ShelvesViewModel(
             try {
                 repository.updateShelf(id, name, description)
                 _operationSuccess.value = true
+                // Limpa o formulário após sucesso
+                formName = ""
+                formDescription = ""
                 loadShelves()
             } catch (e: Exception) {
                 _error.value = "Erro ao atualizar prateleira"
