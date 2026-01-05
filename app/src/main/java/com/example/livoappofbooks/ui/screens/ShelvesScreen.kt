@@ -96,7 +96,7 @@ fun ShelvesScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Shelves",
+            text = "Prateleiras",
             style = AppTypography.headlineSmall,
             color = primary,
             modifier = Modifier.align(Alignment.CenterHorizontally)
