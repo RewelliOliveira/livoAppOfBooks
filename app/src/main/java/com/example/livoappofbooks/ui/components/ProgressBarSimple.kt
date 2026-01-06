@@ -3,7 +3,6 @@ package com.example.livoappofbooks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +30,7 @@ fun ProgressBarSimple(
                 .weight(1f)
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(surface)
+                .background(progressBar)
         ) {
             Box(
                 modifier = Modifier

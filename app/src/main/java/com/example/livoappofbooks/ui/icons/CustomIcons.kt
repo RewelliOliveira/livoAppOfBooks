@@ -7,6 +7,30 @@ import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.vector.PathBuilder
+
+val Arrow_forward_ios_new: ImageVector
+    get() {
+        if (_Arrow_forward_ios_new != null) return _Arrow_forward_ios_new!!
+        _Arrow_forward_ios_new = ImageVector.Builder(
+            name = "Arrow_forward_ios_new",
+            defaultWidth = 30.dp,
+            defaultHeight = 30.dp,
+            viewportWidth = 960f,
+            viewportHeight = 960f
+        ).apply {
+            path(fill = SolidColor(Color(0xFF000000))) {
+                moveTo(320f, 80f)
+                lineTo(720f, 480f)
+                lineTo(320f, 880f)
+                lineToRelative(-71f, -71f)
+                lineToRelative(329f, -329f)
+                lineToRelative(-329f, -329f)
+                close()
+            }
+        }.build()
+        return _Arrow_forward_ios_new!!
+    }
 
 val Arrow_back_ios_new: ImageVector
     get() {
@@ -34,8 +58,6 @@ val Arrow_back_ios_new: ImageVector
 
         return _Arrow_back_ios_new!!
     }
-
-
 val Send: ImageVector
     get() {
         if (_Send != null) return _Send!!
@@ -349,11 +371,11 @@ val Language: ImageVector
         return _Language!!
     }
 
-val MarcaPagina: ImageVector
+val BookmarkFilled: ImageVector
     get() {
-        if (_MarcaPagina != null) return _MarcaPagina!!
-        _MarcaPagina = ImageVector.Builder(
-            name = "MarcaPagina",
+        if (_BookmarkFilled != null) return _BookmarkFilled!!
+        _BookmarkFilled = ImageVector.Builder(
+            name = "Bookmark",
             defaultWidth = 45.dp,
             defaultHeight = 78.dp,
             viewportWidth = 45f,
@@ -374,10 +396,38 @@ val MarcaPagina: ImageVector
                 close()
             }
         }.build()
-        return _MarcaPagina!!
+        return _BookmarkFilled!!
     }
-
-
+val BookmarkOutlined: ImageVector
+    get() {
+        if (_BookmarkOutlined != null) return _BookmarkOutlined!!
+        _BookmarkOutlined = ImageVector.Builder(
+            name = "BookmarkOutlined",
+            defaultWidth = 21.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 21f,
+            viewportHeight = 24f
+        ).apply {
+            path(
+                fill = SolidColor(Color.Transparent),
+                stroke = SolidColor(Color(0xFF003D3A)),
+                strokeLineWidth = 1.5f,
+                strokeLineCap = StrokeCap.Round,
+                strokeLineJoin = StrokeJoin.Round
+            ) {
+                moveTo(17.116f, 1.154f)
+                curveTo(18.491f, 1.314f, 19.5f, 2.501f, 19.5f, 3.886f)
+                lineTo(19.5f, 23.252f)
+                lineTo(10.125f, 18.564f)
+                lineTo(0.75f, 23.252f)
+                lineTo(0.75f, 3.886f)
+                curveTo(0.75f, 2.501f, 1.758f, 1.314f, 3.134f, 1.154f)
+                curveTo(7.779f, 0.615f, 12.471f, 0.615f, 17.116f, 1.154f)
+                close()
+            }
+        }.build()
+        return _BookmarkOutlined!!
+    }
 val Bookshelf: ImageVector
     get() {
         if (_Bookshelf != null) return _Bookshelf!!
@@ -790,6 +840,7 @@ val MagnifyingGlass: ImageVector
         return _MagnifyingGlass!!
     }
 
+
 private var _MagnifyingGlass: ImageVector? = null
 private var _PlusCircle: ImageVector? = null
 private var _CheckCircle: ImageVector? = null
@@ -799,10 +850,12 @@ private var _StarFull: ImageVector? = null
 private var _StarHalf: ImageVector? = null
 private var _Star: ImageVector? = null
 private var _Bookshelf: ImageVector? = null
-private var _MarcaPagina: ImageVector? = null
+private var _BookmarkFilled: ImageVector? = null
+private var _BookmarkOutlined: ImageVector? = null
 private var _Language: ImageVector? = null
 private var _CalendarDays: ImageVector? = null
 private var _BookOpen: ImageVector? = null
 private var _BuildingLibrary: ImageVector? = null
 private var _Arrow_back_ios_new: ImageVector? = null
+private var _Arrow_forward_ios_new: ImageVector? = null
 

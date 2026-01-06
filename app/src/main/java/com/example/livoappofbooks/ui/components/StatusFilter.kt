@@ -61,7 +61,7 @@ fun FilterBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(2.dp)
-                    .background(surface)
+                    .background(progressBar)
             )
 
             textPositions[selectedFilter]?.let { (xPx, sizePx) ->

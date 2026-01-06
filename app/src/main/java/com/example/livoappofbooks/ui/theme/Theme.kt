@@ -163,7 +163,7 @@ val background: Color
     get() = MaterialTheme.colorScheme.background
 
 @get:Composable
-val surface: Color
+val progressBar: Color
     get() = MaterialTheme.colorScheme.surface
 
 @get:Composable

@@ -27,6 +27,7 @@ import com.example.livoappofbooks.ui.theme.*
 fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    placeholder: String,
     onSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {

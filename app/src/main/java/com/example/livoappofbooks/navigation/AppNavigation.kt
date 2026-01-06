@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -22,6 +23,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val context = LocalContext.current
 
     Scaffold(
         bottomBar = {
@@ -39,8 +41,14 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    onNavigate = { navController.navigate(Screen.Profile.route) },
-                    onBookClick = { navController.navigate(Screen.ViewBook.route) }
+                    context = context,
+                    onBookClick = { book ->
+                        if (book.personalLibrary) {
+                            navController.navigate(Screen.ViewBook.createRoute(book.id))
+                        } else {
+                            navController.navigate(Screen.ViewBookInit.createRoute(book.id))
+                        }
+                    }
                 )
             }
 

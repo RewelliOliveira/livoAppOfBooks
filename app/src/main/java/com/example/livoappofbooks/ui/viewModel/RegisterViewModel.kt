@@ -22,7 +22,8 @@ sealed class RegisterUiState {
 
 class RegisterViewModel(context: Context) : ViewModel() {
 
-    private val authService: AuthService = RetrofitInstance.getApi(context)
+    private val authService = RetrofitInstance
+        .createService(context, AuthService::class.java)
     private val repository: AuthRepository = AuthRepository(authService)
 
     private val _uiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Idle)
