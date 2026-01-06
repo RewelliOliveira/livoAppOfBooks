@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,7 +15,6 @@ import com.example.livoappofbooks.ui.screens.LibraryScreen
 import com.example.livoappofbooks.ui.screens.ProfileScreen
 import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
 import com.example.livoappofbooks.ui.screens.SearchScreen
-import com.example.livoappofbooks.ui.screens.ShelfsScreen
 import com.example.livoappofbooks.ui.screens.ViewBook
 
 @Composable
@@ -23,15 +23,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val context = LocalContext.current
 
     Scaffold(
         bottomBar = {
-            if (currentRoute in listOf(
-                    Screen.Library.route,
-                    Screen.Search.route,
-                    Screen.Profile.route,
-                    Screen.Shelfs.route
-                )) {
+            if (currentRoute in listOf(Screen.Library.route, Screen.Search.route, Screen.Profile.route)) {
                 BottomBar(navController)
             }
         }
@@ -45,14 +41,26 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    context = navController.context,
-                    onBookClick = { navController.navigate(Screen.ViewBook.route) }
+                    context = context,
+                    onBookClick = { book ->
+                        if (book.personalLibrary) {
+                            navController.navigate(Screen.ViewBook.createRoute(book.id))
+                        } else {
+                            navController.navigate(Screen.ViewBookInit.createRoute(book.id))
+                        }
+                    }
                 )
             }
 
             composable(Screen.Search.route) {
                 SearchScreen(
-                    onNavigate = { navController.navigate(Screen.Search.route) }
+                    onBookClick = { bookId, isInLibrary ->
+                        if (isInLibrary) {
+                            navController.navigate(Screen.ViewBook.createRoute(bookId))
+                        } else {
+                            navController.navigate(Screen.ViewBookInit.createRoute(bookId))
+                        }
+                    }
                 )
             }
 
@@ -60,17 +68,6 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 ProfileScreen(
                     onNavigate = { navController.navigate(Screen.Library.route) },
                     themeViewModel = themeViewModel
-                )
-            }
-
-            composable(Screen.Shelfs.route) {
-                ShelfsScreen(
-                    onShelfClick = {
-                        TODO("TELA DA PRATELEIRA")
-                    },
-                    onAddShelfClick = {
-                        TODO("TELA DE ADICIONAR PRATELEIRA" )
-                    }
                 )
             }
 
