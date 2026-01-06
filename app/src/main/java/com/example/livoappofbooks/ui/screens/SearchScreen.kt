@@ -1,10 +1,10 @@
 package com.example.livoappofbooks.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -36,24 +36,35 @@ import com.example.livoappofbooks.ui.viewModel.SearchViewModel
 import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
-fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
+fun SearchScreen(
+    viewModel: SearchViewModel = viewModel(),
+    onBookClick: (bookId: String, isInLibrary: Boolean) -> Unit
+) {
+
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+
+    val logoRes = if (isDarkTheme) {
+        R.drawable.livo
+    } else {
+        R.drawable.livo
+    }
     val query by viewModel.query.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .windowInsetsPadding(WindowInsets.statusBars),
+            .padding(16.dp)
+            .background(background),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.livo),
+                painter = painterResource(id = logoRes),
                 contentDescription = "LIVO Logo",
                 colorFilter = ColorFilter.tint(primary),
                 modifier = Modifier
@@ -67,42 +78,35 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
         SearchBar(
             query = query,
             onQueryChange = { viewModel.onQueryChange(it) },
-            placeholder = "Pesquisar livro",
             onSearch = { viewModel.search() },
+            placeholder = "Buscar livros",
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
+        Spacer(modifier = Modifier.height(24.dp))
         when (uiState) {
             is SearchUiState.Idle -> {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
                     Text(
                         text = "Livros Populares",
-                        style = AppTypography.headlineSmall,
+                        style = AppTypography.headlineMedium,
                         color = primary
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                    CardBook(
-                        title = "Peter Pan in Wonderland",
-                        author = "Samira Sales",
-                        rate = 3.7,
-                        imageUrl = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
-                        publishYear = "2025",
-                        pageCount = 240,
-                        personalLibrary = true
-                    )
                 }
             }
 
             is SearchUiState.Loading -> {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 24.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()
@@ -118,36 +122,36 @@ fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel(
                         modifier = Modifier.padding(top = 16.dp)
                     )
                 } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(vertical = 12.dp)
-                    ) {
+                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(results) { book ->
                             CardBook(
+                                bookId = book.id,
                                 title = book.title,
                                 author = book.authors.firstOrNull() ?: "Desconhecido",
                                 rate = book.averageRating ?: 0.0,
                                 imageUrl = book.thumbnail ?: "",
                                 publishYear = book.publishedDate?.take(4) ?: "--",
                                 pageCount = book.pageCount ?: 0,
-                                personalLibrary = book.personalLibrary
+                                personalLibrary = book.personalLibrary,
+                                onClick = { id ->
+                                    onBookClick(id, book.personalLibrary)
+                                }
                             )
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
                 }
             }
 
             is SearchUiState.Error -> {
+                val message = (uiState as SearchUiState.Error).message
                 Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = (uiState as SearchUiState.Error).message,
-                        style = AppTypography.bodyMedium
-                    )
+                    Text(text = message, style = AppTypography.bodyMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    // Opcional: botões de retry poderiam ser adicionados aqui
                 }
             }
         }

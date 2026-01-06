@@ -15,7 +15,6 @@ data class Book(
     val language: String? = null,
     val description: String? = null,
     val personalLibrary: Boolean = false,
-
     val userBookId: Long? = null,
     val bookStatus: BookStatus? = null,
     val readingProgress: Int = 0,
