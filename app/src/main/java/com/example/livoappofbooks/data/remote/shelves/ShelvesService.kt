@@ -49,4 +49,10 @@ interface ShelvesService {
         @Path("id") id: String,
         @Body body: ShelfUpdateRequest
     ): ShelfResponse
+
+    @DELETE("/library/shelfs/{shelfId}/books/{bookId}")
+    suspend fun deleteBookFromShelf(
+        @Path("shelfId") shelfId: String,
+        @Path("bookId") bookId: Long
+    )
 }

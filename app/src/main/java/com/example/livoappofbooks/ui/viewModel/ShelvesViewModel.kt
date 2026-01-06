@@ -148,4 +148,23 @@ class ShelvesViewModel(
             }
         }
     }
+
+    fun removeBookFromShelf(shelfId: String, bookId: Long) {
+        viewModelScope.launch {
+            _loading.value = true
+            _error.value = null
+
+            try {
+                repository.removeBookFromShelf(shelfId, bookId)
+                // Recarrega os detalhes da prateleira para atualizar a lista
+                loadShelfDetails(shelfId)
+                // Poderíamos usar operationSuccess aqui se quisermos mostrar uma mensagem
+                 _operationSuccess.value = true
+            } catch (e: Exception) {
+                _error.value = "Erro ao remover livro da prateleira"
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
 }

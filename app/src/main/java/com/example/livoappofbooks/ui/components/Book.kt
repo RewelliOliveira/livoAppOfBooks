@@ -1,7 +1,7 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,13 +25,15 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.theme.rememberThemeState
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun Book(
     status: BookStatus,
     progress: Int,
     evaluate: Int,
     imageUrl: String,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) {
     val isDark = rememberThemeState().isDarkTheme
 
@@ -39,7 +41,10 @@ fun Book(
         modifier = Modifier
             .width(120.dp)
             .padding(4.dp)
-            .clickable { onClick?.invoke() },
+            .combinedClickable(
+                onClick = { onClick?.invoke() },
+                onLongClick = { onLongClick?.invoke() }
+            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 

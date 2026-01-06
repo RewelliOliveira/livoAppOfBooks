@@ -9,7 +9,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import com.example.livoappofbooks.R
@@ -34,6 +36,10 @@ fun ShelfDetailsScreen(
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
+
+    // Estado para o modal de exclusão de livro
+    var showRemoveDialog by remember { mutableStateOf(false) }
+    var selectedBookToRemove by remember { mutableStateOf<com.example.livoappofbooks.data.remote.shelves.dto.BookShelf?>(null) }
 
     LaunchedEffect(shelfId) {
         if (!shelfId.isNullOrBlank()) {
@@ -101,6 +107,48 @@ fun ShelfDetailsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Modal de confirmação para remover livro
+            if (showRemoveDialog && selectedBookToRemove != null) {
+                AlertDialog(
+                    onDismissRequest = { showRemoveDialog = false },
+                    title = {
+                        Text(
+                            text = "Remover Livro",
+                            style = AppTypography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    text = {
+                        val bookTitle = selectedBookToRemove?.title ?: "o livro"
+                        val shelfName = shelf?.name ?: "esta prateleira"
+                        Text(
+                            text = "Tem certeza que deseja remover \"$bookTitle\" de \"$shelfName\"?",
+                            style = AppTypography.bodyMedium
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                showRemoveDialog = false
+                                selectedBookToRemove?.let { book ->
+                                    shelfId?.let { sId ->
+                                        viewModel.removeBookFromShelf(sId, book.bookId)
+                                    }
+                                }
+                            }
+                        ) {
+                            Text("Remover", color = Color.Red, fontWeight = FontWeight.Bold)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showRemoveDialog = false }) {
+                            Text("Cancelar", color = tertiary)
+                        }
+                    },
+                    containerColor = background
+                )
+            }
+
             // Content
              if (loading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -150,7 +198,11 @@ fun ShelfDetailsScreen(
                                  progress = book.readingProgress,
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
-                                 onClick = { onBookClick(book.bookId) }
+                                 onClick = { onBookClick(book.bookId) },
+                                 onLongClick = {
+                                     selectedBookToRemove = book
+                                     showRemoveDialog = true
+                                 }
                              )
                          }
                      }
