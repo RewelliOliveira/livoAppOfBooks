@@ -8,12 +8,12 @@ import retrofit2.http.POST
 
 interface AuthService {
 
-    @POST("/auth")
+    @POST("/auth/login")
     suspend fun login(
         @Body body: LoginRequest
     ): LoginResponse
 
-    @POST("/user")
+    @POST("/user/register")
     suspend fun register(
         @Body body: RegisterRequest
     ): Unit
