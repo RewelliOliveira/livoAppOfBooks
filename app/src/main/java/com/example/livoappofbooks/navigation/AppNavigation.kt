@@ -4,50 +4,60 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.livoappofbooks.data.repository.LibraryRepository
+import com.example.livoappofbooks.data.remote.RetrofitInstance
+import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
-import com.example.livoappofbooks.ui.screens.LibraryScreen
-import com.example.livoappofbooks.ui.screens.ProfileScreen
-import com.example.livoappofbooks.ui.screens.RegisterReadingScreen
-import com.example.livoappofbooks.ui.screens.SearchScreen
-import com.example.livoappofbooks.ui.screens.ViewBook
+import com.example.livoappofbooks.ui.screens.*
 
 @Composable
 fun AppNavigation(themeViewModel: ThemeViewModel) {
-
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val context = LocalContext.current
 
+    // Configuração do Repositório e Serviço
+    val libraryService = remember {
+        RetrofitInstance.createService(context, LibraryService::class.java)
+    }
+
+    val libraryRepository = remember {
+        LibraryRepository(libraryService)
+    }
+
     Scaffold(
         bottomBar = {
-            if (currentRoute in listOf(Screen.Library.route, Screen.Search.route, Screen.Profile.route)) {
+            if (currentRoute in listOf(
+                    Screen.Library.route, 
+                    Screen.Search.route, 
+                    Screen.Profile.route,
+                    Screen.Shelfs.route
+                )) {
                 BottomBar(navController)
             }
         }
     ) { innerPadding ->
-
         NavHost(
             navController = navController,
             startDestination = Screen.Library.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-
             composable(Screen.Library.route) {
                 LibraryScreen(
                     context = context,
                     onBookClick = { book ->
-                        if (book.personalLibrary) {
-                            navController.navigate(Screen.ViewBook.createRoute(book.id))
-                        } else {
-                            navController.navigate(Screen.ViewBookInit.createRoute(book.id))
-                        }
+                        // Navegação usando o padrão da developer (createRoute)
+                        navController.navigate(Screen.ViewBook.createRoute(book.id))
                     }
                 )
             }
@@ -71,21 +81,27 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 )
             }
 
-            composable(Screen.ViewBook.route) {
-                ViewBook(
-                    title = "Peter Pan in Wonderland",
-                    author = "Samira Sales",
-                    rate = 3.7,
-                    sinopse = "Sinopse de teste do livro...",
-                    imageUrl = "https://br.pinterest.com/pin/19492210989423958/",
-                    publishYear = "2025",
-                    publisher = "Bila-Bilu",
-                    pageCount = "240",
-                    status = "ABANDONADO",
-                    shelf = "Romances",
-                    onBackClick = { navController.popBackStack() },
-                    onRegisterClick = { navController.navigate(Screen.RegisterReading.route) },
+            composable(Screen.Shelfs.route) {
+                ShelfsScreen(
+                    onShelfClick = { /* TODO */ },
+                    onAddShelfClick = { /* TODO */ }
                 )
+            }
+
+            // Rota Dinâmica que aceita o ID do livro
+            composable(
+                route = "${Screen.ViewBook.route}/{bookId}",
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val bookId = backStackEntry.arguments?.getString("bookId")
+                if (bookId != null) {
+                    ViewBookScreen(
+                        bookId = bookId,
+                        repository = libraryRepository,
+                        onBackClick = { navController.popBackStack() },
+                        onRegisterClick = { navController.navigate(Screen.RegisterReading.route) }
+                    )
+                }
             }
 
             composable(Screen.RegisterReading.route) {

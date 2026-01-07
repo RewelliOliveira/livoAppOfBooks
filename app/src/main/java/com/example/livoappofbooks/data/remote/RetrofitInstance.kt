@@ -15,8 +15,7 @@ object RetrofitInstance {
     //bota teu ip aq
     private const val BASE_URL = "https://gateway-production-4bd0.up.railway.app/"
 
-    fun <T> createService(
-        context: Context,
+    fun <T> createService(context: Context,
         serviceClass: Class<T>
     ): T {
 
