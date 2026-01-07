@@ -100,9 +100,9 @@ fun ViewBook(
 
                 AsyncImage(
                     model = safeImageModel,
-                    placeholder = painterResource(id = R.drawable.livro_teste),
-                    error = painterResource(id = R.drawable.livro_teste),
-                    fallback = painterResource(id = R.drawable.livro_teste),
+                    placeholder = painterResource(id = R.drawable.capa_default),
+                    error = painterResource(id = R.drawable.capa_default),
+                    fallback = painterResource(id = R.drawable.capa_default),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
