@@ -26,6 +26,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     val currentRoute = navBackStackEntry?.destination?.route
     val context = LocalContext.current
 
+    // Configuração do Repositório e Serviço
     val libraryService = remember {
         RetrofitInstance.createService(context, LibraryService::class.java)
     }
@@ -37,8 +38,8 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     Scaffold(
         bottomBar = {
             if (currentRoute in listOf(
-                    Screen.Library.route,
-                    Screen.Search.route,
+                    Screen.Library.route, 
+                    Screen.Search.route, 
                     Screen.Profile.route,
                     Screen.Shelfs.route
                 )) {
@@ -55,14 +56,21 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 LibraryScreen(
                     context = context,
                     onBookClick = { book ->
-                        navController.navigate("${Screen.ViewBook.route}/${book.id}")
+                        // Navegação usando o padrão da developer (createRoute)
+                        navController.navigate(Screen.ViewBook.createRoute(book.id))
                     }
                 )
             }
 
             composable(Screen.Search.route) {
                 SearchScreen(
-                    onNavigate = { navController.navigate(Screen.Search.route) }
+                    onBookClick = { bookId, isInLibrary ->
+                        if (isInLibrary) {
+                            navController.navigate(Screen.ViewBook.createRoute(bookId))
+                        } else {
+                            navController.navigate(Screen.ViewBookInit.createRoute(bookId))
+                        }
+                    }
                 )
             }
 
@@ -80,6 +88,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 )
             }
 
+            // Rota Dinâmica que aceita o ID do livro
             composable(
                 route = "${Screen.ViewBook.route}/{bookId}",
                 arguments = listOf(navArgument("bookId") { type = NavType.StringType })
