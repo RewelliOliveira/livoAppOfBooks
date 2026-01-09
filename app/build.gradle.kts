@@ -59,6 +59,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
     implementation(libs.androidx.compose.foundation)
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.ui.graphics)
     testImplementation(libs.junit)

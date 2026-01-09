@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.icons.Arrow_forward_ios_new
-import com.example.livoappofbooks.ui.screens.Prateleira
 import com.example.livoappofbooks.ui.theme.primary
 import com.example.livoappofbooks.ui.theme.tertiary
 import androidx.compose.ui.res.painterResource
@@ -25,9 +24,17 @@ import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.theme.background
 import com.example.livoappofbooks.ui.theme.onBackground
 
+
+data class Shelf(
+    val id: String,
+    val nome: String,
+    val quantidadeLivros: Int,
+    val capas: List<String?>
+)
+
 @Composable
 fun ShelfItem(
-    prateleira: Prateleira,
+    prateleira: Shelf,
     onClick: () -> Unit
 ) {
     Box(
@@ -86,7 +93,8 @@ fun ShelfItem(
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop,
                             placeholder = painterResource(R.drawable.capa_default),
-                            error = painterResource(R.drawable.capa_default)
+                            error = painterResource(R.drawable.capa_default),
+                            fallback = painterResource(R.drawable.capa_default)
                         )
                     }
                 }

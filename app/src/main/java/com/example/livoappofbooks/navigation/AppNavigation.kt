@@ -13,11 +13,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.*
+import com.example.livoappofbooks.ui.viewModel.*
 
 @Composable
 fun AppNavigation(themeViewModel: ThemeViewModel) {
@@ -25,6 +27,10 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val context = LocalContext.current
+
+    val shelvesViewModel: ShelvesViewModel = viewModel(
+        factory = ShelvesViewModelFactory(context)
+    )
 
     // Configuração do Repositório e Serviço
     val libraryService = remember {
@@ -38,8 +44,8 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     Scaffold(
         bottomBar = {
             if (currentRoute in listOf(
-                    Screen.Library.route, 
-                    Screen.Search.route, 
+                    Screen.Library.route,
+                    Screen.Search.route,
                     Screen.Profile.route,
                     Screen.Shelfs.route
                 )) {
@@ -54,11 +60,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
         ) {
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    context = context,
+                    context = navController.context,
                     onBookClick = { book ->
-                        // Navegação usando o padrão da developer (createRoute)
-                        navController.navigate(Screen.ViewBook.createRoute(book.id))
-                    }
+                            // Navegação usando o padrão da developer (createRoute)
+                            navController.navigate(Screen.ViewBook.createRoute(book.id))
+                        }
                 )
             }
 
@@ -82,9 +88,44 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(Screen.Shelfs.route) {
-                ShelfsScreen(
-                    onShelfClick = { /* TODO */ },
-                    onAddShelfClick = { /* TODO */ }
+                ShelvesScreen(
+                    onShelfClick = { shelf -> navController.navigate(Screen.ShelfDetails.createRoute(shelf.id)) },
+                    onAddShelfClick = { navController.navigate(Screen.AddShelf.route) },
+                    viewModel = shelvesViewModel
+                )
+            }
+
+            composable(
+                route = Screen.ShelfDetails.route,
+                arguments = listOf(navArgument("shelfId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val shelfId = backStackEntry.arguments?.getString("shelfId")
+                ShelfDetailsScreen(
+                    shelfId = shelfId,
+                    viewModel = shelvesViewModel,
+                    onBackClick = { navController.popBackStack() },
+                    onEditClick = { id -> navController.navigate(Screen.EditShelf.createRoute(id)) },
+                    onBookClick = { bookId -> navController.navigate(Screen.ViewBook.createRoute(bookId.toString())) }
+                )
+            }
+
+            composable(
+                route = Screen.EditShelf.route,
+                arguments = listOf(navArgument("shelfId") { type = NavType.StringType })
+            ) {
+                 EditShelfScreen(
+                    viewModel = shelvesViewModel,
+                    onBackClick = { navController.popBackStack() },
+                    onDeleteSuccess = {
+                        navController.popBackStack(Screen.Shelfs.route, inclusive = false)
+                    }
+                )
+            }
+
+            composable(Screen.AddShelf.route) {
+                AddShelfScreen(
+                    viewModel = shelvesViewModel,
+                    onBackClick = { navController.popBackStack() }
                 )
             }
 
