@@ -9,8 +9,8 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="/media/arquivos/Documentos/UFC/6o Semestre/Projeto Integrado em Engenharia de Software III/Repositório do projeto/livoAppOfBooks" />
-            <option value="/media/arquivos/Documentos/UFC/6o Semestre/Projeto Integrado em Engenharia de Software III/Repositório do projeto/livoAppOfBooks/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>

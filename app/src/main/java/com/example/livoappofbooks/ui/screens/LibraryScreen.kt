@@ -36,17 +36,14 @@ fun LibraryScreen(
     onBookClick: (Book) -> Unit
 ) {
     val viewModel = remember { LibraryViewModel(context) }
-
     val books by viewModel.books.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
-
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
     LaunchedEffect(Unit) {
         viewModel.loadBooks()
     }
-
     val filteredBooks = books
         .filter {
             it.title.contains(searchQuery, ignoreCase = true)
@@ -54,14 +51,13 @@ fun LibraryScreen(
         .filter {
             when (selectedFilter) {
                 "Todos" -> true
-                "Lendo" -> it.bookStatus == BookStatus.LENDO
-                "Lido" -> it.bookStatus == BookStatus.LIDO
-                "Quero Ler" -> it.bookStatus == BookStatus.QUERO_LER
-                "Abandonado" -> it.bookStatus == BookStatus.ABANDONADO
+                "Lendo" -> it.status == BookStatus.LENDO
+                "Lido" -> it.status == BookStatus.LIDO
+                "Quero Ler" -> it.status == BookStatus.QUERO_LER
+                "Abandonado" -> it.status == BookStatus.ABANDONADO
                 else -> true
             }
         }
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = background
@@ -160,9 +156,9 @@ fun LibraryScreen(
                             ) {
                                 items(filteredBooks) { book ->
                                     Book(
-                                        status = book.bookStatus ?: BookStatus.QUERO_LER,
-                                        progress = book.readingProgress,
-                                        evaluate = book.personalRatting ?: 0,
+                                        status = book.status ?: BookStatus.QUERO_LER,
+                                        progress = book.userReadProgress,
+                                        evaluate = book.libraryRegistration?.personalRating ?: 0,
                                         imageUrl = book.thumbnail.orEmpty(),
                                         onClick = { onBookClick(book) }
                                     )

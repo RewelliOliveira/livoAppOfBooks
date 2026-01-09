@@ -23,16 +23,16 @@ sealed class Screen(
         ScreenIcon.Vector(User)
     )
 
-    object Search : Screen(
-        "search",
-        "Procurar",
-        ScreenIcon.Vector(MagnifyingGlass)
-    )
-
     object Shelfs : Screen(
         "shelfs",
         "Prateleiras",
         ScreenIcon.Vector(BookmarkOutlined)
+    )
+
+    object Search : Screen(
+        "search",
+        "Procurar",
+        ScreenIcon.Vector(MagnifyingGlass)
     )
 
     object ViewBook : Screen(
@@ -40,7 +40,15 @@ sealed class Screen(
         "Visualizar Livro",
         null
     ) {
-        fun createRoute(bookId: Long) = "view_book/$bookId"
+        fun createRoute(bookId: String) = "view_book/$bookId"
+    }
+
+    object ViewBookInit : Screen(
+        "view_book_init/{bookId}",
+        "Visualizar Livro Inicial",
+        null
+    ) {
+        fun createRoute(bookId: String) = "view_book_init/$bookId"
     }
 
     object RegisterReading : Screen(
