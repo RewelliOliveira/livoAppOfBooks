@@ -143,15 +143,3 @@ fun Book(
         }
     }
 }
-
-@Preview
-@Composable
-fun BookPreview() {
-    Book(
-        status = BookStatus.QUERO_LER,
-        progress = 0,
-        evaluate = 0,
-        imageUrl = "",
-        onClick = {}
-    )
-}
