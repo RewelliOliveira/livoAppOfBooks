@@ -43,7 +43,6 @@ fun ProfileScreen(
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.statusBars)
             ) {
-                // Cabeçalho - Mesmo alinhamento que LibraryScreen
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -60,7 +59,6 @@ fun ProfileScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-
                 // Seção de perfil do usuário
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -93,7 +91,7 @@ fun ProfileScreen(
                         Image(
                             painter = painterResource(R.drawable.ic_edit),
                             contentDescription = "Editar perfil",
-                            colorFilter = ColorFilter.tint(primary),
+                            colorFilter = ColorFilter.tint(outline),
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -142,7 +140,7 @@ fun ProfileScreen(
                                 Image(
                                     painter = painterResource(R.drawable.ic_theme),
                                     contentDescription = "Tema",
-                                    colorFilter = ColorFilter.tint(primary),
+                                    colorFilter = ColorFilter.tint(outline),
                                     modifier = Modifier.size(24.dp)
                                 )
 
@@ -185,7 +183,7 @@ fun ProfileScreen(
                                 Image(
                                     painter = painterResource(R.drawable.ic_noti),
                                     contentDescription = "Notificações",
-                                    colorFilter = ColorFilter.tint(primary),
+                                    colorFilter = ColorFilter.tint(outline),
                                     modifier = Modifier.size(24.dp)
                                 )
 
