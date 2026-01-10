@@ -55,10 +55,10 @@ fun LibraryScreen(
         .filter {
             when (selectedFilter) {
                 "Todos" -> true
-                "Lendo" -> it.bookStatus == BookStatus.LENDO
-                "Lido" -> it.bookStatus == BookStatus.LIDO
-                "Quero Ler" -> it.bookStatus == BookStatus.QUERO_LER
-                "Abandonado" -> it.bookStatus == BookStatus.ABANDONADO
+                "Lendo" -> it.status == BookStatus.LENDO
+                "Lido" -> it.status == BookStatus.LIDO
+                "Quero Ler" -> it.status == BookStatus.QUERO_LER
+                "Abandonado" -> it.status == BookStatus.ABANDONADO
                 else -> true
             }
         }
@@ -166,9 +166,9 @@ fun LibraryScreen(
                             ) {
                                 items(filteredBooks) { book ->
                                     Book(
-                                        status = book.bookStatus ?: BookStatus.QUERO_LER,
-                                        progress = book.readingProgress,
-                                        evaluate = book.personalRatting ?: 0,
+                                        status = book.status ?: BookStatus.QUERO_LER,
+                                        progress = book.userReadProgress,
+                                        evaluate = book.libraryRegistration?.personalRating ?: 0,
                                         imageUrl = book.thumbnail.orEmpty(),
                                         onClick = { onBookClick(book) }
                                     )

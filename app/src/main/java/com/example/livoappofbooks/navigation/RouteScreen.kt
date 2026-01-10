@@ -56,6 +56,28 @@ sealed class Screen(
         "Registrar Leitura",
         null
     )
+
+    object ShelfDetails : Screen(
+        "shelf_details/{shelfId}",
+        "Detalhes da Prateleira",
+        null
+    ) {
+        fun createRoute(shelfId: String) = "shelf_details/$shelfId"
+    }
+
+    object EditShelf : Screen(
+        "edit_shelf/{shelfId}",
+        "Editar Prateleira",
+        null
+    ) {
+        fun createRoute(shelfId: String) = "edit_shelf/$shelfId"
+    }
+
+    object AddShelf : Screen(
+        "add_shelf",
+        "Criar Prateleira",
+        null
+    )
 }
 
 sealed class ScreenIcon {
