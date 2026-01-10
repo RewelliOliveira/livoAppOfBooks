@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.icons.Arrow_forward_ios_new
 import com.example.livoappofbooks.ui.screens.Prateleira
-import com.example.livoappofbooks.ui.theme.primary
+import com.example.livoappofbooks.ui.theme.outline
 import com.example.livoappofbooks.ui.theme.tertiary
 import androidx.compose.ui.res.painterResource
 import com.example.livoappofbooks.R
@@ -114,7 +114,7 @@ fun ShelfItem(
                 imageVector = Arrow_forward_ios_new,
                 contentDescription = "Abrir",
                 modifier = Modifier.size(28.dp),
-                colorFilter = ColorFilter.tint(primary)
+                colorFilter = ColorFilter.tint(outline)
             )
         }
     }
