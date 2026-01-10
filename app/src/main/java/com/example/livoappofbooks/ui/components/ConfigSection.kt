@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,12 +26,12 @@ fun ConfigSection(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         color = background,
-        border = BorderStroke(1.dp, primary)
+        border = BorderStroke(1.dp, outline)
     ) {
         Column(modifier = Modifier.padding(15.dp)) {
             Text(
                 titulo,
-                color = primary,
+                color = outline,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )
