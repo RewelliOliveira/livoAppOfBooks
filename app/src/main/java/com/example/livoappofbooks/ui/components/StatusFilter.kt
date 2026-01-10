@@ -12,6 +12,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.*
@@ -44,7 +45,7 @@ fun FilterBar(
                     fontSize = MaterialTheme.typography.labelMedium.fontSize,
                     fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal,
                     color = if (selectedFilter == filter)
-                        primary
+                        outline
                     else
                         Gray,
                     modifier = Modifier
@@ -89,7 +90,7 @@ fun FilterBar(
                         .offset(x = with(density) { left.toDp() })
                         .width(with(density) { (right - left).toDp() })
                         .height(2.dp)
-                        .background(primary)
+                        .background(outline)
                 )
             }
         }
