@@ -53,7 +53,7 @@ fun Input(
             unfocusedBorderColor = onBackground,
             focusedLabelColor = background,
             unfocusedLabelColor = onBackground,
-            cursorColor = background.copy(alpha = 0.8f)
+            cursorColor = outline.copy(alpha = 0.8f)
         ),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = if (isPassword) KeyboardOptions(keyboardType = KeyboardType.Password) else KeyboardOptions.Default,
