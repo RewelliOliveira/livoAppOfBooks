@@ -53,7 +53,7 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = background,
+                    color = outline,
                     fontSize = 16.sp
                 ),
                 cursorBrush = SolidColor(primary),
@@ -67,7 +67,7 @@ fun SearchBar(
                     ) {
                         if (query.isEmpty()) {
                             Text(
-                                text = "Pesquisar na minha biblioteca",
+                                text = placeholder,
                                 style = TextStyle(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
