@@ -31,6 +31,7 @@ import com.example.livoappofbooks.ui.viewModel.RegisterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class RegisterViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -149,6 +150,10 @@ fun RegisterScreen(
 
 @Composable
 private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -166,9 +171,8 @@ private fun Header(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
         )
 
         Image(
-            painter = painterResource(R.drawable.livo),
+            painter = painterResource(logoRes),
             contentDescription = "Icone Livo",
-            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }

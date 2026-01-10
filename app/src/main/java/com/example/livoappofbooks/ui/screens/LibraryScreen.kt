@@ -29,6 +29,7 @@ import com.example.livoappofbooks.ui.components.FilterBar
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LibraryUiState
 import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
+import androidx.compose.foundation.isSystemInDarkTheme
 
 @Composable
 fun LibraryScreen(
@@ -62,6 +63,11 @@ fun LibraryScreen(
             }
         }
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -84,8 +90,7 @@ fun LibraryScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(primary),
+                        painter = painterResource(logoRes),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)

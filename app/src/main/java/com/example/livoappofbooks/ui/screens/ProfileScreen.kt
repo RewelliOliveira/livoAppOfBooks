@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
 import com.example.livoappofbooks.ui.theme.*
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 @Composable
 fun ProfileScreen(
@@ -31,6 +33,12 @@ fun ProfileScreen(
     themeViewModel: ThemeViewModel
 ) {
     val isDark by themeViewModel.isDarkTheme.collectAsState()
+
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+
+    val resolvedDark = runCatching { isDark }.getOrElse { isDarkTheme }
+    val logoRes = if (resolvedDark) R.drawable.livo_white else R.drawable.livo
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -49,8 +57,7 @@ fun ProfileScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(primary),
+                        painter = painterResource(logoRes),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)

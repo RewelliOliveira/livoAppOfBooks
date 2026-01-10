@@ -46,11 +46,7 @@ fun SearchScreen(
     val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
         .getOrElse { isSystemInDarkTheme() }
 
-    val logoRes = if (isDarkTheme) {
-        R.drawable.livo
-    } else {
-        R.drawable.livo
-    }
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
     val query by viewModel.query.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -76,7 +72,6 @@ fun SearchScreen(
                 Image(
                     painter = painterResource(id = logoRes),
                     contentDescription = "LIVO Logo",
-                    colorFilter = ColorFilter.tint(primary),
                     modifier = Modifier
                         .height(30.dp)
                         .width(100.dp)

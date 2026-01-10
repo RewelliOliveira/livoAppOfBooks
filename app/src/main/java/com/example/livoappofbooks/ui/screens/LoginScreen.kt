@@ -28,6 +28,7 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LoginUiState
 import com.example.livoappofbooks.ui.viewModel.LoginViewModel
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -106,6 +107,10 @@ private fun Header(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -117,16 +122,15 @@ private fun Header(
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = primary,
+            tint = outline,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
         )
 
         Image(
-            painter = painterResource(R.drawable.livo),
+            painter = painterResource(logoRes),
             contentDescription = "Icone Livo",
-            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }

@@ -17,6 +17,8 @@ import com.example.livoappofbooks.ui.components.SearchBar
 import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.livoappofbooks.ui.theme.rememberThemeState
 
 data class Prateleira(
     val nome: String,
@@ -31,9 +33,9 @@ fun ShelfsScreen(
 ) {
     var search by remember { mutableStateOf("") }
 
-    val capa1 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa2 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-    val capa3 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    val capa1 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs-api"
+    val capa2 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs-api"
+    val capa3 = "http://books.google.com/books/publisher/content?id=OF0NEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs-api"
     val capa4 = null
 
     val prateleirasMock = listOf(
@@ -49,6 +51,11 @@ fun ShelfsScreen(
         }
     }
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,9 +69,8 @@ fun ShelfsScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.livo),
+                painter = painterResource(id = logoRes),
                 contentDescription = "LIVO Logo",
-                colorFilter = ColorFilter.tint(primary),
                 modifier = Modifier
                     .height(30.dp)
                     .width(100.dp)
