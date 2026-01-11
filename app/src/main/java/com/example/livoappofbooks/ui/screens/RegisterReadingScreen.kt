@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -71,7 +70,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                         modifier = Modifier
                             .weight(1f)
                             .height(52.dp),
-                        border = BorderStroke(1.dp, primary),
+                        border = BorderStroke(1.dp, outline),
                         shape = RoundedCornerShape(50)
                     ) {
                         Row(
@@ -82,12 +81,12 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                                 imageVector = Close_small,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp),
-                                tint = primary
+                                tint = outline
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
                                 text = "Cancelar",
-                                color = primary
+                                color = outline
                             )
                         }
                     }
@@ -98,7 +97,7 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                             .weight(1f)
                             .height(52.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = primary
+                            containerColor = outline
                         ),
                         shape = RoundedCornerShape(50)
                     ) {
@@ -236,13 +235,5 @@ fun RegisterReadingScreen(onNavigate: () -> Unit) {
                 shape = RoundedCornerShape(12.dp),
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRegisterReadingScreen() {
-    MaterialTheme {
-        RegisterReadingScreen(onNavigate = {})
     }
 }

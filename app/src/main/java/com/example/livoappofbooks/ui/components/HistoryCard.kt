@@ -42,7 +42,7 @@ fun HistoryCard(
             .heightIn(min = 140.dp)
             .border(
                 width = 1.dp,
-                color = primary,
+                color = outline,
                 shape = RoundedCornerShape(14.dp)
             ),
         shape = RoundedCornerShape(14.dp),

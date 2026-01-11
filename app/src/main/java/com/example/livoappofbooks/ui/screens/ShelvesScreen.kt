@@ -1,18 +1,18 @@
 package com.example.livoappofbooks.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.components.Shelf
-import androidx.compose.foundation.lazy.items
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.SearchBar
@@ -20,7 +20,6 @@ import com.example.livoappofbooks.ui.components.ShelfItem
 import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
-import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 
 @Composable
 fun ShelvesScreen(
@@ -61,6 +60,11 @@ fun ShelvesScreen(
         }
     }
 
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,9 +78,8 @@ fun ShelvesScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.livo),
+                painter = painterResource(id = logoRes),
                 contentDescription = "LIVO Logo",
-                colorFilter = ColorFilter.tint(primary),
                 modifier = Modifier
                     .height(30.dp)
                     .width(100.dp)
@@ -98,7 +101,7 @@ fun ShelvesScreen(
         Text(
             text = "Prateleiras",
             style = AppTypography.headlineSmall,
-            color = primary,
+            color = outline,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
@@ -110,7 +113,7 @@ fun ShelvesScreen(
         ) {
             when {
                 loading -> {
-                    CircularProgressIndicator(color = primary)
+                    CircularProgressIndicator(color = outline)
                 }
                 error != null -> {
                     Column(

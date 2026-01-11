@@ -47,7 +47,7 @@ fun RadioButtonSingleSelection(
                     selected = (text == selectedOption),
                     onClick = null,
                     colors = RadioButtonDefaults.colors(
-                        selectedColor = primary,
+                        selectedColor = outline,
                         unselectedColor = Color.Gray
                      )
                 )
@@ -61,4 +61,3 @@ fun RadioButtonSingleSelection(
         }
     }
 }
-

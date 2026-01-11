@@ -28,8 +28,8 @@ fun ProgressBarBook(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, primary, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .border(1.dp, primary.copy(alpha = 0.9F),RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .background(background.copy(alpha = 0.8F), RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
 
     ) {
@@ -63,7 +63,7 @@ fun ProgressBarBook(
                 .fillMaxWidth()
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(progressBar) // trilho suave
+                .background(primary.copy(alpha = 0.2f)) // trilho suave
         ) {
             Box(
                 modifier = Modifier
@@ -74,12 +74,4 @@ fun ProgressBarBook(
             )
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun PreviewProgressBarBook() {
-    ProgressBarBook(
-        currentPage = 108,
-        totalPages = 364
-    )
 }

@@ -64,7 +64,9 @@ fun CardBook(
             Spacer(Modifier.width(4.dp))
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp) // garante altura consistente com a imagem
             ) {
                 Text(
                     text = title,
@@ -79,6 +81,8 @@ fun CardBook(
                 Text(
                     text = author,
                     style = AppTypography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = tertiary
                 )
 
@@ -88,6 +92,8 @@ fun CardBook(
 
                 Spacer(Modifier.height(10.dp))
 
+                Spacer(modifier = Modifier.weight(1f))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -95,6 +101,7 @@ fun CardBook(
                 ) {
 
                     Column(
+                        modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         InfoItem(
@@ -107,16 +114,19 @@ fun CardBook(
                         )
                     }
                     Spacer(Modifier.width(10.dp))
+
                     PrimaryButton(
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .defaultMinSize(minWidth = 72.dp),
                         text = if (!personalLibrary) "Adicionar" else "Adicionado",
                         enabled = if(!personalLibrary) true else false,
                         icon = if (!personalLibrary) PlusCircle else  CheckCircle,
                         onClick = {},
-                        height = 30.dp,
+                        height = 36.dp,
                     )
                 }
             }
         }
     }
 }
-

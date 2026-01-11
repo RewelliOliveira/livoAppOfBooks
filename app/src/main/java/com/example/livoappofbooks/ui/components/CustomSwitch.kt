@@ -1,6 +1,5 @@
 package com.example.livoappofbooks.ui.components
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -20,7 +19,7 @@ fun CustomSwitch(
         colors = SwitchDefaults.colors(
             checkedThumbColor = background,
             checkedTrackColor = tertiary,
-            uncheckedThumbColor = primary,
+            uncheckedThumbColor = outline,
             uncheckedTrackColor = background
         )
     )

@@ -29,6 +29,7 @@ import com.example.livoappofbooks.ui.components.FilterBar
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LibraryUiState
 import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
+import androidx.compose.foundation.isSystemInDarkTheme
 
 @Composable
 fun LibraryScreen(
@@ -36,14 +37,17 @@ fun LibraryScreen(
     onBookClick: (Book) -> Unit
 ) {
     val viewModel = remember { LibraryViewModel(context) }
+
     val books by viewModel.books.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
     LaunchedEffect(Unit) {
         viewModel.loadBooks()
     }
+
     val filteredBooks = books
         .filter {
             it.title.contains(searchQuery, ignoreCase = true)
@@ -58,14 +62,21 @@ fun LibraryScreen(
                 else -> true
             }
         }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
+
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         color = background
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
         ) {
 
             Column(
@@ -79,8 +90,7 @@ fun LibraryScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(primary),
+                        painter = painterResource(logoRes),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)

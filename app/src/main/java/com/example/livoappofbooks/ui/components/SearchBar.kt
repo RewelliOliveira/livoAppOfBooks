@@ -20,6 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.livoappofbooks.ui.icons.MagnifyingGlass
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
@@ -38,7 +39,7 @@ fun SearchBar(
             .background(background)
             .border(
                 width = 2.dp,
-                color = primary,
+                color = outline,
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
@@ -52,7 +53,7 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 textStyle = TextStyle(
-                    color = background,
+                    color = outline,
                     fontSize = 16.sp
                 ),
                 cursorBrush = SolidColor(primary),
@@ -71,7 +72,7 @@ fun SearchBar(
                                     fontWeight = FontWeight.Normal,
                                     fontSize = 10.sp,
                                     lineHeight = 10.sp,
-                                    color = primary
+                                    color = Gray
                                 )
                             )
                         }
@@ -83,12 +84,10 @@ fun SearchBar(
             Spacer(modifier = Modifier.width(12.dp))
 
             Icon(
-                imageVector = Icons.Default.Search,
+                imageVector = MagnifyingGlass,
                 contentDescription = "Pesquisar",
-                tint = primary,
-                modifier = Modifier
-                    .size(28.dp)
-                    .clickable { onSearch() }
+                tint = outline,
+                modifier = Modifier.size(28.dp).clickable { onSearch() }
             )
         }
     }

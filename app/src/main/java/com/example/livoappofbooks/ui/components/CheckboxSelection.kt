@@ -11,13 +11,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.*
 
@@ -62,20 +57,4 @@ fun CheckboxSelection(
             }
         }
     }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewCheckBox() {
-    val options = listOf("Romance", "Filosofia", "Religião", "Ficção")
-
-    var selectedOptions by remember { mutableStateOf(listOf<String>()) }
-
-    CheckboxSelection(
-        options = options,
-        selectedOptions = selectedOptions,
-        onSelectionChange = { selectedOptions = it }
-    )
 }
