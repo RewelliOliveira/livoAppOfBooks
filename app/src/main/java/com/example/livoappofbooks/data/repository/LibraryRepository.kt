@@ -15,7 +15,8 @@ class LibraryRepository(
         try {
             val response = libraryService.getUserBooks()
 
-            if (response.isSuccessful) { val userBooks = response.body() ?: emptyList()
+            if (response.isSuccessful) {
+                val userBooks = response.body() ?: emptyList()
                 val books = userBooks.map { it.toDomainBook() }
                 Result.success(books)
             } else {
@@ -58,6 +59,20 @@ class LibraryRepository(
                 Result.success(true)
             } else {
                 Result.failure(Exception("Falha ao atualizar: ${response.code()} - ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun removeBook(userBookId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val response = libraryService.removeBookFromLibrary(userBookId)
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Erro ao remover: ${response.message()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

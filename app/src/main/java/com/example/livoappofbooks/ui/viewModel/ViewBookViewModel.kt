@@ -39,11 +39,11 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
                         if (bookInLibrary != null) {
                             val regFromList = bookInLibrary.libraryRegistration
                             val currentReg = bookDetails.libraryRegistration
-
                             val finalReg = currentReg?.copy(
                                 status = regFromList?.status,
                                 shelf = regFromList?.shelf,
-                                readingProgress = regFromList?.readingProgress
+                                readingProgress = regFromList?.readingProgress,
+                                id = regFromList?.id
                             ) ?: regFromList
 
                             bookDetails = bookDetails.copy(
@@ -66,20 +66,53 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
 
     fun updateBookStatus(bookId: String, newStatusId: String) {
         viewModelScope.launch {
-            val result = repository.updateBookStatus(bookId, newStatusId)
+            val currentBook = _book.value
+            val registrationId = currentBook?.libraryRegistration?.id
 
-            if (result.isSuccess) {
-                _book.value?.let { currentBook ->
-                    val currentReg = currentBook.libraryRegistration
-                    val updatedReg = currentReg?.copy(status = newStatusId)
+            if (registrationId != null) {
+                val result = repository.updateBookStatus(registrationId.toString(), newStatusId)
 
-                    if (updatedReg != null) {
-                        _book.value = currentBook.copy(libraryRegistration = updatedReg)
-                    } else {
-                        fetchBook(bookId)
+                if (result.isSuccess) {
+                    _book.value?.let { bookState ->
+                        val currentReg = bookState.libraryRegistration
+                        val updatedReg = currentReg?.copy(status = newStatusId)
+
+                        if (updatedReg != null) {
+                            _book.value = bookState.copy(libraryRegistration = updatedReg)
+                        } else {
+                            fetchBook(bookId)
+                        }
                     }
+                } else {
+                    fetchBook(bookId)
                 }
+            } else {
+               //ADICIONAR o livro (POST) caso ele ainda não tenha registro
+                // repository.addBookToLibrary(...)
             }
+        }
+    }
+
+    fun removeBook(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val currentBook = _book.value
+            val registrationId = currentBook?.libraryRegistration?.id
+
+            if (registrationId != null) {
+                val result = repository.removeBook(registrationId.toString())
+
+                if (result.isSuccess) {
+                    _book.value = null
+                    onSuccess()
+                } else {
+                    _error.value = "Erro ao remover livro: ${result.exceptionOrNull()?.message}"
+                }
+            } else {
+                _error.value = "Erro: ID de registro não encontrado (Livro não está na biblioteca)."
+            }
+
+            _isLoading.value = false
         }
     }
 }

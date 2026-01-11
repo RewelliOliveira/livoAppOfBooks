@@ -8,12 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.livoappofbooks.data.model.BookStatus
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.ui.components.ViewBook
+import com.example.livoappofbooks.ui.components.modals.dialogs.ConfirmRemoveBookDialog
 import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.viewModel.ViewBookViewModel
 import com.example.livoappofbooks.utils.parseHtmlToText
-import com.example.livoappofbooks.data.model.BookStatus
 
 @Composable
 fun ViewBookScreen(
@@ -28,6 +29,7 @@ fun ViewBookScreen(
     val error by viewModel.error.collectAsState()
 
     var showStatusSheet by remember { mutableStateOf(false) }
+    var showRemoveDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(bookId) {
         viewModel.fetchBook(bookId)
@@ -46,7 +48,6 @@ fun ViewBookScreen(
                 val currentBook = book!!
                 val libReg = currentBook.libraryRegistration
                 val currentStatusEnum = BookStatus.fromId(libReg?.status)
-
                 val secureImageUrl = currentBook.thumbnail?.replace("http:", "https:") ?: ""
                 val authorText = currentBook.authors.joinToString(", ").ifBlank { "Autor Desconhecido" }
                 val cleanDescription = parseHtmlToText(currentBook.description)
@@ -71,6 +72,9 @@ fun ViewBookScreen(
                     onBackClick = onBackClick,
                     onRegisterClick = {
                         showStatusSheet = true
+                    },
+                    onRemoveClick = {
+                        showRemoveDialog = true
                     }
                 )
 
@@ -87,6 +91,20 @@ fun ViewBookScreen(
 
                             viewModel.updateBookStatus(currentBook.id, newStatusEnum.id)
                             showStatusSheet = false
+                        }
+                    )
+                }
+
+                if (showRemoveDialog) {
+                    ConfirmRemoveBookDialog(
+                        onDismiss = { showRemoveDialog = false },
+                        onConfirm = {
+                            viewModel.removeBook(
+                                onSuccess = {
+                                    showRemoveDialog = false
+                                    onBackClick()
+                                }
+                            )
                         }
                     )
                 }

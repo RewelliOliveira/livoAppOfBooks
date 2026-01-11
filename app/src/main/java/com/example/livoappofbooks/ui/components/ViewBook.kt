@@ -46,6 +46,7 @@ fun ViewBook(
     userTotalPages: Int = 0,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit,
+    onRemoveClick: () -> Unit = {}
 ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
@@ -224,6 +225,7 @@ fun ViewBook(
                         }
                     }
                     Spacer(Modifier.height(32.dp))
+
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
@@ -233,7 +235,7 @@ fun ViewBook(
                         ),
                         modifier = Modifier
                             .padding(bottom = 60.dp)
-                            .clickable(onClick = {})
+                            .clickable(onClick = onRemoveClick)
                     )
                 }
             }
