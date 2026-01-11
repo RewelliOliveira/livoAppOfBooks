@@ -1,6 +1,5 @@
 package com.example.livoappofbooks.ui.screens
 
-import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,219 +9,264 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.livoappofbooks.ui.components.StarRating
+import com.example.livoappofbooks.R
+import com.example.livoappofbooks.data.model.BookStatus
+import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.ui.components.InfoItem
+import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
+import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
+import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.BuildingLibrary
+import com.example.livoappofbooks.ui.icons.CalendarDays
 import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.viewModel.ViewBookViewModel
+import com.example.livoappofbooks.utils.parseHtmlToText
 
-// 1. ADICIONADOS NOVOS PARÂMETROS
 @Composable
-fun ViewBookScreen(
-    title: String,
-    author: String,
-    rate: Double,
-    sinopse: String,
-    imageUrl: String,
-    publishYear: String,
-    publisher: String,
-    language: String,
-    pageCount: String,
-    onBackClick: () -> Unit
+fun ViewBookInitScreen(
+    bookId: String,
+    repository: LibraryRepository,
+    onBackClick: () -> Unit,
+    onBookAdded: (String) -> Unit
 ) {
+    val viewModel = remember { ViewBookViewModel(repository) }
+
+    val book by viewModel.book.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+    val bookAdded by viewModel.bookAddedEvent.collectAsState()
+
+    var showStatusSheet by remember { mutableStateOf(false) }
+    var isSynopsisExpanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(bookId) {
+        viewModel.fetchBook(bookId)
+    }
+
+    LaunchedEffect(bookAdded) {
+        if (bookAdded) {
+            onBookAdded(bookId)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(background)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(350.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            AsyncImage(
-                model = imageUrl,
-                //placeholder = painterResource(id = R.drawable.livro_teste),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(320.dp)
-                    .blur(10.dp)
-                    .shadow(20.dp)
-            )
+        when {
+            isLoading -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(320.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, background.copy(alpha = 1f)),
-                            startY = 250f
-                        )
-                    )
-            )
-
-            AsyncImage(
-                model = imageUrl,
-               // placeholder = painterResource(id = R.drawable.livro_teste),
-                contentDescription = title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(260.dp)
-                    .width(170.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .shadow(16.dp, RoundedCornerShape(8.dp))
-                    .align(Alignment.BottomCenter)
-            )
-
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .size(36.dp)
-                    .background(background, CircleShape)
-            ) {
-                Icon(
-                    imageVector = Arrow_back_ios_new,
-                    contentDescription = "Voltar",
-                    tint = Color.Black
+            error != null -> {
+                Text(
+                    text = "Erro: $error",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
-        }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(Modifier.height(385.dp))
+            book != null -> {
+                val currentBook = book!!
+                val secureImageUrl = currentBook.thumbnail?.replace("http:", "https:") ?: ""
+                val authorText =
+                    currentBook.authors.joinToString(", ").ifBlank { "Autor desconhecido" }
+                val cleanDescription = parseHtmlToText(currentBook.description)
+                val pageCountString = currentBook.pageCount?.toString() ?: "-"
 
-            Row(
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.Start
+
+
+
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(320.dp)
+                        .align(Alignment.TopCenter)
                 ) {
+                    AsyncImage(
+                        model = secureImageUrl,
+                        placeholder = painterResource(R.drawable.livro_teste),
+                        error = painterResource(R.drawable.livro_teste),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .blur(20.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(
+                                        Color.Black.copy(alpha = 0.3f),
+                                        background
+                                    )
+                                )
+                            )
+                    )
+
+                    AsyncImage(
+                        model = secureImageUrl,
+                        placeholder = painterResource(R.drawable.livro_teste),
+                        error = painterResource(R.drawable.livro_teste),
+                        contentDescription = currentBook.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(260.dp)
+                            .width(170.dp)
+                            .align(Alignment.BottomCenter)
+                            .clip(RoundedCornerShape(12.dp))
+                            .shadow(16.dp)
+                    )
+
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.TopStart)
+                            .background(background.copy(alpha = 0.7f), CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Arrow_back_ios_new,
+                            contentDescription = "Voltar",
+                            tint = onBackground
+                        )
+                    }
+                }
+
+                /* ================= CONTEÚDO ROLÁVEL ================= */
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 320.dp)
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 24.dp)
+                ) {
+                    Spacer(Modifier.height(24.dp))
+
                     Text(
-                        text = title,
-                        style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        text = currentBook.title,
+                        style = AppTypography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
                         color = onBackground
                     )
-                    Spacer(Modifier.height(8.dp))
+
                     Text(
-                        text = author,
+                        text = authorText,
                         style = AppTypography.bodyMedium,
                         color = tertiary
                     )
-                }
-                StarRating(rating = rate)
-            }
-            Spacer(Modifier.height(24.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                InfoItem(icon = CalendarDays, text = publishYear)
-                InfoItem(icon = BuildingLibrary, text = publisher)
-                InfoItem(icon = BookOpen, text = "$pageCount págs")
+                    Spacer(Modifier.height(20.dp))
 
-            }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        InfoItem(CalendarDays, currentBook.publishedDate?.take(4) ?: "-")
+                        InfoItem(BuildingLibrary, currentBook.publisher ?: "-")
+                        InfoItem(BookOpen, "$pageCountString págs")
+                    }
 
-            Spacer(Modifier.height(24.dp))
-            HorizontalDivider(color = tertiary)
-            Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(24.dp))
 
-            Text(
-                text = "Sinopse",
-                style = AppTypography.titleMedium.copy(
-                    color = onBackground,
-                    fontWeight = FontWeight.SemiBold
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Text(
-                text = sinopse,
-                style = AppTypography.bodyMedium.copy(color = onBackground),
-                textAlign = TextAlign.Justify,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            Spacer(Modifier.height(100.dp)) // Espaço para não colar no botão
-        }
-
-        // --- Botão fixado no rodapé ---
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, background.copy(alpha = 0.98f))
+                    Text(
+                        text = "Sinopse",
+                        style = AppTypography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = onBackground
                     )
-                )
-                .padding(16.dp)
-        ) {
-            Button(
-                onClick = { /* ação */ },
-                colors = ButtonDefaults.buttonColors(containerColor = primary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .shadow(8.dp, RoundedCornerShape(50))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Adicionar",
-                    tint = background
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Adicionar à biblioteca",
-                    style = AppTypography.titleSmall.copy(color = background)
-                )
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Text(
+                        text = if (isSynopsisExpanded)
+                            cleanDescription
+                        else
+                            cleanDescription.take(320) + "...",
+                        style = AppTypography.bodyMedium,
+                        textAlign = TextAlign.Justify,
+                        color = onBackground
+                    )
+
+                    TextButton(
+                        onClick = { isSynopsisExpanded = !isSynopsisExpanded }
+                    ) {
+                        Text(
+                            text = if (isSynopsisExpanded) "Ver menos" else "Ver mais",
+                            color = primary
+                        )
+                    }
+
+                    Spacer(Modifier.height(120.dp))
+                }
+
+                /* ================= BOTÃO FIXO ================= */
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, background)
+                            )
+                        )
+                        .padding(16.dp)
+                ) {
+                    Button(
+                        onClick = { showStatusSheet = true },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Adicionar à biblioteca")
+                    }
+                }
+
+                if (showStatusSheet) {
+                    val options = BookStatus.entries.map { it.displayName }
+
+                    BookStatusBottomSheet(
+                        options = options,
+                        selectedOption = BookStatus.QUERO_LER.displayName,
+                        onDismiss = { showStatusSheet = false },
+                        onSelectionChange = { selected ->
+                            val status = BookStatus.entries.find {
+                                it.displayName == selected
+                            } ?: BookStatus.QUERO_LER
+
+                            viewModel.updateBookStatus(
+                                currentBook.id,
+                                status.id
+                            )
+                            showStatusSheet = false
+                        }
+                    )
+                }
             }
         }
-    }
-}
-
-// 4. PREVIEW ATUALIZADO COM OS NOVOS DADOS
-@Preview(showBackground = true)
-@Composable
-fun ViewBookScreenPreview() {
-    LivoAppOfBooksTheme (darkTheme = false){
-        ViewBookScreen(
-            title = "Peter Pan in Wonderland",
-            author = "Samira Sales",
-            rate = 3.7,
-            sinopse = "Em um mundo onde prestam atenção em cada detalhe...",
-            imageUrl = "url_qualquer",
-            publishYear = "2025",
-            publisher = "Bila-Bilu",
-            language = "Português - BR",
-            pageCount = "240",
-            onBackClick = {}
-        )
     }
 }
