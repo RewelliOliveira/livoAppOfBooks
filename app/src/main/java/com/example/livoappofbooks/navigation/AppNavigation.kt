@@ -147,8 +147,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(
-                route = "${Screen.ViewBook.route}/{bookId}",
-                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+                route = Screen.ViewBook.route, arguments = listOf(navArgument("bookId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val bookId = backStackEntry.arguments?.getString("bookId")
                 if (bookId != null) {
