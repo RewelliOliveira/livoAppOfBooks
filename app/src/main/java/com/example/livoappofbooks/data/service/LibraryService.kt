@@ -6,12 +6,7 @@ import com.example.livoappofbooks.data.model.UserProfile
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
 
 data class StatusUpdateRequest(
     val status: String
@@ -20,7 +15,7 @@ data class StatusUpdateRequest(
 @JsonClass(generateAdapter = true)
 data class UserRatingResponse(
     @Json(name = "id") val id: String,
-    @Json(name = "rating") val rating: Int, // O valor que queremos (ex: 4)
+    @Json(name = "rating") val rating: Int,
     @Json(name = "bookId") val bookId: String
 )
 
@@ -53,9 +48,14 @@ interface LibraryService {
         @Path("book_id") userBookId: String
     ): Response<Unit>
 
-    // NOVO ENDPOINT DE AVALIAÇÃO
     @POST("/books/{book_id}/rating")
     suspend fun registerBookRating(
+        @Path("book_id") bookId: String,
+        @Body request: RatingRequest
+    ): Response<Unit>
+
+    @PUT("/books/{book_id}/rating")
+    suspend fun updateBookRating(
         @Path("book_id") bookId: String,
         @Body request: RatingRequest
     ): Response<Unit>
