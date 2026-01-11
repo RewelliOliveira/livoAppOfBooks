@@ -89,7 +89,7 @@ class LibraryRepository(
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Erro API: ${response.code()}"))
+                Result.failure(Exception(response.code().toString()))
             }
         } catch (e: Exception) {
             Result.failure(e)
