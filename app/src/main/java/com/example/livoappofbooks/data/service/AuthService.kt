@@ -1,4 +1,4 @@
-package com.example.livoappofbooks.data.remote
+package com.example.livoappofbooks.data.service
 
 import com.example.livoappofbooks.data.remote.dto.LoginRequest
 import com.example.livoappofbooks.data.remote.dto.LoginResponse
