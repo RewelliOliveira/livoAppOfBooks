@@ -168,10 +168,11 @@ fun ViewBook(
                         icon = Bookshelf
                     )
                     Spacer(Modifier.width(8.dp))
+
                     Status(
                         modifier = Modifier.weight(1f),
                         status = BookStatus.fromString(status),
-                        onClick = {}
+                        onClick = onRegisterClick
                     )
                 }
 
@@ -253,8 +254,7 @@ fun ViewBook(
             Icon(imageVector = Arrow_back_ios_new,
                 contentDescription = "Voltar",
                 tint = Color.Black.copy(alpha = 0.8f),
-                modifier = Modifier.size(24.dp)
-            )
+                modifier = Modifier.size(24.dp))
         }
 
         if (userCurrentPage != null && userCurrentPage > 0) {

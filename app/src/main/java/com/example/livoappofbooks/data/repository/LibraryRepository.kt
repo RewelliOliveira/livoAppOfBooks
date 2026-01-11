@@ -4,17 +4,18 @@ import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
+import com.example.livoappofbooks.data.service.StatusUpdateRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class LibraryRepository(
-    private val libraryService: LibraryService) {
+    private val libraryService: LibraryService
+) {
     suspend fun getUserBooks(): Result<List<Book>> = withContext(Dispatchers.IO) {
         try {
             val response = libraryService.getUserBooks()
 
-            if (response.isSuccessful) {
-                val userBooks = response.body() ?: emptyList()
+            if (response.isSuccessful) { val userBooks = response.body() ?: emptyList()
                 val books = userBooks.map { it.toDomainBook() }
                 Result.success(books)
             } else {
@@ -46,5 +47,20 @@ class LibraryRepository(
 
     suspend fun getUserProfile(): UserProfile = withContext(Dispatchers.IO) {
         libraryService.getUserProfile()
+    }
+
+    suspend fun updateBookStatus(bookId: String, newStatus: String): Result<Boolean> = withContext(Dispatchers.IO) {
+        try {
+            val requestBody = StatusUpdateRequest(status = newStatus)
+            val response = libraryService.updateBookStatus(bookId, requestBody)
+
+            if (response.isSuccessful) {
+                Result.success(true)
+            } else {
+                Result.failure(Exception("Falha ao atualizar: ${response.code()} - ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
