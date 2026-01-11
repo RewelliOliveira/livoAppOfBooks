@@ -25,6 +25,7 @@ fun ViewBookScreen(
 ) {
     val viewModel = remember { ViewBookViewModel(repository) }
     val book by viewModel.book.collectAsState()
+    val userRating by viewModel.userRating.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
@@ -36,6 +37,7 @@ fun ViewBookScreen(
 
     LaunchedEffect(bookId) {
         viewModel.fetchBook(bookId)
+        viewModel.fetchUserRating(bookId)
     }
 
     LaunchedEffect(error) {
@@ -76,11 +78,12 @@ fun ViewBookScreen(
                     val userCurrentPage = if (currentBook.personalLibrary) libReg?.readingProgress else null
                     val pageCountString = currentBook.pageCount?.toString() ?: "-"
                     val totalPagesInt = currentBook.pageCount ?: 0
+                    val displayRating = if (userRating > 0) userRating.toDouble() else (currentBook.averageRating ?: 0.0)
 
                     ViewBook(
                         title = currentBook.title,
                         author = authorText,
-                        rate = currentBook.averageRating ?: 0.0,
+                        rate = displayRating,
                         sinopse = cleanDescription,
                         imageUrl = secureImageUrl,
                         publishYear = currentBook.publishedDate?.take(4) ?: "Ano N/A",
@@ -129,7 +132,7 @@ fun ViewBookScreen(
 
                     if (showRatingDialog) {
                         RatingDialog(
-                            rating = currentBook.averageRating ?: 0.0,
+                            rating = userRating.toDouble(),
                             onDismiss = { showRatingDialog = false },
                             onRatingChange = { newRating ->
                                 viewModel.rateBook(currentBook.id, newRating.toInt())

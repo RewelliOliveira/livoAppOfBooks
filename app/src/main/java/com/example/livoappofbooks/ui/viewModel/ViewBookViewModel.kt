@@ -13,6 +13,9 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
     private val _book = MutableStateFlow<Book?>(null)
     val book: StateFlow<Book?> = _book
 
+    private val _userRating = MutableStateFlow(0)
+    val userRating: StateFlow<Int> = _userRating
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -23,6 +26,8 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
+
+            launch { fetchUserRating(bookId) }
 
             val detailResult = repository.getBookById(bookId)
 
@@ -61,6 +66,17 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
                 _error.value = detailResult.exceptionOrNull()?.message ?: "Erro desconhecido"
             }
             _isLoading.value = false
+        }
+    }
+
+    fun fetchUserRating(bookId: String) {
+        viewModelScope.launch {
+            try {
+                val rating = repository.getUserRating(bookId)
+                _userRating.value = rating
+            } catch (e: Exception) {
+                _userRating.value = 0
+            }
         }
     }
 
@@ -138,6 +154,7 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
         val result = repository.registerBookRating(bookId, rating)
 
         if (result.isSuccess) {
+            _userRating.value = rating
             fetchBook(bookId)
         } else {
             val errorCode = result.exceptionOrNull()?.message ?: "UNKNOWN"

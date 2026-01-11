@@ -80,6 +80,21 @@ class LibraryRepository(
         }
     }
 
+    suspend fun getUserRating(bookId: String): Int {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = libraryService.getUserRating(bookId)
+                if (response.isSuccessful) {
+                    response.body()?.rating ?: 0
+                } else {
+                    0
+                }
+            } catch (e: Exception) {
+                0
+            }
+        }
+    }
+
     suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             val request = RatingRequest(rating = rating)
