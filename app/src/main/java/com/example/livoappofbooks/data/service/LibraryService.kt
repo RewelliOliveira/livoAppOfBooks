@@ -18,6 +18,13 @@ data class StatusUpdateRequest(
 )
 
 @JsonClass(generateAdapter = true)
+data class UserRatingResponse(
+    @Json(name = "id") val id: String,
+    @Json(name = "rating") val rating: Int, // O valor que queremos (ex: 4)
+    @Json(name = "bookId") val bookId: String
+)
+
+@JsonClass(generateAdapter = true)
 data class RatingRequest(
     @Json(name = "rating") val rating: Int
 )
@@ -31,6 +38,9 @@ interface LibraryService {
 
     @GET("user/profile")
     suspend fun getUserProfile(): UserProfile
+
+    @GET("/books/{bookId}/rating/me")
+    suspend fun getUserRating(@Path("bookId") bookId: String): Response<UserRatingResponse>
 
     @PUT("/library/{book_id}")
     suspend fun updateBookStatus(
