@@ -151,23 +151,19 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
                 return@launch
             }
 
-            sendRatingToApi(bookId, rating)
+            val result = repository.saveBookRating(bookId, rating)
+
+            if (result.isSuccess) {
+                _userRating.value = rating
+                fetchBook(bookId)
+            } else {
+                val errorMsg = result.exceptionOrNull()?.message ?: "UNKNOWN"
+                _error.value = errorMsg
+            }
         }
     }
 
     fun resetError() {
         _error.value = null
-    }
-
-    private suspend fun sendRatingToApi(bookId: String, rating: Int) {
-        val result = repository.registerBookRating(bookId, rating)
-
-        if (result.isSuccess) {
-            _userRating.value = rating
-            fetchBook(bookId)
-        } else {
-            val errorCode = result.exceptionOrNull()?.message ?: "UNKNOWN"
-            _error.value = errorCode
-        }
     }
 }

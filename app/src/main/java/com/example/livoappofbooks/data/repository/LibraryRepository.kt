@@ -120,19 +120,29 @@ class LibraryRepository(
         }
     }
 
-    suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            val request = RatingRequest(rating = rating)
+    suspend fun saveBookRating(bookId: String, rating: Int): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val checkResponse = libraryService.getUserRating(bookId)
+                val hasExistingRating = checkResponse.isSuccessful && checkResponse.body() != null
+                val request = RatingRequest(rating)
 
-            val response = libraryService.registerBookRating(bookId, request)
-
-            if (response.isSuccessful) {
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception(response.code().toString()))
+                if (hasExistingRating) {
+                    // ATUALIZAÇÃO (PUT)
+                    val response = libraryService.updateBookRating(bookId, request)
+                    if (response.isSuccessful) Result.success(Unit)
+                    else Result.failure(Exception("Erro ao atualizar (PUT): ${response.code()}"))
+                } else {
+                    // CRIAÇÃO (POST)
+                    val response = libraryService.registerBookRating(bookId, request)
+                    if (response.isSuccessful) Result.success(Unit)
+                    else Result.failure(Exception("Erro ao criar (POST): ${response.code()}"))
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
+
+    suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = saveBookRating(bookId, rating)
 }
