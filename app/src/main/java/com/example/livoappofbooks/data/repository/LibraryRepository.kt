@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.data.repository
 
 import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
 import kotlinx.coroutines.Dispatchers
@@ -41,5 +42,9 @@ class LibraryRepository(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun getUserProfile(): UserProfile = withContext(Dispatchers.IO) {
+        libraryService.getUserProfile()
     }
 }

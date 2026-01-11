@@ -14,9 +14,6 @@ object RetrofitInstance {
 
     private const val BASE_URL = "https://gateway-production-4bd0.up.railway.app/"
 
-    // bota teu ip aq
-    // private const val BASE_URL = "IP:PORTA"
-
     fun <T> createService(context: Context,
         serviceClass: Class<T>
     ): T {
@@ -27,7 +24,7 @@ object RetrofitInstance {
             val originalRequest = chain.request()
             val path = originalRequest.url.encodedPath
 
-            if (path.contains("/auth") || path.contains("/user")) {
+            if (path.contains("/auth")) {
                 return@Interceptor chain.proceed(originalRequest)
             }
 
