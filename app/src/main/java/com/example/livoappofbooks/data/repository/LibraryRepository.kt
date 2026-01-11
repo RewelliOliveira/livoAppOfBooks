@@ -4,6 +4,7 @@ import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
+import com.example.livoappofbooks.data.service.RatingRequest
 import com.example.livoappofbooks.data.service.StatusUpdateRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,6 +74,22 @@ class LibraryRepository(
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Erro ao remover: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val request = RatingRequest(rating = rating)
+
+            val response = libraryService.registerBookRating(bookId, request)
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Erro API: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

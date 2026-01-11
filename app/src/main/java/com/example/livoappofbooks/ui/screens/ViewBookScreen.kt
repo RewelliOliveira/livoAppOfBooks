@@ -12,6 +12,7 @@ import com.example.livoappofbooks.data.model.BookStatus
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.ui.components.ViewBook
 import com.example.livoappofbooks.ui.components.modals.dialogs.ConfirmRemoveBookDialog
+import com.example.livoappofbooks.ui.components.modals.dialogs.RatingDialog
 import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.viewModel.ViewBookViewModel
 import com.example.livoappofbooks.utils.parseHtmlToText
@@ -30,6 +31,7 @@ fun ViewBookScreen(
 
     var showStatusSheet by remember { mutableStateOf(false) }
     var showRemoveDialog by remember { mutableStateOf(false) }
+    var showRatingDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(bookId) {
         viewModel.fetchBook(bookId)
@@ -70,17 +72,14 @@ fun ViewBookScreen(
                     userCurrentPage = userCurrentPage,
                     userTotalPages = totalPagesInt,
                     onBackClick = onBackClick,
-                    onRegisterClick = {
-                        showStatusSheet = true
-                    },
-                    onRemoveClick = {
-                        showRemoveDialog = true
-                    }
+                    onRegisterClick = { showStatusSheet = true },
+                    onShelfClick = { },
+                    onRemoveClick = { showRemoveDialog = true },
+                    onRatingClick = { showRatingDialog = true }
                 )
 
                 if (showStatusSheet) {
                     val optionsList = BookStatus.entries.map { it.displayName }
-
                     BookStatusBottomSheet(
                         options = optionsList,
                         selectedOption = currentStatusEnum.displayName,
@@ -88,7 +87,6 @@ fun ViewBookScreen(
                         onSelectionChange = { selectedName ->
                             val newStatusEnum = BookStatus.entries.find { it.displayName == selectedName }
                                 ?: BookStatus.QUERO_LER
-
                             viewModel.updateBookStatus(currentBook.id, newStatusEnum.id)
                             showStatusSheet = false
                         }
@@ -105,6 +103,17 @@ fun ViewBookScreen(
                                     onBackClick()
                                 }
                             )
+                        }
+                    )
+                }
+
+                if (showRatingDialog) {
+                    RatingDialog(
+                        rating = currentBook.averageRating ?: 0.0,
+                        onDismiss = { showRatingDialog = false },
+                        onRatingChange = { newRating ->
+                            viewModel.rateBook(currentBook.id, newRating.toInt())
+                            showRatingDialog = false
                         }
                     )
                 }

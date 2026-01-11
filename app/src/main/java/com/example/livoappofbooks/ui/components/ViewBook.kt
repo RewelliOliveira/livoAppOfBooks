@@ -46,7 +46,9 @@ fun ViewBook(
     userTotalPages: Int = 0,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit,
-    onRemoveClick: () -> Unit = {}
+    onShelfClick: () -> Unit,
+    onRemoveClick: () -> Unit = {},
+    onRatingClick: () -> Unit
 ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
@@ -164,8 +166,8 @@ fun ViewBook(
                 ) {
                     PrimaryButton(
                         modifier = Modifier.weight(2f),
-                        text = shelf.take(8),
-                        onClick = {},
+                        text = shelf.take(15),
+                        onClick = onShelfClick,
                         icon = Bookshelf
                     )
                     Spacer(Modifier.width(8.dp))
@@ -186,7 +188,10 @@ fun ViewBook(
                         text = "Registrar Leitura",
                         onClick = onRegisterClick
                     )
-                    RatingButton(modifier = Modifier.fillMaxWidth(), onClick = {})
+                    RatingButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onRatingClick
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))

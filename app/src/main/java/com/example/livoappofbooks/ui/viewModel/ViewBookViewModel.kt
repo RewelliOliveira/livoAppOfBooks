@@ -87,8 +87,8 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
                     fetchBook(bookId)
                 }
             } else {
-               //ADICIONAR o livro (POST) caso ele ainda não tenha registro
-                // repository.addBookToLibrary(...)
+                val addResult = repository.updateBookStatus(bookId, newStatusId)
+                if (addResult.isSuccess) fetchBook(bookId)
             }
         }
     }
@@ -109,10 +109,38 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
                     _error.value = "Erro ao remover livro: ${result.exceptionOrNull()?.message}"
                 }
             } else {
-                _error.value = "Erro: ID de registro não encontrado (Livro não está na biblioteca)."
+                _error.value = "Erro: Livro não está na biblioteca."
             }
 
             _isLoading.value = false
+        }
+    }
+
+    fun rateBook(bookId: String, rating: Int) {
+        viewModelScope.launch {
+            val currentBook = _book.value
+            val isBookInLibrary = currentBook?.personalLibrary == true || currentBook?.libraryRegistration != null
+
+            if (!isBookInLibrary) {
+                val addResult = repository.updateBookStatus(bookId, "LIDO")
+
+                if (addResult.isSuccess) {
+                    sendRatingToApi(bookId, rating)
+                } else {
+                    _error.value = "Erro ao registrar livro antes de avaliar."
+                }
+            } else {
+                sendRatingToApi(bookId, rating)
+            }
+        }
+    }
+
+    private suspend fun sendRatingToApi(bookId: String, rating: Int) {
+        val result = repository.registerBookRating(bookId, rating)
+        if (result.isSuccess) {
+            fetchBook(bookId)
+        } else {
+            _error.value = result.exceptionOrNull()?.message ?: "Erro ao enviar avaliação"
         }
     }
 }
