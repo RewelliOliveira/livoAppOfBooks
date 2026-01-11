@@ -46,6 +46,7 @@ fun ViewBook(
     userTotalPages: Int = 0,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit,
+    onStatusClick: () -> Unit,
     onShelfClick: () -> Unit,
     onRemoveClick: () -> Unit = {},
     onRatingClick: () -> Unit
@@ -175,7 +176,7 @@ fun ViewBook(
                     Status(
                         modifier = Modifier.weight(1f),
                         status = BookStatus.fromString(status),
-                        onClick = onRegisterClick
+                        onClick = onStatusClick
                     )
                 }
 
