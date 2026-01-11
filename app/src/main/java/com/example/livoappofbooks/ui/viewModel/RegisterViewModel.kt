@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.livoappofbooks.data.remote.AuthRepository
-import com.example.livoappofbooks.data.remote.AuthService
+import com.example.livoappofbooks.data.service.AuthService
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.remote.dto.RegisterRequest
 import kotlinx.coroutines.flow.MutableStateFlow

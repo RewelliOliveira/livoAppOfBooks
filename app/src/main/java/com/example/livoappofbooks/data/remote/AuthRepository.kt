@@ -3,6 +3,7 @@ package com.example.livoappofbooks.data.remote
 import com.example.livoappofbooks.data.remote.dto.LoginRequest
 import com.example.livoappofbooks.data.remote.dto.LoginResponse
 import com.example.livoappofbooks.data.remote.dto.RegisterRequest
+import com.example.livoappofbooks.data.service.AuthService
 
 class AuthRepository(
     private val api: AuthService

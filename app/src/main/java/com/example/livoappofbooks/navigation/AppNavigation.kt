@@ -7,19 +7,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.remote.RetrofitInstance
+import com.example.livoappofbooks.data.remote.local.TokenManager
+import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.service.LibraryService
-import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.screens.*
-import com.example.livoappofbooks.ui.viewModel.*
+import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
+import com.example.livoappofbooks.ui.viewModel.ProfileViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
+import com.example.livoappofbooks.ui.viewModel.ShelvesViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 
 @Composable
 fun AppNavigation(themeViewModel: ThemeViewModel) {
@@ -28,6 +32,10 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
     val currentRoute = navBackStackEntry?.destination?.route
     val context = LocalContext.current
 
+    // Gerenciador de Token para o Logout
+    val tokenManager = remember { TokenManager(context) }
+
+    // ViewModel das Prateleiras
     val shelvesViewModel: ShelvesViewModel = viewModel(
         factory = ShelvesViewModelFactory(context)
     )
@@ -60,11 +68,10 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
         ) {
             composable(Screen.Library.route) {
                 LibraryScreen(
-                    context = navController.context,
+                    context = context,
                     onBookClick = { book ->
-                            // Navegação usando o padrão da developer (createRoute)
-                            navController.navigate(Screen.ViewBook.createRoute(book.id))
-                        }
+                        navController.navigate(Screen.ViewBook.createRoute(book.id))
+                    }
                 )
             }
 
@@ -81,9 +88,19 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(Screen.Profile.route) {
+                // Cria o ViewModel usando a Factory
+                val profileViewModel: ProfileViewModel = viewModel(
+                    factory = ProfileViewModelFactory(libraryRepository, tokenManager)
+                )
+
                 ProfileScreen(
-                    onNavigate = { navController.navigate(Screen.Library.route) },
-                    themeViewModel = themeViewModel
+                    themeViewModel = themeViewModel,
+                    viewModel = profileViewModel,
+                    onLogoutSuccess = {
+                        navController.navigate("login_screen") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
                 )
             }
 
@@ -113,7 +130,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 route = Screen.EditShelf.route,
                 arguments = listOf(navArgument("shelfId") { type = NavType.StringType })
             ) {
-                 EditShelfScreen(
+                EditShelfScreen(
                     viewModel = shelvesViewModel,
                     onBackClick = { navController.popBackStack() },
                     onDeleteSuccess = {
@@ -129,7 +146,6 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 )
             }
 
-            // Rota Dinâmica que aceita o ID do livro
             composable(
                 route = "${Screen.ViewBook.route}/{bookId}",
                 arguments = listOf(navArgument("bookId") { type = NavType.StringType })
