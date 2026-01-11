@@ -86,8 +86,7 @@ fun ViewBook(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(320.dp)
-                        .blur(10.dp)
-                        .shadow(20.dp)
+                        .blur(2.dp)
                 )
 
                 Box(

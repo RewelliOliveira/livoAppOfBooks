@@ -160,6 +160,25 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 }
             }
 
+            composable(
+                route = Screen.ViewBookInit.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val bookId = backStackEntry.arguments?.getString("bookId")
+                if (bookId != null) {
+                    ViewBookInitScreen(
+                        bookId = bookId,
+                        repository = libraryRepository,
+                        onBackClick = { navController.popBackStack() },
+                        onBookAdded = { id ->
+                            navController.navigate(Screen.ViewBook.createRoute(id)) {
+                                popUpTo(Screen.ViewBookInit.createRoute(id)) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+            }
+
             composable(Screen.RegisterReading.route) {
                 RegisterReadingScreen(
                     onNavigate = { navController.popBackStack() }
