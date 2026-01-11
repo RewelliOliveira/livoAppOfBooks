@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.data.service
 
+import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.LibraryBookReponse
 import com.example.livoappofbooks.data.model.UserProfile
@@ -48,6 +49,12 @@ interface LibraryService {
         @Path("book_id") userBookId: String
     ): Response<Unit>
 
+    @POST("library")
+    suspend fun addBookToLibrary(
+        @Body body: AddBookRequest
+    ): Response<Unit>
+
+    // NOVO ENDPOINT DE AVALIAÇÃO
     @POST("/books/{book_id}/rating")
     suspend fun registerBookRating(
         @Path("book_id") bookId: String,

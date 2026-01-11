@@ -1,11 +1,15 @@
 package com.example.livoappofbooks.ui.viewModel
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel() {
@@ -21,6 +25,9 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
+
+    private val _bookAddedEvent = MutableStateFlow(false)
+    val bookAddedEvent = _bookAddedEvent.asStateFlow()
 
     fun fetchBook(bookId: String) {
         viewModelScope.launch {
@@ -86,25 +93,27 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
             val registrationId = currentBook?.libraryRegistration?.id
 
             if (registrationId != null) {
-                val result = repository.updateBookStatus(registrationId.toString(), newStatusId)
+                // PATCH
+                val result = repository.updateBookStatus(
+                    registrationId.toString(),
+                    newStatusId
+                )
 
                 if (result.isSuccess) {
-                    _book.value?.let { bookState ->
-                        val currentReg = bookState.libraryRegistration
-                        val updatedReg = currentReg?.copy(status = newStatusId)
-
-                        if (updatedReg != null) {
-                            _book.value = bookState.copy(libraryRegistration = updatedReg)
-                        } else {
-                            fetchBook(bookId)
-                        }
-                    }
-                } else {
                     fetchBook(bookId)
                 }
             } else {
-                val addResult = repository.updateBookStatus(bookId, newStatusId)
-                if (addResult.isSuccess) fetchBook(bookId)
+                // POST
+                val result = repository.addBookToLibrary(
+                    bookId = bookId,
+                    statusId = newStatusId
+                )
+
+                if (result.isSuccess) {
+                    _bookAddedEvent.value = true
+                } else {
+                    _error.value = result.exceptionOrNull()?.message
+                }
             }
         }
     }

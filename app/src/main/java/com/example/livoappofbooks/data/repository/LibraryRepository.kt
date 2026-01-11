@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.data.repository
 
+import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
@@ -22,6 +23,30 @@ class LibraryRepository(
                 Result.success(books)
             } else {
                 Result.failure(Exception("Erro: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun addBookToLibrary(
+        bookId: String,
+        statusId: String
+    ): Result<Unit> {
+        return try {
+            val response = libraryService.addBookToLibrary(
+                AddBookRequest(
+                    bookId = bookId,
+                    bookStatus = statusId
+                )
+            )
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(
+                    Exception("Erro ao adicionar livro: ${response.code()}")
+                )
             }
         } catch (e: Exception) {
             Result.failure(e)

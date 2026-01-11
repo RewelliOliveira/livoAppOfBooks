@@ -5,6 +5,11 @@ data class BookApiResponse(
     val volumeInfo: VolumeInfo
 )
 
+data class AddBookRequest(
+    val bookId: String,
+    val bookStatus: String
+)
+
 data class VolumeInfo(
     val title: String?,
     val authors: List<String>?,
