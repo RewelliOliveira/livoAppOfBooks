@@ -46,6 +46,10 @@ fun ViewBook(
     userTotalPages: Int = 0,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit,
+    onStatusClick: () -> Unit,
+    onShelfClick: () -> Unit,
+    onRemoveClick: () -> Unit = {},
+    onRatingClick: () -> Unit
 ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
@@ -163,15 +167,16 @@ fun ViewBook(
                 ) {
                     PrimaryButton(
                         modifier = Modifier.weight(2f),
-                        text = shelf.take(8),
-                        onClick = {},
+                        text = shelf.take(15),
+                        onClick = onShelfClick,
                         icon = Bookshelf
                     )
                     Spacer(Modifier.width(8.dp))
+
                     Status(
                         modifier = Modifier.weight(1f),
                         status = BookStatus.fromString(status),
-                        onClick = {}
+                        onClick = onStatusClick
                     )
                 }
 
@@ -184,7 +189,10 @@ fun ViewBook(
                         text = "Registrar Leitura",
                         onClick = onRegisterClick
                     )
-                    RatingButton(modifier = Modifier.fillMaxWidth(), onClick = {})
+                    RatingButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onRatingClick
+                    )
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -223,6 +231,7 @@ fun ViewBook(
                         }
                     }
                     Spacer(Modifier.height(32.dp))
+
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
@@ -232,7 +241,7 @@ fun ViewBook(
                         ),
                         modifier = Modifier
                             .padding(bottom = 60.dp)
-                            .clickable(onClick = {})
+                            .clickable(onClick = onRemoveClick)
                     )
                 }
             }
@@ -253,8 +262,7 @@ fun ViewBook(
             Icon(imageVector = Arrow_back_ios_new,
                 contentDescription = "Voltar",
                 tint = Color.Black.copy(alpha = 0.8f),
-                modifier = Modifier.size(24.dp)
-            )
+                modifier = Modifier.size(24.dp))
         }
 
         if (userCurrentPage != null && userCurrentPage > 0) {
