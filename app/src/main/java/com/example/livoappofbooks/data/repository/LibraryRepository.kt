@@ -76,10 +76,10 @@ class LibraryRepository(
         libraryService.getUserProfile()
     }
 
-    suspend fun updateBookStatus(bookId: String, newStatus: String): Result<Boolean> = withContext(Dispatchers.IO) {
+    suspend fun updateBookStatus(userBookId: String, newStatus: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val requestBody = StatusUpdateRequest(status = newStatus)
-            val response = libraryService.updateBookStatus(bookId, requestBody)
+            val response = libraryService.updateBookStatus(userBookId, requestBody)
 
             if (response.isSuccessful) {
                 Result.success(true)
