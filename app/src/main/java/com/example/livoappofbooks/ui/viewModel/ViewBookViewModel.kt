@@ -40,20 +40,24 @@ class ViewBookViewModel(
     private val _shelfAddedEvent = MutableStateFlow<String?>(null)
     val shelfAddedEvent: StateFlow<String?> = _shelfAddedEvent.asStateFlow()
 
+    // Busca as prateleiras do usuário para exibir no modal
     fun fetchUserShelves() {
         shelvesRepository ?: return
         viewModelScope.launch {
             try {
                 _shelves.value = shelvesRepository.getAllShelves()
             } catch (e: Exception) {
-                // Silently fail, shelves just won't be available
+                // Em caso de erro, apenas deixa a lista vazia
             }
         }
     }
 
+    // Adiciona o livro atual à prateleira selecionada
     fun addBookToShelf(shelfId: String) {
         val currentBook = _book.value ?: return
         val libReg = currentBook.libraryRegistration ?: return
+        
+        // registrationId é o ID do livro no seu banco de dados (tipo Long)
         val registrationId = libReg.id?.toLongOrNull() ?: return
         val status = libReg.status ?: "QUERO_LER"
         
@@ -62,10 +66,11 @@ class ViewBookViewModel(
             val result = shelvesRepository.addBookToShelf(
                 shelfId = shelfId,
                 registrationId = registrationId,
-                bookId = currentBook.id,
+                bookId = currentBook.id, // ID do Google (String)
                 status = status
             )
             if (result.isSuccess) {
+                // Dispara o evento de sucesso para mostrar o Snackbar
                 val shelfName = _shelves.value.find { it.id == shelfId }?.name ?: "prateleira"
                 _shelfAddedEvent.value = shelfName
             } else {

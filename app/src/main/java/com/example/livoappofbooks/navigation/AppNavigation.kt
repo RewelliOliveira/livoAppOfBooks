@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.remote.local.TokenManager
+import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.screens.*
@@ -47,6 +48,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
     val libraryRepository = remember {
         LibraryRepository(libraryService)
+    }
+
+    // Repositório de Prateleiras para ViewBookScreen
+    val shelvesRepository = remember {
+        ShelvesRepository(context)
     }
 
     Scaffold(
@@ -154,6 +160,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                     ViewBookScreen(
                         bookId = bookId,
                         repository = libraryRepository,
+                        shelvesRepository = shelvesRepository,
                         onBackClick = { navController.popBackStack() },
                         onRegisterClick = { navController.navigate(Screen.RegisterReading.route) }
                     )

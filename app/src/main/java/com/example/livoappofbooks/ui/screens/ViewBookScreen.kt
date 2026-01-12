@@ -8,10 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.data.model.BookStatus
+import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.ui.components.ViewBook
 import com.example.livoappofbooks.ui.components.modals.dialogs.ConfirmRemoveBookDialog
 import com.example.livoappofbooks.ui.components.modals.dialogs.RatingDialog
+import com.example.livoappofbooks.ui.components.modals.sheets.AddToShelfBottomSheet
 import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.viewModel.ViewBookViewModel
 import com.example.livoappofbooks.utils.parseHtmlToText
@@ -20,24 +22,39 @@ import com.example.livoappofbooks.utils.parseHtmlToText
 fun ViewBookScreen(
     bookId: String,
     repository: LibraryRepository,
+    shelvesRepository: ShelvesRepository? = null,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    val viewModel = remember { ViewBookViewModel(repository) }
+    val viewModel = remember { ViewBookViewModel(repository, shelvesRepository) }
     val book by viewModel.book.collectAsState()
     val userRating by viewModel.userRating.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
+    val shelves by viewModel.shelves.collectAsState()
+    val shelfAddedEvent by viewModel.shelfAddedEvent.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    // Estados para controlar a visibilidade dos modais (bottom sheets e dialogs)
     var showStatusSheet by remember { mutableStateOf(false) }
     var showRemoveDialog by remember { mutableStateOf(false) }
     var showRatingDialog by remember { mutableStateOf(false) }
+    var showShelfSheet by remember { mutableStateOf(false) }
 
+    // Carrega os dados do livro e as prateleiras ao abrir a tela
     LaunchedEffect(bookId) {
         viewModel.fetchBook(bookId)
         viewModel.fetchUserRating(bookId)
+        viewModel.fetchUserShelves()
+    }
+
+    // Mostra mensagem de sucesso quando o livro é adicionado à prateleira
+    LaunchedEffect(shelfAddedEvent) {
+        shelfAddedEvent?.let { shelfName ->
+            snackbarHostState.showSnackbar("Livro adicionado à prateleira \"$shelfName\"!")
+            viewModel.resetShelfAddedEvent()
+        }
     }
 
     LaunchedEffect(error) {
@@ -74,7 +91,7 @@ fun ViewBookScreen(
                     val secureImageUrl = currentBook.thumbnail?.replace("http:", "https:") ?: ""
                     val authorText = currentBook.authors.joinToString(", ").ifBlank { "Autor Desconhecido" }
                     val cleanDescription = parseHtmlToText(currentBook.description)
-                    val shelfText = libReg?.shelf ?: "Geral"
+                    val shelfText = libReg?.shelf ?: "Prateleiras"
                     val userCurrentPage = if (currentBook.personalLibrary) libReg?.readingProgress else null
                     val pageCountString = currentBook.pageCount?.toString() ?: "-"
                     val totalPagesInt = currentBook.pageCount ?: 0
@@ -96,7 +113,7 @@ fun ViewBookScreen(
                         onBackClick = onBackClick,
                         onRegisterClick = onRegisterClick,
                         onStatusClick = { showStatusSheet = true },
-                        onShelfClick = { },
+                        onShelfClick = { showShelfSheet = true },
                         onRemoveClick = { showRemoveDialog = true },
                         onRatingClick = { showRatingDialog = true }
                     )
@@ -113,6 +130,17 @@ fun ViewBookScreen(
                                 viewModel.updateBookStatus(currentBook.id, newStatusEnum.id)
                                 showStatusSheet = false
                             }
+                        )
+                    }
+
+                    if (showShelfSheet) {
+                        AddToShelfBottomSheet(
+                            shelves = shelves,
+                            onShelfSelected = { shelfId ->
+                                viewModel.addBookToShelf(shelfId)
+                                showShelfSheet = false
+                            },
+                            onDismiss = { showShelfSheet = false }
                         )
                     }
 
