@@ -6,13 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
+import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel() {
+class ViewBookViewModel(
+    private val repository: LibraryRepository,
+    private val shelvesRepository: ShelvesRepository? = null
+) : ViewModel() {
 
     private val _book = MutableStateFlow<Book?>(null)
     val book: StateFlow<Book?> = _book
@@ -28,6 +33,50 @@ class ViewBookViewModel(private val repository: LibraryRepository) : ViewModel()
 
     private val _bookAddedEvent = MutableStateFlow(false)
     val bookAddedEvent = _bookAddedEvent.asStateFlow()
+
+    private val _shelves = MutableStateFlow<List<ShelfResponse>>(emptyList())
+    val shelves: StateFlow<List<ShelfResponse>> = _shelves.asStateFlow()
+
+    private val _shelfAddedEvent = MutableStateFlow<String?>(null)
+    val shelfAddedEvent: StateFlow<String?> = _shelfAddedEvent.asStateFlow()
+
+    fun fetchUserShelves() {
+        shelvesRepository ?: return
+        viewModelScope.launch {
+            try {
+                _shelves.value = shelvesRepository.getAllShelves()
+            } catch (e: Exception) {
+                // Silently fail, shelves just won't be available
+            }
+        }
+    }
+
+    fun addBookToShelf(shelfId: String) {
+        val currentBook = _book.value ?: return
+        val libReg = currentBook.libraryRegistration ?: return
+        val registrationId = libReg.id?.toLongOrNull() ?: return
+        val status = libReg.status ?: "QUERO_LER"
+        
+        shelvesRepository ?: return
+        viewModelScope.launch {
+            val result = shelvesRepository.addBookToShelf(
+                shelfId = shelfId,
+                registrationId = registrationId,
+                bookId = currentBook.id,
+                status = status
+            )
+            if (result.isSuccess) {
+                val shelfName = _shelves.value.find { it.id == shelfId }?.name ?: "prateleira"
+                _shelfAddedEvent.value = shelfName
+            } else {
+                _error.value = "Erro ao adicionar à prateleira"
+            }
+        }
+    }
+
+    fun resetShelfAddedEvent() {
+        _shelfAddedEvent.value = null
+    }
 
     fun fetchBook(bookId: String) {
         viewModelScope.launch {
