@@ -2,6 +2,7 @@ package com.example.livoappofbooks.data.remote.shelves
 
 import android.content.Context
 import com.example.livoappofbooks.data.remote.RetrofitInstance
+import com.example.livoappofbooks.data.remote.shelves.dto.AddBookToShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfUpdateRequest
@@ -51,5 +52,28 @@ class ShelvesRepository(
 
     suspend fun removeBookFromShelf(shelfId: String, bookId: Long) {
         service.deleteBookFromShelf(shelfId, bookId)
+    }
+
+    suspend fun addBookToShelf(
+        shelfId: String,
+        registrationId: Long,
+        bookId: String,
+        status: String
+    ): Result<Unit> {
+        return try {
+            val request = AddBookToShelfRequest(
+                id = registrationId,
+                bookId = bookId,
+                status = status
+            )
+            val response = service.addBookToShelf(shelfId, request)
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Erro ao adicionar livro: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

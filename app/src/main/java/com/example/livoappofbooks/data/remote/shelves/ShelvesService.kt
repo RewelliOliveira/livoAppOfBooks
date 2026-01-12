@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.data.remote.shelves
 
+import com.example.livoappofbooks.data.remote.shelves.dto.AddBookToShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.BookShelf
 import com.example.livoappofbooks.data.remote.shelves.dto.SearchBookResponse
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfRequest
@@ -55,4 +56,10 @@ interface ShelvesService {
         @Path("shelfId") shelfId: String,
         @Path("bookId") bookId: Long
     )
+
+    @POST("/library/shelfs/{shelfId}/books")
+    suspend fun addBookToShelf(
+        @Path("shelfId") shelfId: String,
+        @Body body: AddBookToShelfRequest
+    ): retrofit2.Response<Unit>
 }
