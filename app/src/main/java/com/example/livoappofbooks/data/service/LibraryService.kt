@@ -8,9 +8,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.Response
 import retrofit2.http.*
-
+@JsonClass(generateAdapter = true)
 data class StatusUpdateRequest(
-    val status: String
+    @Json(name = "bookStatus") val status: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -37,10 +37,9 @@ interface LibraryService {
 
     @GET("/books/{bookId}/rating/me")
     suspend fun getUserRating(@Path("bookId") bookId: String): Response<UserRatingResponse>
-
-    @PUT("/library/{book_id}")
+    @PATCH("/library/{userBookId}")
     suspend fun updateBookStatus(
-        @Path("book_id") bookId: String,
+        @Path("userBookId") userBookId: String,
         @Body request: StatusUpdateRequest
     ): Response<Unit>
 
@@ -54,7 +53,6 @@ interface LibraryService {
         @Body body: AddBookRequest
     ): Response<Unit>
 
-    // NOVO ENDPOINT DE AVALIAÇÃO
     @POST("/books/{book_id}/rating")
     suspend fun registerBookRating(
         @Path("book_id") bookId: String,
