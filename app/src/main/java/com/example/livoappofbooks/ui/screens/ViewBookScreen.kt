@@ -82,7 +82,7 @@ fun ViewBookScreen(
             contentAlignment = Alignment.Center
         ) {
             when {
-                isLoading -> CircularProgressIndicator()
+                isLoading && book == null -> CircularProgressIndicator()
 
                 book != null -> {
                     val currentBook = book!!

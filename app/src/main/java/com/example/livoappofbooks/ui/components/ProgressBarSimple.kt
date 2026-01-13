@@ -16,12 +16,16 @@ import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarSimple(
-    progress: Float, modifier: Modifier = Modifier
+    progress: Float,
+    modifier: Modifier = Modifier
 ) {
-    val percentage = (progress * 100).toInt()
+
+    val progressInt = progress.toInt()
+    val progressNormalized = (progress / 100f).coerceIn(0f, 1f)
 
     Row(
-        modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Box(
@@ -29,25 +33,26 @@ fun ProgressBarSimple(
                 .weight(1f)
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(primary.copy(alpha = 0.2F))
+                .background(outline.copy(alpha = 0.2f))
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progress)
+                    .fillMaxWidth(progressNormalized)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(primary)
+                    .background(outline)
             )
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = "$percentage%", style = TextStyle(
-                color = primary, fontSize = 12.sp, fontWeight = FontWeight.Bold
+            text = "$progressInt%",
+            style = TextStyle(
+                color = outline,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
             )
         )
     }
 }
-
-

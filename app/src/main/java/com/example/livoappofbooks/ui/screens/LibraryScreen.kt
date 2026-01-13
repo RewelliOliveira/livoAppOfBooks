@@ -145,19 +145,6 @@ fun LibraryScreen(
                         }
                     }
 
-                    is LibraryUiState.Error -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = (uiState as LibraryUiState.Error).message,
-                                color = tertiary,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-
                     else -> {
                         if (filteredBooks.isEmpty()) {
                             Box(
@@ -165,7 +152,7 @@ fun LibraryScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Nenhum livro encontrado",
+                                    text = "Vá na aba de busca para adicionar livros à sua biblioteca!",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = tertiary.copy(alpha = 0.6f),

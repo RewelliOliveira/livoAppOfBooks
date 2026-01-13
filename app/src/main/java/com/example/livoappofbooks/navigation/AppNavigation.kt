@@ -169,7 +169,9 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                         repository = libraryRepository,
                         shelvesRepository = shelvesRepository,
                         onBackClick = { navController.popBackStack() },
-                        onRegisterClick = { navController.navigate(Screen.RegisterReading.route) }
+                        onRegisterClick = {
+                            navController.navigate(Screen.RegisterReading.createRoute(bookId))
+                        }
                     )
                 }
             }
@@ -193,9 +195,20 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 }
             }
 
-            composable(Screen.RegisterReading.route) {
+            composable(
+                route = Screen.RegisterReading.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+
+                val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
+
+                val viewModel: com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModel = viewModel(
+                    factory = com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModelFactory(bookId, libraryRepository)
+                )
+
                 RegisterReadingScreen(
-                    onNavigate = { navController.popBackStack() }
+                    viewModel = viewModel,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
         }
