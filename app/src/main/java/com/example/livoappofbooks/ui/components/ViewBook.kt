@@ -150,9 +150,9 @@ fun ViewBook(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    InfoItem(icon = CalendarDays, text = publishYear)
-                    InfoItem(icon = BuildingLibrary, text = publisher.take(12))
-                    InfoItem(icon = BookOpen, text = "$pageCount págs")
+                    InfoItem(icon = CalendarDays, text = publishYear, 22.dp)
+                    InfoItem(icon = BuildingLibrary, text = publisher.take(12), 22.dp)
+                    InfoItem(icon = BookOpen, text = "$pageCount págs", 22.dp)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -168,7 +168,8 @@ fun ViewBook(
                         modifier = Modifier.weight(2f),
                         text = shelf.take(15),
                         onClick = onShelfClick,
-                        icon = Bookshelf
+                        icon = Bookshelf,
+                        style = AppTypography.titleSmall
                     )
                     Spacer(Modifier.width(8.dp))
 
@@ -186,7 +187,8 @@ fun ViewBook(
                         modifier = Modifier.fillMaxWidth(),
                         icon = Pencil,
                         text = "Registrar Leitura",
-                        onClick = onRegisterClick
+                        onClick = onRegisterClick,
+                        style = AppTypography.titleSmall
                     )
                     RatingButton(
                         modifier = Modifier.fillMaxWidth(),
