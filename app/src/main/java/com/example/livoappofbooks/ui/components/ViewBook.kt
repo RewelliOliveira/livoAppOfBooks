@@ -60,6 +60,8 @@ fun ViewBook(
 
     val safeImageModel = imageUrl.ifBlank { null }
 
+    val currentStatus = BookStatus.fromString(status)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -182,18 +184,22 @@ fun ViewBook(
 
                 Spacer(Modifier.height(16.dp))
 
-                Column {
-                    PrimaryButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        icon = Pencil,
-                        text = "Registrar Leitura",
-                        onClick = onRegisterClick,
-                        style = AppTypography.titleSmall
-                    )
-                    RatingButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = onRatingClick
-                    )
+                if (currentStatus != BookStatus.QUERO_LER) {
+                    Column {
+                        PrimaryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Pencil,
+                            text = "Registrar Leitura",
+                            onClick = onRegisterClick,
+                            style = AppTypography.titleSmall
+                        )
+
+                        if(currentStatus == BookStatus.LIDO)
+                        RatingButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onRatingClick
+                        )
+                    }
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -266,7 +272,7 @@ fun ViewBook(
                 modifier = Modifier.size(24.dp))
         }
 
-        if (userCurrentPage != null && userCurrentPage > 0) {
+        if (userCurrentPage != null && userCurrentPage >= 0) {
             ProgressBarBook(
                 currentPage = userCurrentPage,
                 totalPages = if (userTotalPages > 0) userTotalPages else 1,
