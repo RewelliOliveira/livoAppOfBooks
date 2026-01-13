@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -54,6 +55,11 @@ fun ProfileScreen(
         }
     )
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = background
@@ -76,8 +82,7 @@ fun ProfileScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.livo),
-                            colorFilter = ColorFilter.tint(primary),
+                            painter = painterResource(logoRes),
                             contentDescription = "LIVO Logo",
                             modifier = Modifier.height(30.dp).width(100.dp)
                         )
@@ -113,9 +118,8 @@ fun ProfileScreen(
                                 )
                             } else {
                                 Image(
-                                    painter = painterResource(R.drawable.livo),
+                                    painter = painterResource(logoRes),
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(primary),
                                     modifier = Modifier.size(30.dp)
                                 )
                             }
