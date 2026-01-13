@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
@@ -29,7 +28,7 @@ fun ProgressBarBook(
         modifier = modifier
             .fillMaxWidth()
             .border(1.dp, primary.copy(alpha = 0.9F),RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(background.copy(alpha = 0.8F), RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .background(background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
 
     ) {
