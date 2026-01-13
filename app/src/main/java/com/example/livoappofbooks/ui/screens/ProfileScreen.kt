@@ -1,5 +1,8 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.livoappofbooks.R
@@ -31,6 +35,7 @@ import com.example.livoappofbooks.ui.components.InfoCard
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
+import com.example.livoappofbooks.utils.NotificationService
 
 @Composable
 fun ProfileScreen(
@@ -43,6 +48,8 @@ fun ProfileScreen(
     val profileImagePath by viewModel.profileImagePath.collectAsState()
     val context = LocalContext.current
 
+    val isNotificationsEnabled by viewModel.isNotificationsEnabled.collectAsState()
+
     LaunchedEffect(Unit) {
         viewModel.fetchUserProfile()
     }
@@ -54,6 +61,49 @@ fun ProfileScreen(
             }
         }
     )
+
+    fun sendTestNotification() {
+        val service = NotificationService(context)
+        service.showReadingReminder(
+            title = "Notificações Ativadas! ",
+            message = "Você vai receber lembretes de leitura, preguiçoso🧐"
+        )
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                viewModel.toggleNotifications(context, true)
+                sendTestNotification()
+            } else {
+                viewModel.toggleNotifications(context, false)
+            }
+        }
+    )
+
+    fun onNotificationSwitchChanged(isChecked: Boolean) {
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val permissionStatus = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+                if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                    viewModel.toggleNotifications(context, true)
+                    sendTestNotification()
+                } else {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            } else {
+                viewModel.toggleNotifications(context, true)
+                sendTestNotification()
+            }
+        } else {
+            viewModel.toggleNotifications(context, false)
+        }
+    }
+
 
     val isDarkTheme = isSystemInDarkTheme()
     val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
@@ -231,15 +281,17 @@ fun ProfileScreen(
                                             color = tertiary
                                         )
                                         Text(
-                                            "Receba lembretes todos os dias",
+                                            "Receba lembretes a cada 3h",
                                             fontSize = 13.sp,
                                             color = tertiary.copy(alpha = 0.7f)
                                         )
                                     }
                                 }
                                 CustomSwitch(
-                                    checked = false,
-                                    onCheckedChange = { }
+                                    checked = isNotificationsEnabled,
+                                    onCheckedChange = { isChecked ->
+                                        onNotificationSwitchChanged(isChecked)
+                                    }
                                 )
                             }
                         }
