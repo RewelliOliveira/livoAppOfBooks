@@ -14,6 +14,7 @@ import com.example.livoappofbooks.ui.theme.AppTypography
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.TextStyle
 import com.example.livoappofbooks.ui.theme.*
 @Composable
 fun PrimaryButton(
@@ -23,7 +24,8 @@ fun PrimaryButton(
     icon: ImageVector? = null,
     enabled: Boolean = true,
     height: Dp? = null,
-    width: Dp? = null
+    width: Dp? = null,
+    style: TextStyle = AppTypography.labelMedium
 ) {
     Button(
         onClick = onClick,
@@ -57,7 +59,7 @@ fun PrimaryButton(
                 text = text,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = AppTypography.labelMedium.copy(color = background)
+                style = style
             )
         }
     }
