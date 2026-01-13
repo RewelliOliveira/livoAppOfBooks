@@ -22,6 +22,8 @@ import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.screens.*
 import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
 import com.example.livoappofbooks.ui.viewModel.ProfileViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.SearchViewModel
+import com.example.livoappofbooks.ui.viewModel.SearchViewModelFactory
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModelFactory
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
@@ -82,7 +84,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(Screen.Search.route) {
+                val searchViewModel: SearchViewModel = viewModel(
+                    factory = SearchViewModelFactory(libraryRepository)
+                )
                 SearchScreen(
+                    viewModel = searchViewModel,
                     onBookClick = { bookId, isInLibrary ->
                         if (isInLibrary) {
                             navController.navigate(Screen.ViewBook.createRoute(bookId))
