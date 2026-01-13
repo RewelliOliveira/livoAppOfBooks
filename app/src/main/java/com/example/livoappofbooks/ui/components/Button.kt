@@ -2,20 +2,17 @@ package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import com.example.livoappofbooks.ui.theme.AppTypography
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.ui.theme.*
+
 @Composable
 fun PrimaryButton(
     text: String,
@@ -31,8 +28,13 @@ fun PrimaryButton(
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = outline,
-            disabledContainerColor = inversePrimary
+            containerColor = MaterialTheme.colorScheme.outline,
+
+            contentColor = MaterialTheme.colorScheme.background,
+
+            // Cores para estado desabilitado
+            disabledContainerColor = inversePrimary,
+            disabledContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = RoundedCornerShape(50),
         modifier = modifier
@@ -49,7 +51,6 @@ fun PrimaryButton(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = background,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(Modifier.width(8.dp))
@@ -59,13 +60,9 @@ fun PrimaryButton(
                 text = text,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                color = LocalContentColor.current,
                 style = style
             )
         }
     }
 }
-
-
-
-
-
