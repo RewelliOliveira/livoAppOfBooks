@@ -45,7 +45,8 @@ fun RatingButton(
 
         Text(
             text = "Avaliar livro",
-            style = AppTypography.titleSmall.copy(color = primary)
+            style = AppTypography.titleSmall.copy(color = primary),
+            color = outline
         )
     }
 }
