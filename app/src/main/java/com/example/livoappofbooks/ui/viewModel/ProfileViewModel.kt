@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.livoappofbooks.data.model.ProfileUiState
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.remote.local.TokenManager
+import com.example.livoappofbooks.utils.NotificationScheduler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,8 @@ import java.io.FileOutputStream
 
 class ProfileViewModel(
     private val repository: LibraryRepository,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState(isLoading = true))
@@ -28,10 +30,31 @@ class ProfileViewModel(
     private val _profileImagePath = MutableStateFlow<String?>(null)
     val profileImagePath: StateFlow<String?> = _profileImagePath.asStateFlow()
 
+    private val _isNotificationsEnabled = MutableStateFlow(false)
+    val isNotificationsEnabled: StateFlow<Boolean> = _isNotificationsEnabled.asStateFlow()
+
+    private val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
     init {
         _profileImagePath.value = tokenManager.getProfilePath()
+        _isNotificationsEnabled.value = prefs.getBoolean("notifications_enabled", false)
         fetchUserProfile()
     }
+    
+    fun toggleNotifications(context: Context, isEnabled: Boolean) {
+        viewModelScope.launch {
+
+            prefs.edit().putBoolean("notifications_enabled", isEnabled).apply()
+            _isNotificationsEnabled.value = isEnabled
+
+            if (isEnabled) {
+                NotificationScheduler.schedulePeriodicReminder(context)
+            } else {
+                NotificationScheduler.cancelReminder(context)
+            }
+        }
+    }
+
 
     fun fetchUserProfile() {
         viewModelScope.launch {
@@ -83,14 +106,16 @@ class ProfileViewModel(
     }
 }
 
+
 class ProfileViewModelFactory(
     private val repository: LibraryRepository,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val context: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ProfileViewModel(repository, tokenManager) as T
+            return ProfileViewModel(repository, tokenManager, context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

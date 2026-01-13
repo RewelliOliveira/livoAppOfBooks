@@ -24,7 +24,7 @@ fun RatingButton(
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = outline,
-            disabledContentColor = primary.copy(alpha = 0.5f)
+            disabledContentColor = outline.copy(alpha = 0.5f)
         ),
         border = BorderStroke(
             1.dp,
@@ -45,7 +45,8 @@ fun RatingButton(
 
         Text(
             text = "Avaliar livro",
-            style = AppTypography.titleSmall.copy(color = primary)
+            style = AppTypography.titleSmall.copy(color = primary),
+            color = outline
         )
     }
 }

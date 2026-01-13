@@ -24,16 +24,19 @@ import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.theme.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.livoappofbooks.domain.model.BookStatus
+import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.viewModel.SearchViewModel
 import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
@@ -50,8 +53,11 @@ fun SearchScreen(
     val query by viewModel.query.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
-    // Obter livros populares a partir do provedor de mocks
+    // Obter livros populares a partir de mocks
     val popularByCategory = remember { com.example.livoappofbooks.data.mock.PopularBooks.shuffled() }
+
+    var showAddSheet by remember { mutableStateOf(false) }
+    var selectedBookId by remember { mutableStateOf<String?>(null) }
 
     Surface(
         modifier = Modifier
@@ -161,6 +167,10 @@ fun SearchScreen(
                                     personalLibrary = book.personalLibrary,
                                     onClick = { id ->
                                         onBookClick(id, book.personalLibrary)
+                                    },
+                                    onAddClick = { id ->
+                                        selectedBookId = id
+                                        showAddSheet = true
                                     }
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -180,6 +190,27 @@ fun SearchScreen(
                     }
                 }
             }
+        }
+        if (showAddSheet && selectedBookId != null) {
+            val options = BookStatus.entries.map { it.displayName }
+
+            BookStatusBottomSheet(
+                options = options,
+                selectedOption = BookStatus.QUERO_LER.displayName, // Padrão
+                onDismiss = {
+                    showAddSheet = false
+                    selectedBookId = null
+                },
+                onSelectionChange = { selectedName ->
+                    val status = BookStatus.entries.find { it.displayName == selectedName }
+                        ?: BookStatus.QUERO_LER
+
+                    viewModel.addBookToLibrary(selectedBookId!!, status.id)
+
+                    showAddSheet = false
+                    selectedBookId = null
+                }
+            )
         }
     }
 }
