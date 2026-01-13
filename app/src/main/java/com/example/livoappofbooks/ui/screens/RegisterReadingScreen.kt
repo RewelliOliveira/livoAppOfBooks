@@ -132,7 +132,7 @@ fun RegisterReadingScreen(
                 val book = state.book
                 val totalPages = book?.pageCount ?: 1
                 val progressCurrent = book?.userReadProgress ?: 0
-                val progressPercent = if (totalPages > 0) progressCurrent.toFloat() / totalPages else 0f
+                val progressPercent = if (totalPages > 0) progressCurrent.toFloat() else 0f
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -205,7 +205,7 @@ fun RegisterReadingScreen(
                 SmallInput(
                     value = state.title,
                     onValueChange = { viewModel.onTitleChange(it) },
-                    label = "Título da resenha (opcional)",
+                    label = "Título (opcional)",
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions.Default
                 )
