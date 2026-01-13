@@ -2,6 +2,7 @@ package com.example.livoappofbooks.data.repository
 
 import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.data.model.ReadingLogRequest
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
@@ -145,4 +146,36 @@ class LibraryRepository(
     }
 
     suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = saveBookRating(bookId, rating)
+
+    suspend fun createReadingLog(
+        libraryBookId: Int,
+        title: String?,
+        text: String?,
+        pagesRead: Int
+    ): Result<Unit> {
+        return try {
+            val currentTime = java.time.LocalDateTime.now().toString()
+
+            val safetitle = if (title.isNullOrBlank()) "Leitura Registrada" else title
+            val safetext = if (text.isNullOrBlank()) "Sem comentário" else text
+
+            val request = ReadingLogRequest(
+                libraryBookId = libraryBookId,
+                title = safetitle,
+                text = safetext,
+                time = currentTime,
+                pagesRead = pagesRead
+            )
+
+            val response = libraryService.createReadingLog(request) // Use sua instância do service
+
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Erro ao registrar leitura: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
