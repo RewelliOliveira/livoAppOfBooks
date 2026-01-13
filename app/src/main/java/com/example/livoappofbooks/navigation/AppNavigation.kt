@@ -101,8 +101,9 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Profile.route) {
                 // Cria o ViewModel usando a Factory
+                val context = context
                 val profileViewModel: ProfileViewModel = viewModel(
-                    factory = ProfileViewModelFactory(libraryRepository, tokenManager)
+                    factory = ProfileViewModelFactory(libraryRepository, tokenManager, context)
                 )
 
                 ProfileScreen(
