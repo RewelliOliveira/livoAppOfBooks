@@ -64,11 +64,11 @@ fun BottomBar(navController: NavController) {
                 },
                 label = { Text(text = screen.label) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = primary,
+                    selectedIconColor = outline,
                     unselectedIconColor = tertiary,
-                    selectedTextColor = primary,
+                    selectedTextColor = outline,
                     unselectedTextColor = tertiary,
-                    indicatorColor = tertiary.copy(alpha = 0.1f)
+                    indicatorColor = onBackground.copy(alpha = 0.1f)
                 )
             )
         }
