@@ -62,6 +62,22 @@ fun LibraryScreen(
             }
         }
 
+        .sortedWith(
+            compareBy(
+                { book ->
+                    when (book.status) {
+                        BookStatus.LENDO -> 1
+                        BookStatus.LIDO -> 2
+                        BookStatus.QUERO_LER -> 3
+                        BookStatus.ABANDONADO -> 4
+                        else -> 5
+                    }
+                },
+            )
+        )
+
+
+
     val isDarkTheme = isSystemInDarkTheme()
     val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
         .getOrElse { isDarkTheme }
