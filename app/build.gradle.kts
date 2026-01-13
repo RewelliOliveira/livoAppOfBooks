@@ -83,4 +83,7 @@ dependencies {
     val nav_version = "2.9.6"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    //Notificações
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 }
