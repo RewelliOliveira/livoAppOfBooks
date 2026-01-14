@@ -191,14 +191,17 @@ fun ViewBook(
                             icon = Pencil,
                             text = "Registrar Leitura",
                             onClick = onRegisterClick,
-                            style = AppTypography.titleSmall
+                            style = AppTypography.titleSmall,
+                            height = 48.dp
                         )
 
-                        if(currentStatus == BookStatus.LIDO)
-                        RatingButton(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = onRatingClick
-                        )
+
+                        if(currentStatus == BookStatus.LIDO) {
+                            RatingButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = onRatingClick
+                            )
+                        }
 
                         ReadingHistoryButton(
                             modifier = Modifier.fillMaxWidth(),

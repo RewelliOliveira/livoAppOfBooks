@@ -35,7 +35,7 @@ fun ReadingHistoryButton(
             outline
         ),
         modifier = modifier
-            .defaultMinSize(minHeight = 40.dp)
+            .defaultMinSize(minHeight = 48.dp)
     ) {
 
         Icon(
