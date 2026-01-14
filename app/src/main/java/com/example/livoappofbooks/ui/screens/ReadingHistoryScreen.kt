@@ -152,9 +152,10 @@ fun ReadingHistoryScreen(
                 items(5) { index ->
                     ReadingHistoryItem(
                         title = "Leitura ${index + 1}",
-                        pages = "${(index + 1) * 20} páginas",
                         date = "10/0${index + 1}/2026",
-                        review = "Comentário de exemplo sobre essa leitura."
+                        pages = "${(index + 1) * 20}/320",
+                        review = "Comentário de exemplo sobre essa leitura.",
+                        time = "14:2${index}"
                     )
                 }
             }
