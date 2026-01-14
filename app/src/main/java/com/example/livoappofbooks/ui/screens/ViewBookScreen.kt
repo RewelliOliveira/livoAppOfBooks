@@ -24,8 +24,10 @@ fun ViewBookScreen(
     repository: LibraryRepository,
     shelvesRepository: ShelvesRepository? = null,
     onBackClick: () -> Unit,
-    onRegisterClick: () -> Unit
-) {
+    onRegisterClick: () -> Unit,
+    onReadingHistoryClick: () -> Unit
+)
+ {
     val viewModel = remember { ViewBookViewModel(repository, shelvesRepository) }
     val book by viewModel.book.collectAsState()
     val userRating by viewModel.userRating.collectAsState()
@@ -115,7 +117,9 @@ fun ViewBookScreen(
                         onStatusClick = { showStatusSheet = true },
                         onShelfClick = { showShelfSheet = true },
                         onRemoveClick = { showRemoveDialog = true },
-                        onRatingClick = { showRatingDialog = true }
+                        onRatingClick = { showRatingDialog = true },
+                        onReadingHistoryClick = onReadingHistoryClick
+
                     )
 
                     if (showStatusSheet) {

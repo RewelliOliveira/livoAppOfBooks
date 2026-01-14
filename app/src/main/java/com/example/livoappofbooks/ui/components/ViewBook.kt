@@ -49,8 +49,9 @@ fun ViewBook(
     onStatusClick: () -> Unit,
     onShelfClick: () -> Unit,
     onRemoveClick: () -> Unit = {},
-    onRatingClick: () -> Unit
-) {
+    onRatingClick: () -> Unit,
+    onReadingHistoryClick: () -> Unit
+    ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
@@ -207,7 +208,7 @@ fun ViewBook(
 
                         ReadingHistoryButton(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = onRatingClick
+                            onClick = onReadingHistoryClick
                         )
                     }
                 }

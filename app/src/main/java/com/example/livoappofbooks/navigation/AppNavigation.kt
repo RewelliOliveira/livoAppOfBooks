@@ -171,6 +171,9 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                         onBackClick = { navController.popBackStack() },
                         onRegisterClick = {
                             navController.navigate(Screen.RegisterReading.createRoute(bookId))
+                        },
+                        onReadingHistoryClick = {
+                            navController.navigate(Screen.ReadingHistory.createRoute(bookId))
                         }
                     )
                 }
@@ -211,6 +214,19 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
+
+            composable(
+                route = Screen.ReadingHistory.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
+
+                ReadingHistoryScreen(
+                    bookId = bookId,
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+
         }
     }
 }
