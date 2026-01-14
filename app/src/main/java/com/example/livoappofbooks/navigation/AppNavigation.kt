@@ -147,7 +147,8 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.AddShelf.route) {
                 AddShelfScreen(
-                    viewModel = shelvesViewModel,
+                    context = context,
+                    shelvesViewModel = shelvesViewModel,
                     onBackClick = { navController.popBackStack() }
                 )
             }
