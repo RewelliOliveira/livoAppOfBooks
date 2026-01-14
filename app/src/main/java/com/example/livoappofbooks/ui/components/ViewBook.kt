@@ -195,12 +195,14 @@ fun ViewBook(
                             height = 48.dp
                         )
 
+                        Spacer(modifier = Modifier.height(12.dp))
 
                         if(currentStatus == BookStatus.LIDO) {
                             RatingButton(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = onRatingClick
                             )
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
 
                         ReadingHistoryButton(
