@@ -199,6 +199,11 @@ fun ViewBook(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = onRatingClick
                         )
+
+                        ReadingHistoryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onRatingClick
+                        )
                     }
                 }
 
