@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.History
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.icons.*
 
@@ -37,8 +39,8 @@ fun ReadingHistoryButton(
     ) {
 
         Icon(
-            imageVector = Star,
-            contentDescription = "Estrela",
+            imageVector = Icons.Outlined.History,
+            contentDescription = "Histórico de leituras",
             tint = outline,
             modifier = Modifier.size(18.dp)
         )
@@ -46,7 +48,7 @@ fun ReadingHistoryButton(
         Spacer(Modifier.width(8.dp))
 
         Text(
-            text = "Avaliar livro",
+            text = "Historico de Leituras",
             style = AppTypography.titleSmall.copy(color = primary),
             color = outline
         )
