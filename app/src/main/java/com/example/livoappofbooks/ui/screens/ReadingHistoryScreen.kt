@@ -149,16 +149,58 @@ fun ReadingHistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(5) { index ->
+
+                item {
                     ReadingHistoryItem(
-                        title = "Leitura ${index + 1}",
-                        date = "10/0${index + 1}/2026",
-                        pages = "${(index + 1) * 20}/320",
+                        title = "Leitura 1",
+                        date = "10/01/2026",
+                        pages = "78/320",
                         review = "Comentário de exemplo sobre essa leitura.",
-                        time = "14:2${index}"
+                        time = "14:25"
+                    )
+                }
+
+                item {
+                    ReadingHistoryItem(
+                        title = "Leitura 2",
+                        date = "11/01/2026",
+                        pages = "120/320",
+                        review = null,
+                        time = "16:10"
+                    )
+                }
+
+                item {
+                    ReadingHistoryItem(
+                        title = null,
+                        date = "12/01/2026",
+                        pages = "200/320",
+                        review = "Leitura feita durante a viagem.",
+                        time = "09:42"
+                    )
+                }
+
+                item {
+                    ReadingHistoryItem(
+                        title = null,
+                        date = "13/01/2026",
+                        pages = "250/320",
+                        review = null,
+                        time = "21:05"
+                    )
+                }
+
+                item {
+                    ReadingHistoryItem(
+                        title = "Leitura com um título extremamente longo para testar quebra de linha no layout do componente",
+                        date = "14/01/2026",
+                        pages = "320/320",
+                        review = "Finalização do livro.",
+                        time = "23:59"
                     )
                 }
             }
+
         }
     }
 }

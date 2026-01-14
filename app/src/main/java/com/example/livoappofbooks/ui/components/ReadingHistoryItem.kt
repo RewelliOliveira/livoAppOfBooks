@@ -20,10 +20,10 @@ import com.example.livoappofbooks.ui.theme.tertiary
 
 @Composable
 fun ReadingHistoryItem(
-    title: String,
+    title: String?,
     date: String,
     pages: String,
-    review: String,
+    review: String?,
     time: String
 ) {
     Surface(
@@ -38,22 +38,35 @@ fun ReadingHistoryItem(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.SemiBold,
-                    color = onBackground,
-                    modifier = Modifier.weight(1f)
-                )
+            if (!title.isNullOrBlank()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.SemiBold,
+                        color = onBackground,
+                        modifier = Modifier.weight(1f)
+                    )
 
-                Text(
-                    text = date,
-                    fontSize = 12.sp,
-                    color = tertiary
-                )
+                    Text(
+                        text = date,
+                        fontSize = 12.sp,
+                        color = tertiary
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = date,
+                        fontSize = 12.sp,
+                        color = tertiary
+                    )
+                }
             }
 
             HorizontalDivider(
@@ -78,11 +91,13 @@ fun ReadingHistoryItem(
                 )
             }
 
-            Text(
-                text = review,
-                fontSize = 14.sp,
-                color = onBackground
-            )
+            if (!review.isNullOrBlank()) {
+                Text(
+                    text = review,
+                    fontSize = 14.sp,
+                    color = onBackground
+                )
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
