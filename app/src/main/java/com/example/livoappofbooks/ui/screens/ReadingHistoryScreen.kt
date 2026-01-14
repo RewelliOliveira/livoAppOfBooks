@@ -85,7 +85,7 @@ fun ReadingHistoryScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
 
                     Text(
-                        text = "Título do Livro (mock)",
+                        text = "Título mockado",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = onBackground,
@@ -97,7 +97,7 @@ fun ReadingHistoryScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Autor desconhecido",
+                            text = "Autor mockado",
                             fontSize = 14.sp,
                             color = onBackground,
                             modifier = Modifier.weight(1f),
@@ -142,14 +142,7 @@ fun ReadingHistoryScreen(
                 ProgressBarSimple(progress = progressPercent)
             }
 
-            // ===== DAQUI PRA BAIXO: REGISTROS =====
-
-            Text(
-                text = "Registros",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = onBackground
-            )
+            HorizontalDivider(color = tertiary)
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
