@@ -53,13 +53,25 @@ fun ReadingHistoryScreen(
                 )
             )
         },
+        bottomBar = {
+            PrimaryButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                icon = Pencil,
+                text = "Registrar Leitura",
+                onClick = onRegisterClick,
+                style = AppTypography.titleSmall,
+                height = 48.dp
+            )
+        },
         containerColor = background
     ) { innerPadding ->
 
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxSize()
                 .background(background),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -202,18 +214,5 @@ fun ReadingHistoryScreen(
                 }
             }
         }
-        /*
-        não consegui colocar o botão naquele espaço que sobra na borda da tela,
-        mas a navegação dele já está ok
-        */
-
-        PrimaryButton(
-            modifier = Modifier.fillMaxWidth(),
-            icon = Pencil,
-            text = "Registrar Leitura",
-            onClick = onRegisterClick,
-            style = AppTypography.titleSmall,
-            height = 48.dp
-        )
     }
 }
