@@ -223,7 +223,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
                 ReadingHistoryScreen(
                     bookId = bookId,
-                    repository = libraryRepository, // <- adiciona isso
+                    repository = libraryRepository,
                     onBackClick = { navController.popBackStack() },
                     onRegisterClick = { navController.navigate(Screen.RegisterReading.createRoute(bookId)) }
                 )

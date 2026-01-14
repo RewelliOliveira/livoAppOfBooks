@@ -11,9 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// Estado da UI do header
+// Estado da UI do header, agora com userRating
 data class ReadingHistoryHeaderUiState(
     val book: Book? = null,
+    val userRating: Int = 0,       // adicionado
     val isLoading: Boolean = true,
     val error: String? = null
 )
@@ -27,17 +28,46 @@ class ReadingHistoryHeaderViewModel(
     val uiState: StateFlow<ReadingHistoryHeaderUiState> = _uiState.asStateFlow()
 
     init {
-        fetchBook()
+        fetchBookDetails()
     }
 
-    private fun fetchBook() {
+    private fun fetchBookDetails() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
+
+            // Busca rating do usuário em paralelo
+            launch { fetchUserRating() }
 
             try {
                 val result = repository.getBookById(bookId)
                 if (result.isSuccess) {
-                    val bookDetails = result.getOrThrow()
+                    var bookDetails = result.getOrThrow()
+
+                    // Atualiza informações da biblioteca do usuário
+                    try {
+                        val userBooksResult = repository.getUserBooks()
+                        if (userBooksResult.isSuccess) {
+                            val userBooks = userBooksResult.getOrThrow()
+                            val bookInLibrary = userBooks.find { it.id == bookId }
+
+                            if (bookInLibrary != null) {
+                                val regFromList = bookInLibrary.libraryRegistration
+                                val currentReg = bookDetails.libraryRegistration
+                                val finalReg = currentReg?.copy(
+                                    status = regFromList?.status,
+                                    shelf = regFromList?.shelf,
+                                    readingProgress = regFromList?.readingProgress,
+                                    id = regFromList?.id
+                                ) ?: regFromList
+
+                                bookDetails = bookDetails.copy(
+                                    libraryRegistration = finalReg,
+                                    personalLibrary = true
+                                )
+                            }
+                        }
+                    } catch (e: Exception) { e.printStackTrace() }
+
                     _uiState.update { it.copy(book = bookDetails, isLoading = false) }
                 } else {
                     _uiState.update {
@@ -51,6 +81,13 @@ class ReadingHistoryHeaderViewModel(
                 _uiState.update { it.copy(isLoading = false, error = e.message ?: "Erro desconhecido") }
             }
         }
+    }
+
+    private suspend fun fetchUserRating() {
+        try {
+            val rating = repository.getUserRating(bookId)
+            _uiState.update { it.copy(userRating = rating) }
+        } catch (_: Exception) { }
     }
 }
 
