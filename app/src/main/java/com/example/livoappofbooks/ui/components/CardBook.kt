@@ -32,8 +32,8 @@ fun CardBook(
     pageCount: Int,
     imageUrl: String,
     personalLibrary: Boolean,
-    onClick: (String) -> Unit,
-    onAddClick: (String) -> Unit
+    onClick: (String) -> Unit = {},
+    onAddClick: (String) -> Unit = {}
 ) {
     Box(
         Modifier

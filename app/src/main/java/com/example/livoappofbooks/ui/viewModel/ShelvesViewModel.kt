@@ -180,7 +180,7 @@ class ShelvesViewModel(
         }
     }
 
-    fun removeBookFromShelf(shelfId: String, bookId: Long) {
+    fun removeBookFromShelf(shelfId: String, bookId: String) {
         viewModelScope.launch {
             _loading.value = true
             _error.value = null

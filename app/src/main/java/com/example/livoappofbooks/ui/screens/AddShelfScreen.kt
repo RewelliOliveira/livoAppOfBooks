@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.data.model.Book
-import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.PrimaryButton
@@ -28,18 +27,18 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 @Composable
 fun AddShelfScreen(
     context: Context,
-    shelvesViewModel: ShelvesViewModel,
+    viewModel: ShelvesViewModel,
     onBackClick: () -> Unit
 ) {
     // Estados locais vinculados ao ViewModel para sobreviver à rotação
-    var name by remember { mutableStateOf(shelvesViewModel.formName) }
-    var description by remember { mutableStateOf(shelvesViewModel.formDescription) }
+    var name by remember { mutableStateOf(viewModel.formName) }
+    var description by remember { mutableStateOf(viewModel.formDescription) }
 
     // Estado para o modal de confirmação
     var showSaveDialog by remember { mutableStateOf(false) }
 
-    val loading by shelvesViewModel.loading.observeAsState(false)
-    val success by shelvesViewModel.operationSuccess.observeAsState(false)
+    val loading by viewModel.loading.observeAsState(false)
+    val success by viewModel.operationSuccess.observeAsState(false)
 
     // ViewModel da biblioteca para listar os livros do usuário
     val libraryViewModel = remember { LibraryViewModel(context) }
@@ -48,17 +47,17 @@ fun AddShelfScreen(
 
     // Sincroniza com ViewModel quando os valores mudam
     LaunchedEffect(name) {
-        shelvesViewModel.formName = name
+        viewModel.formName = name
     }
 
     LaunchedEffect(description) {
-        shelvesViewModel.formDescription = description
+        viewModel.formDescription = description
     }
 
     // Observa o sucesso para navegar de volta
     LaunchedEffect(success) {
         if (success) {
-            shelvesViewModel.resetOperationSuccess()
+            viewModel.resetOperationSuccess()
             onBackClick()
         }
     }
@@ -223,10 +222,10 @@ fun AddShelfScreen(
                                 ShelfSelectableBookItem(
                                     book = book,
                                     isSelected = book.libraryRegistration?.id?.toLongOrNull()
-                                        ?.let { shelvesViewModel.selectedBooks.containsKey(it) }
+                                        ?.let { viewModel.selectedBooks.containsKey(it) }
                                         ?: false,
                                     onToggle = { registrationId ->
-                                        shelvesViewModel.toggleBookSelection(
+                                        viewModel.toggleBookSelection(
                                             registrationId = registrationId,
                                             bookId = book.id,
                                             status = book.status
@@ -277,8 +276,8 @@ private fun ShelfSelectableBookItem(
         publishYear = book.publishedDate ?: "",
         pageCount = book.pageCount ?: 0,
         imageUrl = book.thumbnail.orEmpty(),
-        personalLibrary = isSelected
-    ) { _ ->
-        onToggle(registrationId)
-    }
+        personalLibrary = isSelected,
+        onClick = { onToggle(registrationId) },
+        onAddClick = { onToggle(registrationId) }
+    )
 }

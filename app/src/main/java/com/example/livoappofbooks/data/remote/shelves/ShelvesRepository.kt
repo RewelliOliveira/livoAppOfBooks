@@ -53,7 +53,7 @@ class ShelvesRepository(
         return service.updateShelf(id, body)
     }
 
-    suspend fun removeBookFromShelf(shelfId: String, bookId: Long) {
+    suspend fun removeBookFromShelf(shelfId: String, bookId: String) {
         service.deleteBookFromShelf(shelfId, bookId)
     }
 
