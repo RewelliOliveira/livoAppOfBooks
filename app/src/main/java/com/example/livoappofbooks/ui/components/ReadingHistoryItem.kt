@@ -86,6 +86,7 @@ fun ReadingHistoryItem(
                 )
                 Text(
                     text = pages,
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 13.sp,
                     color = onBackground
                 )
