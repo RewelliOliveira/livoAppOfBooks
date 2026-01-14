@@ -76,6 +76,15 @@ sealed class Screen(
         "Criar Prateleira",
         null
     )
+
+    object ReadingHistory : Screen(
+        "reading_history/{bookId}",
+        "Histórico de Leitura",
+        null
+    ) {
+        fun createRoute(bookId: String) = "reading_history/$bookId"
+    }
+
 }
 
 sealed class ScreenIcon {

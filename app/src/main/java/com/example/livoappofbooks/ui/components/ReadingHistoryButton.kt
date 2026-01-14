@@ -1,3 +1,5 @@
+package com.example.livoappofbooks.ui.components
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -11,11 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.History
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.icons.*
 
 @Composable
-fun RatingButton(
+fun ReadingHistoryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,8 +39,8 @@ fun RatingButton(
     ) {
 
         Icon(
-            imageVector = Star,
-            contentDescription = "Estrela",
+            imageVector = Icons.Outlined.History,
+            contentDescription = "Histórico de leituras",
             tint = outline,
             modifier = Modifier.size(18.dp)
         )
@@ -44,7 +48,7 @@ fun RatingButton(
         Spacer(Modifier.width(8.dp))
 
         Text(
-            text = "Avaliar livro",
+            text = "Historico de Leituras",
             style = AppTypography.titleSmall.copy(color = primary),
             color = outline
         )

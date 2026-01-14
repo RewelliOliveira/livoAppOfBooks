@@ -49,8 +49,9 @@ fun ViewBook(
     onStatusClick: () -> Unit,
     onShelfClick: () -> Unit,
     onRemoveClick: () -> Unit = {},
-    onRatingClick: () -> Unit
-) {
+    onRatingClick: () -> Unit,
+    onReadingHistoryClick: () -> Unit
+    ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
@@ -191,13 +192,23 @@ fun ViewBook(
                             icon = Pencil,
                             text = "Registrar Leitura",
                             onClick = onRegisterClick,
-                            style = AppTypography.titleSmall
+                            style = AppTypography.titleSmall,
+                            height = 48.dp
                         )
 
-                        if(currentStatus == BookStatus.LIDO)
-                        RatingButton(
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        if(currentStatus == BookStatus.LIDO) {
+                            RatingButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = onRatingClick
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        ReadingHistoryButton(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = onRatingClick
+                            onClick = onReadingHistoryClick
                         )
                     }
                 }
