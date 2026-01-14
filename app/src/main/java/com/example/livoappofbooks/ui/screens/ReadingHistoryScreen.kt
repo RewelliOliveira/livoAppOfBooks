@@ -14,18 +14,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.components.ProgressBarSimple
 import com.example.livoappofbooks.ui.components.ReadingHistoryItem
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.Pencil
 import com.example.livoappofbooks.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadingHistoryScreen(
     bookId: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -61,8 +64,6 @@ fun ReadingHistoryScreen(
                 .background(background),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
-            // ===== HEADER COPIADO DO RegisterReadingScreen =====
 
             // mocks
             val totalPages = 320
@@ -200,7 +201,19 @@ fun ReadingHistoryScreen(
                     )
                 }
             }
-
         }
+        /*
+        não consegui colocar o botão naquele espaço que sobra na borda da tela,
+        mas a navegação dele já está ok
+        */
+
+        PrimaryButton(
+            modifier = Modifier.fillMaxWidth(),
+            icon = Pencil,
+            text = "Registrar Leitura",
+            onClick = onRegisterClick,
+            style = AppTypography.titleSmall,
+            height = 48.dp
+        )
     }
 }

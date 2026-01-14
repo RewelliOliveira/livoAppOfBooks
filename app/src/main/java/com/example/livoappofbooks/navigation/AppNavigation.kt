@@ -223,7 +223,10 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
                 ReadingHistoryScreen(
                     bookId = bookId,
-                    onBackClick = { navController.popBackStack() }
+                    onBackClick = { navController.popBackStack() },
+                    onRegisterClick = {
+                        navController.navigate(Screen.RegisterReading.createRoute(bookId))
+                    }
                 )
             }
 
