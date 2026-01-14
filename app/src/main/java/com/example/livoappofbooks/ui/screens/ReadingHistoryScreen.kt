@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.components.ProgressBarSimple
+import com.example.livoappofbooks.ui.components.ReadingHistoryItem
 import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
@@ -157,39 +158,6 @@ fun ReadingHistoryScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ReadingHistoryItem(
-    title: String,
-    pages: String,
-    date: String,
-    review: String
-) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = BackgroundLight,
-        tonalElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(text = title, fontWeight = FontWeight.SemiBold)
-            Text(
-                text = "$pages • $date",
-                fontSize = 12.sp,
-                color = tertiary
-            )
-            Text(
-                text = review,
-                fontSize = 14.sp,
-                color = onBackground
-            )
         }
     }
 }
