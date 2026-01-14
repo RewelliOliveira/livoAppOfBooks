@@ -9,11 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.ui.components.ProgressBarSimple
+import com.example.livoappofbooks.ui.components.StarRating
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.theme.*
@@ -29,7 +31,7 @@ fun ReadingHistoryScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Histórico de Leitura",
+                        "Histórico de Leitura",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -54,16 +56,24 @@ fun ReadingHistoryScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(background),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
-            // ---------- HEADER DO LIVRO (ESTÁTICO) ----------
+            // ===== HEADER COPIADO DO RegisterReadingScreen =====
+
+            // mocks
+            val totalPages = 320
+            val progressCurrent = 320
+            val progressPercent = 1f
+
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 AsyncImage(
-                    model = null, // imagem fake por enquanto
+                    model = null, // mock
                     contentDescription = "Capa do livro",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(85.dp, 120.dp)
                         .clip(RoundedCornerShape(8.dp))
@@ -72,7 +82,8 @@ fun ReadingHistoryScreen(
 
                 Spacer(Modifier.width(16.dp))
 
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+
                     Text(
                         text = "Título do Livro (mock)",
                         fontWeight = FontWeight.Bold,
@@ -81,29 +92,58 @@ fun ReadingHistoryScreen(
                         maxLines = 2
                     )
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(BookOpen, null, tint = onBackground)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
-                            text = " 320 págs.",
-                            fontSize = 12.sp,
-                            color = onBackground
+                            text = "Autor desconhecido",
+                            fontSize = 14.sp,
+                            color = onBackground,
+                            modifier = Modifier.weight(1f),
+                            maxLines = 1
                         )
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(BookOpen, null, tint = onBackground)
+                            Text(
+                                " $totalPages pags.",
+                                fontSize = 12.sp,
+                                color = onBackground
+                            )
+                        }
                     }
 
-                    Text(
-                        text = "LIDO",
-                        fontSize = 12.sp,
-                        color = BackgroundLight,
-                        modifier = Modifier
-                            .background(PrincipalColor, RoundedCornerShape(30.dp))
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = "LIDO",
+                            fontSize = 12.sp,
+                            color = BackgroundLight,
+                            modifier = Modifier
+                                .background(PrincipalColor, RoundedCornerShape(30.dp))
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                        )
+
+                        StarRating(
+                            rating = 4.5,
+                            maxStars = 5,
+                            starSize = 18
+                        )
+                    }
                 }
             }
 
-            ProgressBarSimple(progress = 1f)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ProgressBarSimple(progress = progressPercent)
+            }
 
-            // ---------- LISTA DE REGISTROS (ESTÁTICA) ----------
+            // ===== DAQUI PRA BAIXO: REGISTROS =====
+
             Text(
                 text = "Registros",
                 fontWeight = FontWeight.Bold,
@@ -147,8 +187,16 @@ private fun ReadingHistoryItem(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = title, fontWeight = FontWeight.SemiBold)
-            Text(text = "$pages • $date", fontSize = 12.sp, color = tertiary)
-            Text(text = review, fontSize = 14.sp, color = onBackground)
+            Text(
+                text = "$pages • $date",
+                fontSize = 12.sp,
+                color = tertiary
+            )
+            Text(
+                text = review,
+                fontSize = 14.sp,
+                color = onBackground
+            )
         }
     }
 }
