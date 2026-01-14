@@ -5,13 +5,13 @@ import androidx.compose.ui.graphics.Color
 
 // 🌈 Cores principais do design Livo
 @Stable val PrincipalColor = Color(0xFF003D3A)   // Verde principal (cor de destaque)
-@Stable val DarkColor = Color(0xFF001327)        // Fundo escuro / modo noturno
+@Stable val DarkColor = Color(0xFF0B2A2A)        // Fundo escuro / modo noturno
 @Stable val SubtitlesColor = Color(0xFF121212)   // Cinza muito escuro para textos secundários
 @Stable val Yellow = Color(0xFFF4B61A)           // Amarelo vibrante para destaques
 @Stable val PositiveActions = Color(0xFF2BA80C)  // Verde claro para ações positivas
 @Stable val AlertColor = Color(0xFFB30808)       // Vermelho para alertas / erros
 @Stable val BackgroundLight = Color(0xFFFDFBED)  // Fundo claro (amarelado suave)
-@Stable val BackgroundDark = Color(0xFF121517)
+@Stable val BackgroundDark = Color(0xFF121212)
 
 // 🌑 Tons neutros e auxiliares
 @Stable val Black = Color(0xFF000000)

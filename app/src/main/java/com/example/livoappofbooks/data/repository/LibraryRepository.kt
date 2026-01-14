@@ -2,6 +2,7 @@ package com.example.livoappofbooks.data.repository
 
 import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.data.model.ReadingLogRequest
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
@@ -76,10 +77,10 @@ class LibraryRepository(
         libraryService.getUserProfile()
     }
 
-    suspend fun updateBookStatus(bookId: String, newStatus: String): Result<Boolean> = withContext(Dispatchers.IO) {
+    suspend fun updateBookStatus(userBookId: String, newStatus: String): Result<Boolean> = withContext(Dispatchers.IO) {
         try {
             val requestBody = StatusUpdateRequest(status = newStatus)
-            val response = libraryService.updateBookStatus(bookId, requestBody)
+            val response = libraryService.updateBookStatus(userBookId, requestBody)
 
             if (response.isSuccessful) {
                 Result.success(true)
@@ -120,16 +121,58 @@ class LibraryRepository(
         }
     }
 
-    suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            val request = RatingRequest(rating = rating)
+    suspend fun saveBookRating(bookId: String, rating: Int): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val checkResponse = libraryService.getUserRating(bookId)
+                val hasExistingRating = checkResponse.isSuccessful && checkResponse.body() != null
+                val request = RatingRequest(rating)
 
-            val response = libraryService.registerBookRating(bookId, request)
+                if (hasExistingRating) {
+                    // ATUALIZAÇÃO (PUT)
+                    val response = libraryService.updateBookRating(bookId, request)
+                    if (response.isSuccessful) Result.success(Unit)
+                    else Result.failure(Exception("Erro ao atualizar (PUT): ${response.code()}"))
+                } else {
+                    // CRIAÇÃO (POST)
+                    val response = libraryService.registerBookRating(bookId, request)
+                    if (response.isSuccessful) Result.success(Unit)
+                    else Result.failure(Exception("Erro ao criar (POST): ${response.code()}"))
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = saveBookRating(bookId, rating)
+
+    suspend fun createReadingLog(
+        libraryBookId: Int,
+        title: String?,
+        text: String?,
+        pagesRead: Int
+    ): Result<Unit> {
+        return try {
+            val currentTime = java.time.LocalDateTime.now().toString()
+
+            val safetitle = if (title.isNullOrBlank()) "Leitura Registrada" else title
+            val safetext = if (text.isNullOrBlank()) "Sem comentário" else text
+
+            val request = ReadingLogRequest(
+                libraryBookId = libraryBookId,
+                title = safetitle,
+                text = safetext,
+                time = currentTime,
+                pagesRead = pagesRead
+            )
+
+            val response = libraryService.createReadingLog(request) // Use sua instância do service
 
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                Result.failure(Exception(response.code().toString()))
+                Result.failure(Exception("Erro ao registrar leitura: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

@@ -51,11 +51,9 @@ sealed class Screen(
         fun createRoute(bookId: String) = "view_book_init/$bookId"
     }
 
-    object RegisterReading : Screen(
-        "register_reading",
-        "Registrar Leitura",
-        null
-    )
+    object RegisterReading : Screen("register_reading/{bookId}", "Registrar Leitura", null) {
+        fun createRoute(bookId: String) = "register_reading/$bookId"
+    }
 
     object ShelfDetails : Screen(
         "shelf_details/{shelfId}",
@@ -78,6 +76,15 @@ sealed class Screen(
         "Criar Prateleira",
         null
     )
+
+    object ReadingHistory : Screen(
+        "reading_history/{bookId}",
+        "Histórico de Leitura",
+        null
+    ) {
+        fun createRoute(bookId: String) = "reading_history/$bookId"
+    }
+
 }
 
 sealed class ScreenIcon {

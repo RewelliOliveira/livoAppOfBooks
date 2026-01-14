@@ -49,8 +49,9 @@ fun ViewBook(
     onStatusClick: () -> Unit,
     onShelfClick: () -> Unit,
     onRemoveClick: () -> Unit = {},
-    onRatingClick: () -> Unit
-) {
+    onRatingClick: () -> Unit,
+    onReadingHistoryClick: () -> Unit
+    ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
@@ -59,6 +60,8 @@ fun ViewBook(
     else sinopse.take(previewLimit) + "..."
 
     val safeImageModel = imageUrl.ifBlank { null }
+
+    val currentStatus = BookStatus.fromString(status)
 
     Box(
         modifier = Modifier
@@ -78,9 +81,9 @@ fun ViewBook(
             ) {
                 AsyncImage(
                     model = safeImageModel,
-                    placeholder = painterResource(id = R.drawable.livro_teste),
-                    error = painterResource(id = R.drawable.livro_teste),
-                    fallback = painterResource(id = R.drawable.livro_teste),
+                    placeholder = painterResource(id = R.drawable.capa_default),
+                    error = painterResource(id = R.drawable.capa_default),
+                    fallback = painterResource(id = R.drawable.capa_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -96,7 +99,7 @@ fun ViewBook(
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(Color.Transparent, background),
-                                startY = 250f
+                                startY = 10f
                             )
                         )
                 )
@@ -150,9 +153,9 @@ fun ViewBook(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    InfoItem(icon = CalendarDays, text = publishYear)
-                    InfoItem(icon = BuildingLibrary, text = publisher.take(12))
-                    InfoItem(icon = BookOpen, text = "$pageCount págs")
+                    InfoItem(icon = CalendarDays, text = publishYear, 22.dp)
+                    InfoItem(icon = BuildingLibrary, text = publisher.take(12), 22.dp)
+                    InfoItem(icon = BookOpen, text = "$pageCount págs", 22.dp)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -168,7 +171,8 @@ fun ViewBook(
                         modifier = Modifier.weight(2f),
                         text = shelf.take(15),
                         onClick = onShelfClick,
-                        icon = Bookshelf
+                        icon = Bookshelf,
+                        style = AppTypography.titleSmall
                     )
                     Spacer(Modifier.width(8.dp))
 
@@ -181,17 +185,32 @@ fun ViewBook(
 
                 Spacer(Modifier.height(16.dp))
 
-                Column {
-                    PrimaryButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        icon = Pencil,
-                        text = "Registrar Leitura",
-                        onClick = onRegisterClick
-                    )
-                    RatingButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = onRatingClick
-                    )
+                if (currentStatus != BookStatus.QUERO_LER) {
+                    Column {
+                        PrimaryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Pencil,
+                            text = "Registrar Leitura",
+                            onClick = onRegisterClick,
+                            style = AppTypography.titleSmall,
+                            height = 48.dp
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        if(currentStatus == BookStatus.LIDO) {
+                            RatingButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = onRatingClick
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        ReadingHistoryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onReadingHistoryClick
+                        )
+                    }
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -264,7 +283,7 @@ fun ViewBook(
                 modifier = Modifier.size(24.dp))
         }
 
-        if (userCurrentPage != null && userCurrentPage > 0) {
+        if (userCurrentPage != null && userCurrentPage >= 0) {
             ProgressBarBook(
                 currentPage = userCurrentPage,
                 totalPages = if (userTotalPages > 0) userTotalPages else 1,

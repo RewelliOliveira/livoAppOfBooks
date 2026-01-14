@@ -59,13 +59,13 @@ fun ShelfDetailsScreen(
                     Icon(
                         imageVector = com.example.livoappofbooks.ui.icons.Arrow_back_ios_new,
                         contentDescription = "Voltar",
-                        tint = primary
+                        tint = outline
                     )
                 }
                 Text(
                     text = shelf?.name ?: "Carregando...",
-                    style = AppTypography.headlineSmall,
-                    color = primary,
+                    style = AppTypography.headlineLarge,
+                    color = outline,
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp),
@@ -75,7 +75,7 @@ fun ShelfDetailsScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_edit),
                         contentDescription = "Editar",
-                        tint = primary
+                        tint = outline
                     )
                 }
             }

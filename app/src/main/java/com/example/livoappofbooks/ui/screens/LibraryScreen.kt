@@ -62,6 +62,22 @@ fun LibraryScreen(
             }
         }
 
+        .sortedWith(
+            compareBy(
+                { book ->
+                    when (book.status) {
+                        BookStatus.LENDO -> 1
+                        BookStatus.LIDO -> 2
+                        BookStatus.QUERO_LER -> 3
+                        BookStatus.ABANDONADO -> 4
+                        else -> 5
+                    }
+                },
+            )
+        )
+
+
+
     val isDarkTheme = isSystemInDarkTheme()
     val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
         .getOrElse { isDarkTheme }
@@ -129,19 +145,6 @@ fun LibraryScreen(
                         }
                     }
 
-                    is LibraryUiState.Error -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = (uiState as LibraryUiState.Error).message,
-                                color = tertiary,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-
                     else -> {
                         if (filteredBooks.isEmpty()) {
                             Box(
@@ -149,7 +152,7 @@ fun LibraryScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Nenhum livro encontrado",
+                                    text = "Vá na aba de busca para adicionar livros à sua biblioteca!",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = tertiary.copy(alpha = 0.6f),

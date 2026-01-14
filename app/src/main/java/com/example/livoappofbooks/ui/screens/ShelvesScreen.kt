@@ -100,7 +100,7 @@ fun ShelvesScreen(
 
         Text(
             text = "Prateleiras",
-            style = AppTypography.headlineSmall,
+            style = AppTypography.headlineMedium,
             color = outline,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )

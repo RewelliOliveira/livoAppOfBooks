@@ -22,6 +22,8 @@ import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.screens.*
 import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
 import com.example.livoappofbooks.ui.viewModel.ProfileViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.SearchViewModel
+import com.example.livoappofbooks.ui.viewModel.SearchViewModelFactory
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModelFactory
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
@@ -82,7 +84,11 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
             }
 
             composable(Screen.Search.route) {
+                val searchViewModel: SearchViewModel = viewModel(
+                    factory = SearchViewModelFactory(libraryRepository)
+                )
                 SearchScreen(
+                    viewModel = searchViewModel,
                     onBookClick = { bookId, isInLibrary ->
                         if (isInLibrary) {
                             navController.navigate(Screen.ViewBook.createRoute(bookId))
@@ -95,8 +101,9 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.Profile.route) {
                 // Cria o ViewModel usando a Factory
+                val context = context
                 val profileViewModel: ProfileViewModel = viewModel(
-                    factory = ProfileViewModelFactory(libraryRepository, tokenManager)
+                    factory = ProfileViewModelFactory(libraryRepository, tokenManager, context)
                 )
 
                 ProfileScreen(
@@ -163,7 +170,12 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                         repository = libraryRepository,
                         shelvesRepository = shelvesRepository,
                         onBackClick = { navController.popBackStack() },
-                        onRegisterClick = { navController.navigate(Screen.RegisterReading.route) }
+                        onRegisterClick = {
+                            navController.navigate(Screen.RegisterReading.createRoute(bookId))
+                        },
+                        onReadingHistoryClick = {
+                            navController.navigate(Screen.ReadingHistory.createRoute(bookId))
+                        }
                     )
                 }
             }
@@ -187,11 +199,38 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                 }
             }
 
-            composable(Screen.RegisterReading.route) {
+            composable(
+                route = Screen.RegisterReading.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+
+                val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
+
+                val viewModel: com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModel = viewModel(
+                    factory = com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModelFactory(bookId, libraryRepository)
+                )
+
                 RegisterReadingScreen(
-                    onNavigate = { navController.popBackStack() }
+                    viewModel = viewModel,
+                    onNavigateBack = { navController.popBackStack() }
                 )
             }
+
+            composable(
+                route = Screen.ReadingHistory.route,
+                arguments = listOf(navArgument("bookId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
+
+                ReadingHistoryScreen(
+                    bookId = bookId,
+                    onBackClick = { navController.popBackStack() },
+                    onRegisterClick = {
+                        navController.navigate(Screen.RegisterReading.createRoute(bookId))
+                    }
+                )
+            }
+
         }
     }
 }

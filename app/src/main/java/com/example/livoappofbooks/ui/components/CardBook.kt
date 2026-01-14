@@ -32,7 +32,8 @@ fun CardBook(
     pageCount: Int,
     imageUrl: String,
     personalLibrary: Boolean,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+    onAddClick: (String) -> Unit
 ) {
     Box(
         Modifier
@@ -122,8 +123,9 @@ fun CardBook(
                         text = if (!personalLibrary) "Adicionar" else "Adicionado",
                         enabled = if(!personalLibrary) true else false,
                         icon = if (!personalLibrary) PlusCircle else  CheckCircle,
-                        onClick = {},
                         height = 36.dp,
+                        onClick = { onAddClick(bookId) },
+                        style = AppTypography.bodySmall
                     )
                 }
             }

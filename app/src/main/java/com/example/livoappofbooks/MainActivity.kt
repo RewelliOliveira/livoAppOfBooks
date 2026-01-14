@@ -1,5 +1,6 @@
 package com.example.livoappofbooks
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +25,8 @@ import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModelFactory
+import com.example.livoappofbooks.utils.NotificationScheduler
+import com.example.livoappofbooks.utils.NotificationService
 
 class MainActivity : ComponentActivity() {
 
@@ -33,9 +36,21 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val notificationService = NotificationService(applicationContext) //notificaçãozinha
+        notificationService.createNotificationChannel()
+
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val isNotificationsEnabled = prefs.getBoolean("notifications_enabled", false) // true é o padrão se nunca escolheu
+
+        if (isNotificationsEnabled) {
+            NotificationScheduler.schedulePeriodicReminder(applicationContext)
+        } else {
+            NotificationScheduler.cancelReminder(applicationContext)
+        }
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
