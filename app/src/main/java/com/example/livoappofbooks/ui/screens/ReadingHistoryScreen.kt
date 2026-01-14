@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.livoappofbooks.data.model.BookStatus
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
@@ -97,9 +96,7 @@ fun ReadingHistoryScreen(
                 )
             } else {
                 val book = uiState.book
-                val totalPages = book?.pageCount ?: 0
-                val progressCurrent = book?.userReadProgress ?: 0
-                val progressPercent = if (totalPages > 0) progressCurrent.toFloat() / totalPages else 0f
+                val progressPercent = (book?.userReadProgress ?: 0).toFloat() // <-- CORRIGIDO
                 val statusText = book?.status?.displayName ?: "Não iniciado"
                 val statusColor = book?.status?.color ?: BackgroundLight
 
@@ -142,7 +139,7 @@ fun ReadingHistoryScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(BookOpen, null, tint = onBackground)
                                 Text(
-                                    " $totalPages pags.",
+                                    " ${book?.pageCount ?: 0} pags.",
                                     fontSize = 12.sp,
                                     color = onBackground
                                 )
@@ -174,7 +171,7 @@ fun ReadingHistoryScreen(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    ProgressBarSimple(progress = progressPercent)
+                    ProgressBarSimple(progress = progressPercent) // <-- Float agora
                 }
             }
 
