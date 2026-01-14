@@ -32,7 +32,6 @@ fun ReadingHistoryScreen(
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    // ViewModel do header
     val viewModel: ReadingHistoryHeaderViewModel = viewModel(
         factory = ReadingHistoryHeaderViewModelFactory(bookId, repository)
     )
@@ -85,9 +84,8 @@ fun ReadingHistoryScreen(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
-            // HEADER DINÂMICO
             if (uiState.isLoading) {
-                ProgressBarSimple(progress = 0.5f) // indicador simples enquanto carrega
+                ProgressBarSimple(progress = 0.5f)
             } else if (uiState.error != null) {
                 Text(
                     text = uiState.error ?: "Erro desconhecido",
@@ -175,7 +173,6 @@ fun ReadingHistoryScreen(
                 }
             }
 
-            // MANTÉM MOCKS ABAIXO
             HorizontalDivider(color = tertiary)
 
             LazyColumn(

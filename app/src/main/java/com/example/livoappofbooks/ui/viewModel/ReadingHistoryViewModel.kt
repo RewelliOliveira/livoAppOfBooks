@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// Estado da UI do header, agora com userRating
 data class ReadingHistoryHeaderUiState(
     val book: Book? = null,
-    val userRating: Int = 0,       // adicionado
+    val userRating: Int = 0,
     val isLoading: Boolean = true,
     val error: String? = null
 )
@@ -35,7 +34,6 @@ class ReadingHistoryHeaderViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            // Busca rating do usuário em paralelo
             launch { fetchUserRating() }
 
             try {
@@ -43,7 +41,6 @@ class ReadingHistoryHeaderViewModel(
                 if (result.isSuccess) {
                     var bookDetails = result.getOrThrow()
 
-                    // Atualiza informações da biblioteca do usuário
                     try {
                         val userBooksResult = repository.getUserBooks()
                         if (userBooksResult.isSuccess) {
