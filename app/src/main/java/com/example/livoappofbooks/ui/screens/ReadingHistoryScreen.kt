@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,23 +13,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.livoappofbooks.ui.components.PrimaryButton
-import com.example.livoappofbooks.ui.components.ProgressBarSimple
-import com.example.livoappofbooks.ui.components.ReadingHistoryItem
-import com.example.livoappofbooks.ui.components.StarRating
+import com.example.livoappofbooks.data.repository.LibraryRepository
+import com.example.livoappofbooks.ui.components.*
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.Pencil
 import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.viewModel.ReadingHistoryHeaderViewModel
+import com.example.livoappofbooks.ui.viewModel.ReadingHistoryHeaderViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadingHistoryScreen(
     bookId: String,
+    repository: LibraryRepository,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
+    val viewModel: ReadingHistoryHeaderViewModel = viewModel(
+        factory = ReadingHistoryHeaderViewModelFactory(bookId, repository)
+    )
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -77,83 +84,93 @@ fun ReadingHistoryScreen(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
 
-            // mocks
-            val totalPages = 320
-            val progressCurrent = 320
-            val progressPercent = 1f
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                AsyncImage(
-                    model = null, // mock
-                    contentDescription = "Capa do livro",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(85.dp, 120.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(BackgroundLight)
+            if (uiState.isLoading) {
+                ProgressBarSimple(progress = 0.5f)
+            } else if (uiState.error != null) {
+                Text(
+                    text = uiState.error ?: "Erro desconhecido",
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp
                 )
+            } else {
+                val book = uiState.book
+                val progressPercent = (book?.userReadProgress ?: 0).toFloat() // <-- CORRIGIDO
+                val statusText = book?.status?.displayName ?: "Não iniciado"
+                val statusColor = book?.status?.color ?: BackgroundLight
 
-                Spacer(Modifier.width(16.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
 
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-
-                    Text(
-                        text = "Título mockado",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = onBackground,
-                        maxLines = 2
+                    AsyncImage(
+                        model = book?.thumbnail,
+                        contentDescription = "Capa do livro",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(85.dp, 120.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(BackgroundLight)
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    Spacer(Modifier.width(16.dp))
+
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+
                         Text(
-                            text = "Autor mockado",
-                            fontSize = 14.sp,
+                            text = book?.title ?: "Título não disponível",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
                             color = onBackground,
-                            modifier = Modifier.weight(1f),
-                            maxLines = 1
+                            maxLines = 2
                         )
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(BookOpen, null, tint = onBackground)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
-                                " $totalPages pags.",
+                                text = book?.authors?.joinToString(", ") ?: "Autor não disponível",
+                                fontSize = 14.sp,
+                                color = onBackground,
+                                modifier = Modifier.weight(1f),
+                                maxLines = 1
+                            )
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(BookOpen, null, tint = onBackground)
+                                Text(
+                                    " ${book?.pageCount ?: 0} pags.",
+                                    fontSize = 12.sp,
+                                    color = onBackground
+                                )
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Text(
+                                text = statusText.uppercase(),
                                 fontSize = 12.sp,
-                                color = onBackground
+                                color = BackgroundLight,
+                                modifier = Modifier
+                                    .background(statusColor, RoundedCornerShape(30.dp))
+                                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                            )
+
+                            StarRating(
+                                rating = uiState.userRating.toDouble(),
+                                maxStars = 5,
+                                starSize = 18
                             )
                         }
                     }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Text(
-                            text = "LIDO",
-                            fontSize = 12.sp,
-                            color = BackgroundLight,
-                            modifier = Modifier
-                                .background(PrincipalColor, RoundedCornerShape(30.dp))
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                        )
-
-                        StarRating(
-                            rating = 4.5,
-                            maxStars = 5,
-                            starSize = 18
-                        )
-                    }
                 }
-            }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                ProgressBarSimple(progress = progressPercent)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    ProgressBarSimple(progress = progressPercent) // <-- Float agora
+                }
             }
 
             HorizontalDivider(color = tertiary)
@@ -162,7 +179,6 @@ fun ReadingHistoryScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-
                 item {
                     ReadingHistoryItem(
                         title = "Leitura 1",
