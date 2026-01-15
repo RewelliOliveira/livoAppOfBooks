@@ -4,11 +4,13 @@ import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.LibraryBookReponse
 import com.example.livoappofbooks.data.model.ReadingLogRequest
+import com.example.livoappofbooks.data.model.ReadingLogResponse
 import com.example.livoappofbooks.data.model.UserProfile
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import retrofit2.Response
 import retrofit2.http.*
+
 @JsonClass(generateAdapter = true)
 data class StatusUpdateRequest(
     @Json(name = "bookStatus") val status: String
@@ -38,6 +40,7 @@ interface LibraryService {
 
     @GET("books/{bookId}/rating/me")
     suspend fun getUserRating(@Path("bookId") bookId: String): Response<UserRatingResponse>
+
     @PATCH("library/{userBookId}")
     suspend fun updateBookStatus(
         @Path("userBookId") userBookId: String,
@@ -68,4 +71,9 @@ interface LibraryService {
 
     @POST("library/reading-logs")
     suspend fun createReadingLog(@Body request: ReadingLogRequest): Response<Unit>
+
+    @GET("library/reading-logs")
+    suspend fun getReadingLogs(
+        @Query("libraryBookId") libraryBookId: Long
+    ): Response<List<ReadingLogResponse>>
 }

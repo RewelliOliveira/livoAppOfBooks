@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -32,13 +33,15 @@ fun Input(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isPassword: Boolean = false // New parameter
+    isPassword: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { newValue ->
+            onValueChange(newValue.replace("\n", ""))
+        },
         label = {
             Text(
                 label,
@@ -48,6 +51,8 @@ fun Input(
         },
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
+        singleLine = true,
+        maxLines = 1,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = onBackground,
             unfocusedBorderColor = onBackground,
@@ -56,7 +61,10 @@ fun Input(
             cursorColor = outline.copy(alpha = 0.8f)
         ),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = if (isPassword) KeyboardOptions(keyboardType = KeyboardType.Password) else KeyboardOptions.Default,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
         trailingIcon = {
             if (isPassword) {
                 val image = if (passwordVisible)
@@ -66,7 +74,7 @@ fun Input(
                 val description = if (passwordVisible) "Esconder senha" else "Mostrar senha"
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, description)
+                    Icon(imageVector = image, contentDescription = description)
                 }
             }
         }
