@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,16 +116,13 @@ fun CardBook(
                     }
                     Spacer(Modifier.width(10.dp))
 
-                    PrimaryButton(
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .defaultMinSize(minWidth = 72.dp),
-                        text = if (!personalLibrary) "Adicionar" else "Adicionado",
-                        enabled = if(!personalLibrary) true else false,
-                        icon = if (!personalLibrary) PlusCircle else  CheckCircle,
-                        height = 36.dp,
-                        onClick = { onAddClick(bookId) },
-                        style = AppTypography.bodySmall
+                    Checkbox(
+                        checked = personalLibrary,
+                        onCheckedChange = { onAddClick(bookId) },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = primary,
+                            uncheckedColor = tertiary
+                        )
                     )
                 }
             }

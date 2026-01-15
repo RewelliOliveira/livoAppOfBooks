@@ -12,6 +12,8 @@ import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import com.example.livoappofbooks.domain.model.BookStatus
 import kotlinx.coroutines.launch
 
+import androidx.compose.runtime.mutableStateMapOf
+
 class ShelvesViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShelvesViewModel::class.java)) {
@@ -43,9 +45,8 @@ class ShelvesViewModel(
     private val _operationSuccess = MutableLiveData<Boolean>()
     val operationSuccess: LiveData<Boolean> = _operationSuccess
 
-    // Mapa simples para controlar os livros selecionados ao criar/editar prateleiras.
-    // A chave é o id do registro na biblioteca do usuário.
-    private val _selectedBooks = mutableMapOf<Long, BookShelfRequest>()
+    // Mapa observável para controlar os livros selecionados na UI
+    private val _selectedBooks = mutableStateMapOf<Long, BookShelfRequest>()
     val selectedBooks: Map<Long, BookShelfRequest> get() = _selectedBooks
 
     // Estado do formulário para sobreviver à rotação de tela
