@@ -1,8 +1,11 @@
 package com.example.livoappofbooks.data.repository
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.livoappofbooks.data.model.AddBookRequest
 import com.example.livoappofbooks.data.model.Book
 import com.example.livoappofbooks.data.model.ReadingLogRequest
+import com.example.livoappofbooks.data.model.ReadingLogResponse
 import com.example.livoappofbooks.data.model.UserProfile
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.data.model.toDomainBook
@@ -129,12 +132,10 @@ class LibraryRepository(
                 val request = RatingRequest(rating)
 
                 if (hasExistingRating) {
-                    // ATUALIZAÇÃO (PUT)
                     val response = libraryService.updateBookRating(bookId, request)
                     if (response.isSuccessful) Result.success(Unit)
                     else Result.failure(Exception("Erro ao atualizar (PUT): ${response.code()}"))
                 } else {
-                    // CRIAÇÃO (POST)
                     val response = libraryService.registerBookRating(bookId, request)
                     if (response.isSuccessful) Result.success(Unit)
                     else Result.failure(Exception("Erro ao criar (POST): ${response.code()}"))
@@ -147,6 +148,7 @@ class LibraryRepository(
 
     suspend fun registerBookRating(bookId: String, rating: Int): Result<Unit> = saveBookRating(bookId, rating)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun createReadingLog(
         libraryBookId: Int,
         title: String?,
@@ -167,12 +169,30 @@ class LibraryRepository(
                 pagesRead = pagesRead
             )
 
-            val response = libraryService.createReadingLog(request) // Use sua instância do service
+            val response = libraryService.createReadingLog(request)
 
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Erro ao registrar leitura: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getReadingLogs(libraryBookId: String): Result<List<ReadingLogResponse>> = withContext(Dispatchers.IO) {
+        val idAsLong = libraryBookId.toLongOrNull()
+        if (idAsLong == null) {
+            return@withContext Result.failure(Exception("ID inválido: $libraryBookId"))
+        }
+
+        try {
+            val response = libraryService.getReadingLogs(idAsLong)
+            if (response.isSuccessful) {
+                Result.success(response.body() ?: emptyList())
+            } else {
+                Result.failure(Exception("Erro ao buscar logs: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

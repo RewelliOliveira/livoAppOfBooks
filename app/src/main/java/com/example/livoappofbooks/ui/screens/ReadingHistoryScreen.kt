@@ -1,8 +1,11 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,8 +24,22 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.Pencil
 import com.example.livoappofbooks.ui.theme.*
-import com.example.livoappofbooks.ui.viewModel.ReadingHistoryHeaderViewModel
-import com.example.livoappofbooks.ui.viewModel.ReadingHistoryHeaderViewModelFactory
+import com.example.livoappofbooks.ui.viewModel.ReadingHistoryViewModel
+import com.example.livoappofbooks.ui.viewModel.ReadingHistoryViewModelFactory
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatDateTime(isoString: String): Pair<String, String> {
+    return try {
+        val parsedDate = LocalDateTime.parse(isoString)
+        val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        Pair(parsedDate.format(dateFormatter), parsedDate.format(timeFormatter))
+    } catch (e: Exception) {
+        Pair(isoString, "")
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,10 +49,14 @@ fun ReadingHistoryScreen(
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit
 ) {
-    val viewModel: ReadingHistoryHeaderViewModel = viewModel(
-        factory = ReadingHistoryHeaderViewModelFactory(bookId, repository)
+    val viewModel: ReadingHistoryViewModel = viewModel(
+        factory = ReadingHistoryViewModelFactory(bookId, repository)
     )
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(bookId) {
+        viewModel.loadData()
+    }
 
     Scaffold(
         topBar = {
@@ -85,21 +106,17 @@ fun ReadingHistoryScreen(
         ) {
 
             if (uiState.isLoading) {
-                ProgressBarSimple(progress = 0.5f)
-            } else if (uiState.error != null) {
-                Text(
-                    text = uiState.error ?: "Erro desconhecido",
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 14.sp
-                )
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    ProgressBarSimple(progress = 0.5f)
+                }
             } else {
                 val book = uiState.book
-                val progressPercent = (book?.userReadProgress ?: 0).toFloat() // <-- CORRIGIDO
-                val statusText = book?.status?.displayName ?: "Não iniciado"
+                val progressPercent = (book?.libraryRegistration?.readingProgress ?: 0).toFloat()
+
+                val statusText = book?.status?.displayName ?: "..."
                 val statusColor = book?.status?.color ?: BackgroundLight
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-
                     AsyncImage(
                         model = book?.thumbnail,
                         contentDescription = "Capa do livro",
@@ -113,27 +130,24 @@ fun ReadingHistoryScreen(
                     Spacer(Modifier.width(16.dp))
 
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
                         Text(
-                            text = book?.title ?: "Título não disponível",
+                            text = book?.title ?: "Título indisponível",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             color = onBackground,
                             maxLines = 2
                         )
-
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = book?.authors?.joinToString(", ") ?: "Autor não disponível",
+                                text = book?.authors?.joinToString(", ") ?: "Autor desconhecido",
                                 fontSize = 14.sp,
                                 color = onBackground,
                                 modifier = Modifier.weight(1f),
                                 maxLines = 1
                             )
-
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(BookOpen, null, tint = onBackground)
                                 Text(
@@ -143,13 +157,11 @@ fun ReadingHistoryScreen(
                                 )
                             }
                         }
-
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-
                             Text(
                                 text = statusText.uppercase(),
                                 fontSize = 12.sp,
@@ -158,7 +170,6 @@ fun ReadingHistoryScreen(
                                     .background(statusColor, RoundedCornerShape(30.dp))
                                     .padding(horizontal = 16.dp, vertical = 4.dp)
                             )
-
                             StarRating(
                                 rating = uiState.userRating.toDouble(),
                                 maxStars = 5,
@@ -169,64 +180,38 @@ fun ReadingHistoryScreen(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    ProgressBarSimple(progress = progressPercent) // <-- Float agora
-                }
-            }
-
-            HorizontalDivider(color = tertiary)
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                item {
-                    ReadingHistoryItem(
-                        title = "Leitura 1",
-                        date = "10/01/2026",
-                        pages = "78/320",
-                        review = "Comentário de exemplo sobre essa leitura.",
-                        time = "14:25"
-                    )
+                    ProgressBarSimple(progress = progressPercent)
                 }
 
-                item {
-                    ReadingHistoryItem(
-                        title = "Leitura 2",
-                        date = "11/01/2026",
-                        pages = "120/320",
-                        review = null,
-                        time = "16:10"
-                    )
-                }
+                HorizontalDivider(color = tertiary)
 
-                item {
-                    ReadingHistoryItem(
-                        title = null,
-                        date = "12/01/2026",
-                        pages = "200/320",
-                        review = "Leitura feita durante a viagem.",
-                        time = "09:42"
-                    )
-                }
+                if (uiState.logs.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Nenhum registro de leitura ainda.", color = Gray)
+                    }
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(uiState.logs) { log ->
+                            val (dateFormatted, timeFormatted) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                formatDateTime(log.time)
+                            } else {
+                                Pair(log.time, "")
+                            }
 
-                item {
-                    ReadingHistoryItem(
-                        title = null,
-                        date = "13/01/2026",
-                        pages = "250/320",
-                        review = null,
-                        time = "21:05"
-                    )
-                }
+                            val pagesDisplay = "${log.pagesRead} págs"
 
-                item {
-                    ReadingHistoryItem(
-                        title = "Leitura com um título extremamente longo para testar quebra de linha no layout do componente",
-                        date = "14/01/2026",
-                        pages = "320/320",
-                        review = "Finalização do livro.",
-                        time = "23:59"
-                    )
+                            ReadingHistoryItem(
+                                title = log.title,
+                                date = dateFormatted,
+                                pages = pagesDisplay,
+                                review = log.text,
+                                time = timeFormatted
+                            )
+                        }
+                    }
                 }
             }
         }
