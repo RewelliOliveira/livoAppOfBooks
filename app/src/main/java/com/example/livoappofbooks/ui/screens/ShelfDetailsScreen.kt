@@ -28,7 +28,7 @@ fun ShelfDetailsScreen(
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit,
     onEditClick: (String) -> Unit,
-    onBookClick: (Long) -> Unit
+    onBookClick: (String) -> Unit
 ) {
     val shelf by viewModel.selectedShelf.observeAsState()
     val loading by viewModel.loading.observeAsState(false)
@@ -132,7 +132,7 @@ fun ShelfDetailsScreen(
                                 showRemoveDialog = false
                                 selectedBookToRemove?.let { book ->
                                     shelfId?.let { sId ->
-                                        viewModel.removeBookFromShelf(sId, book.bookId)
+                                        viewModel.removeBookFromShelf(sId, book.googleBookId)
                                     }
                                 }
                             }
@@ -195,10 +195,10 @@ fun ShelfDetailsScreen(
                          items(filteredBooks) { book ->
                              Book(
                                  status = BookStatus.fromString(book.status),
-                                 progress = book.readingProgress,
+                                 progress = 0, // Removido do DTO
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
-                                 onClick = { onBookClick(book.bookId) },
+                                 onClick = { onBookClick(book.googleBookId) },
                                  onLongClick = {
                                      selectedBookToRemove = book
                                      showRemoveDialog = true

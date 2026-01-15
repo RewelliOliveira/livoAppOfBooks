@@ -3,14 +3,13 @@ package com.example.livoappofbooks.ui.viewModel
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
+import com.example.livoappofbooks.data.remote.shelves.dto.BookShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
+import com.example.livoappofbooks.domain.model.BookStatus
 import kotlinx.coroutines.launch
 
 class ShelvesViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
@@ -44,6 +43,11 @@ class ShelvesViewModel(
     private val _operationSuccess = MutableLiveData<Boolean>()
     val operationSuccess: LiveData<Boolean> = _operationSuccess
 
+    // Mapa simples para controlar os livros selecionados ao criar/editar prateleiras.
+    // A chave é o id do registro na biblioteca do usuário.
+    private val _selectedBooks = mutableMapOf<Long, BookShelfRequest>()
+    val selectedBooks: Map<Long, BookShelfRequest> get() = _selectedBooks
+
     // Estado do formulário para sobreviver à rotação de tela
     var formName: String = ""
     var formDescription: String = ""
@@ -52,6 +56,7 @@ class ShelvesViewModel(
     fun clearFormState() {
         formName = ""
         formDescription = ""
+        _selectedBooks.clear()
     }
 
     fun resetOperationSuccess() {
@@ -96,11 +101,13 @@ class ShelvesViewModel(
             _loading.value = true
 
             try {
-                repository.createShelf(name, description)
+                val books = _selectedBooks.values.toList()
+                repository.createShelf(name, description, books)
                 _operationSuccess.value = true
                 // Limpa o formulário após sucesso
                 formName = ""
                 formDescription = ""
+                _selectedBooks.clear()
                 loadShelves()
             } catch (e: Exception) {
                 _error.value = "Erro ao criar prateleira"
@@ -149,7 +156,31 @@ class ShelvesViewModel(
         }
     }
 
-    fun removeBookFromShelf(shelfId: String, bookId: Long) {
+    /**
+     * Alterna a seleção de um livro para ser incluído na prateleira.
+     *
+     * @param registrationId id do registro na biblioteca do usuário (Long)
+     * @param bookId id do livro (por exemplo, id do Google Books)
+     * @param status status atual do livro na biblioteca
+     */
+    fun toggleBookSelection(
+        registrationId: Long,
+        bookId: String,
+        status: BookStatus?
+    ) {
+        if (_selectedBooks.containsKey(registrationId)) {
+            _selectedBooks.remove(registrationId)
+        } else {
+            val statusString = (status ?: BookStatus.QUERO_LER).name
+            _selectedBooks[registrationId] = BookShelfRequest(
+                id = registrationId,
+                bookId = bookId,
+                status = statusString
+            )
+        }
+    }
+
+    fun removeBookFromShelf(shelfId: String, bookId: String) {
         viewModelScope.launch {
             _loading.value = true
             _error.value = null

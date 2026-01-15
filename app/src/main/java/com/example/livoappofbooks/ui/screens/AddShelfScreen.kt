@@ -1,6 +1,9 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -8,17 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.background
 import com.example.livoappofbooks.ui.theme.primary
 import com.example.livoappofbooks.ui.theme.tertiary
+import com.example.livoappofbooks.ui.viewModel.LibraryUiState
+import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 
 @Composable
 fun AddShelfScreen(
+    context: Context,
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit
 ) {
@@ -31,6 +39,11 @@ fun AddShelfScreen(
 
     val loading by viewModel.loading.observeAsState(false)
     val success by viewModel.operationSuccess.observeAsState(false)
+
+    // ViewModel da biblioteca para listar os livros do usuário
+    val libraryViewModel = remember { LibraryViewModel(context) }
+    val books by libraryViewModel.books.collectAsState()
+    val libraryState by libraryViewModel.uiState.collectAsState()
 
     // Sincroniza com ViewModel quando os valores mudam
     LaunchedEffect(name) {
@@ -47,6 +60,11 @@ fun AddShelfScreen(
             viewModel.resetOperationSuccess()
             onBackClick()
         }
+    }
+
+    // Carrega os livros da biblioteca na abertura da tela
+    LaunchedEffect(Unit) {
+        libraryViewModel.loadBooks()
     }
 
     // Modal de confirmação para criar
@@ -138,8 +156,87 @@ fun AddShelfScreen(
                 onValueChange = { description = it },
                 modifier = Modifier.height(120.dp)
             )
-            
-            Spacer(modifier = Modifier.weight(1f))
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Seus livros",
+                style = AppTypography.titleMedium,
+                color = primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+            // Lista de livros da biblioteca com seleção simples
+            when (libraryState) {
+                is LibraryUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = primary)
+                    }
+                }
+
+                is LibraryUiState.Error -> {
+                    val message = (libraryState as LibraryUiState.Error).message
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = message,
+                            style = AppTypography.bodyMedium,
+                            color = tertiary
+                        )
+                    }
+                }
+
+                else -> {
+                    if (books.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Nenhum livro na sua biblioteca ainda.",
+                                style = AppTypography.bodyMedium,
+                                color = tertiary
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(books) { book ->
+                                ShelfSelectableBookItem(
+                                    book = book,
+                                    isSelected = book.libraryRegistration?.id?.toLongOrNull()
+                                        ?.let { viewModel.selectedBooks.containsKey(it) }
+                                        ?: false,
+                                    onToggle = { registrationId ->
+                                        viewModel.toggleBookSelection(
+                                            registrationId = registrationId,
+                                            bookId = book.id,
+                                            status = book.status
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
             if (loading) {
                 CircularProgressIndicator(color = primary)
@@ -159,4 +256,28 @@ fun AddShelfScreen(
             }
         }
     }
+}
+
+@Composable
+private fun ShelfSelectableBookItem(
+    book: Book,
+    isSelected: Boolean,
+    onToggle: (Long) -> Unit
+) {
+    // Usa o id do registro da biblioteca como chave para seleção.
+    val registrationId = book.libraryRegistration?.id?.toLongOrNull()
+        ?: return
+
+    CardBook(
+        bookId = book.id,
+        title = book.title,
+        author = book.authors.firstOrNull() ?: "",
+        rate = book.averageRating ?: 0.0,
+        publishYear = book.publishedDate ?: "",
+        pageCount = book.pageCount ?: 0,
+        imageUrl = book.thumbnail.orEmpty(),
+        personalLibrary = isSelected,
+        onClick = { onToggle(registrationId) },
+        onAddClick = { onToggle(registrationId) }
+    )
 }
