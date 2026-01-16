@@ -18,12 +18,10 @@ import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.CalendarDays
-import com.example.livoappofbooks.ui.icons.CheckCircle
-import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
-fun CardBook(
+fun CardShelf(
     bookId: String,
     title: String,
     author: String,
@@ -116,16 +114,13 @@ fun CardBook(
                     }
                     Spacer(Modifier.width(10.dp))
 
-                    PrimaryButton(
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .defaultMinSize(minWidth = 72.dp),
-                        text = if (!personalLibrary) "Adicionar" else "Adicionado",
-                        enabled = if(!personalLibrary) true else false,
-                        icon = if (!personalLibrary) PlusCircle else  CheckCircle,
-                        height = 36.dp,
-                        onClick = { onAddClick(bookId) },
-                        style = AppTypography.bodySmall
+                    Checkbox(
+                        checked = personalLibrary,
+                        onCheckedChange = { onAddClick(bookId) },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = primary,
+                            uncheckedColor = tertiary
+                        )
                     )
                 }
             }

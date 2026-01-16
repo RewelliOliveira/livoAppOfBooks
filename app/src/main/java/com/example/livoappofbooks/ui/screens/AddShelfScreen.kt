@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.data.model.Book
-import com.example.livoappofbooks.ui.components.CardBook
+import com.example.livoappofbooks.ui.components.CardShelf
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.theme.AppTypography
@@ -158,17 +158,18 @@ fun AddShelfScreen(
                 modifier = Modifier.height(120.dp)
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Seus livros",
-                style = AppTypography.titleMedium,
-                color = primary,
+                style = AppTypography.titleLarge,
+                color = outline,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
 
             when (libraryState) {
                 is LibraryUiState.Loading -> {
@@ -269,7 +270,7 @@ private fun ShelfSelectableBookItem(
     val registrationId = book.libraryRegistration?.id?.toLongOrNull()
         ?: return
 
-    CardBook(
+    CardShelf(
         bookId = book.id,
         title = book.title,
         author = book.authors.firstOrNull() ?: "",
