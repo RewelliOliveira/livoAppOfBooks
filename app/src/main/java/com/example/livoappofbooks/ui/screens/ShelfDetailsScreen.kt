@@ -37,7 +37,6 @@ fun ShelfDetailsScreen(
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
-    // Estado para o modal de exclusão de livro
     var showRemoveDialog by remember { mutableStateOf(false) }
     var selectedBookToRemove by remember { mutableStateOf<com.example.livoappofbooks.data.remote.shelves.dto.BookShelf?>(null) }
 
@@ -107,7 +106,7 @@ fun ShelfDetailsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Modal de confirmação para remover livro
+
             if (showRemoveDialog && selectedBookToRemove != null) {
                 AlertDialog(
                     onDismissRequest = { showRemoveDialog = false },
@@ -149,7 +148,7 @@ fun ShelfDetailsScreen(
                 )
             }
 
-            // Content
+
              if (loading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = primary)
@@ -195,7 +194,7 @@ fun ShelfDetailsScreen(
                          items(filteredBooks) { book ->
                              Book(
                                  status = BookStatus.fromString(book.status),
-                                 progress = 0, // Removido do DTO
+                                 progress = 0,
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
                                  onClick = { onBookClick(book.googleBookId) },

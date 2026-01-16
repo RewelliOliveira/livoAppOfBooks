@@ -18,8 +18,6 @@ import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.icons.BookOpen
 import com.example.livoappofbooks.ui.icons.CalendarDays
-import com.example.livoappofbooks.ui.icons.CheckCircle
-import com.example.livoappofbooks.ui.icons.PlusCircle
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable

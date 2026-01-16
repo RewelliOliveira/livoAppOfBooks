@@ -27,7 +27,6 @@ class ShelvesRepository(
         val body = ShelfRequest(
             name = name,
             description = description,
-            // Permite criar a prateleira já com uma lista de livros selecionados
             books = books
         )
         return service.createShelf(body)

@@ -53,7 +53,6 @@ class ShelvesViewModel(
     var formName: String = ""
     var formDescription: String = ""
 
-    // Limpa o estado do formulário ao abrir uma nova tela
     fun clearFormState() {
         formName = ""
         formDescription = ""
@@ -105,7 +104,6 @@ class ShelvesViewModel(
                 val books = _selectedBooks.values.toList()
                 repository.createShelf(name, description, books)
                 _operationSuccess.value = true
-                // Limpa o formulário após sucesso
                 formName = ""
                 formDescription = ""
                 _selectedBooks.clear()
@@ -129,7 +127,6 @@ class ShelvesViewModel(
             try {
                 repository.updateShelf(id, name, description)
                 _operationSuccess.value = true
-                // Limpa o formulário após sucesso
                 formName = ""
                 formDescription = ""
                 loadShelves()
@@ -188,9 +185,7 @@ class ShelvesViewModel(
 
             try {
                 repository.removeBookFromShelf(shelfId, bookId)
-                // Recarrega os detalhes da prateleira para atualizar a lista
                 loadShelfDetails(shelfId)
-                // Poderíamos usar operationSuccess aqui se quisermos mostrar uma mensagem
                  _operationSuccess.value = true
             } catch (e: Exception) {
                 _error.value = "Erro ao remover livro da prateleira"

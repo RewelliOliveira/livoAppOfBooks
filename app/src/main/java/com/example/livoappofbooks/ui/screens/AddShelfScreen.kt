@@ -30,22 +30,22 @@ fun AddShelfScreen(
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit
 ) {
-    // Estados locais vinculados ao ViewModel para sobreviver à rotação
+
     var name by remember { mutableStateOf(viewModel.formName) }
     var description by remember { mutableStateOf(viewModel.formDescription) }
 
-    // Estado para o modal de confirmação
+
     var showSaveDialog by remember { mutableStateOf(false) }
 
     val loading by viewModel.loading.observeAsState(false)
     val success by viewModel.operationSuccess.observeAsState(false)
 
-    // ViewModel da biblioteca para listar os livros do usuário
+
     val libraryViewModel = remember { LibraryViewModel(context) }
     val books by libraryViewModel.books.collectAsState()
     val libraryState by libraryViewModel.uiState.collectAsState()
 
-    // Sincroniza com ViewModel quando os valores mudam
+
     LaunchedEffect(name) {
         viewModel.formName = name
     }
@@ -54,7 +54,7 @@ fun AddShelfScreen(
         viewModel.formDescription = description
     }
 
-    // Observa o sucesso para navegar de volta
+
     LaunchedEffect(success) {
         if (success) {
             viewModel.resetOperationSuccess()
@@ -62,12 +62,12 @@ fun AddShelfScreen(
         }
     }
 
-    // Carrega os livros da biblioteca na abertura da tela
+
     LaunchedEffect(Unit) {
         libraryViewModel.loadBooks()
     }
 
-    // Modal de confirmação para criar
+
     if (showSaveDialog) {
         AlertDialog(
             onDismissRequest = { showSaveDialog = false },
@@ -168,7 +168,7 @@ fun AddShelfScreen(
                     .padding(vertical = 8.dp)
             )
 
-            // Lista de livros da biblioteca com seleção simples
+
             when (libraryState) {
                 is LibraryUiState.Loading -> {
                     Box(
@@ -264,7 +264,7 @@ private fun ShelfSelectableBookItem(
     isSelected: Boolean,
     onToggle: (Long) -> Unit
 ) {
-    // Usa o id do registro da biblioteca como chave para seleção.
+
     val registrationId = book.libraryRegistration?.id?.toLongOrNull()
         ?: return
 

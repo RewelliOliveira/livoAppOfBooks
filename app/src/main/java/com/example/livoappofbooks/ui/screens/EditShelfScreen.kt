@@ -30,16 +30,16 @@ fun EditShelfScreen(
     val success by viewModel.operationSuccess.observeAsState(false)
     val error by viewModel.error.observeAsState()
 
-    // Estados locais vinculados ao ViewModel para sobreviver à rotação
+
     var name by remember { mutableStateOf(viewModel.formName) }
     var description by remember { mutableStateOf(viewModel.formDescription) }
     var initialized by remember { mutableStateOf(false) }
 
-    // Estados para os modais de confirmação
+
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showSaveDialog by remember { mutableStateOf(false) }
 
-    // Inicializa os campos com os dados da prateleira
+
     LaunchedEffect(shelf) {
         if (!initialized && shelf != null) {
             name = shelf?.name ?: ""
@@ -50,7 +50,7 @@ fun EditShelfScreen(
         }
     }
 
-    // Sincroniza com ViewModel quando os valores mudam
+
     LaunchedEffect(name) {
         viewModel.formName = name
     }
@@ -66,7 +66,7 @@ fun EditShelfScreen(
         }
     }
 
-    // Modal de confirmação para excluir
+
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
@@ -102,7 +102,7 @@ fun EditShelfScreen(
         )
     }
 
-    // Modal de confirmação para salvar
+
     if (showSaveDialog) {
         AlertDialog(
             onDismissRequest = { showSaveDialog = false },
