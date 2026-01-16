@@ -40,6 +40,7 @@ fun ShelfDetailsScreen(
     var showRemoveDialog by remember { mutableStateOf(false) }
     var selectedBookToRemove by remember { mutableStateOf<com.example.livoappofbooks.data.remote.shelves.dto.BookShelf?>(null) }
 
+
     LaunchedEffect(shelfId) {
         if (!shelfId.isNullOrBlank()) {
             viewModel.loadShelfDetails(shelfId)
@@ -174,6 +175,18 @@ fun ShelfDetailsScreen(
                             else -> true
                         }
                     }
+                     .sortedWith(
+                         compareBy(
+                             { book ->
+                                 when (BookStatus.fromString(book.status)) {
+                                     BookStatus.LENDO -> 1
+                                     BookStatus.LIDO -> 2
+                                     BookStatus.QUERO_LER -> 3
+                                     BookStatus.ABANDONADO -> 4
+                                 }
+                             },
+                         )
+                     )
 
                  if (filteredBooks.isEmpty()) {
                      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

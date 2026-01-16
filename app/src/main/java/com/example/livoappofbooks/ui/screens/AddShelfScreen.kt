@@ -23,6 +23,7 @@ import com.example.livoappofbooks.ui.viewModel.LibraryUiState
 import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
+import com.example.livoappofbooks.ui.theme.outline
 
 @Composable
 fun AddShelfScreen(
@@ -120,13 +121,13 @@ fun AddShelfScreen(
                     Icon(
                         imageVector = Arrow_back_ios_new,
                         contentDescription = "Voltar",
-                        tint = primary
+                        tint = outline
                     )
                 }
                 Text(
                     text = "Criar Prateleira",
                     style = AppTypography.headlineSmall,
-                    color = primary,
+                    color = outline,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }

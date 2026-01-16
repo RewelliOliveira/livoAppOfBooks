@@ -156,12 +156,14 @@ fun ShelvesScreen(
         }
 
         PrimaryButton(
-            text = "Criar shelf",
+            text = "Criar Prateleira",
             icon = PlusCircle,
             onClick = onAddShelfClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 16.dp),
+            height = 50.dp,
+            style = AppTypography.labelLarge
         )
     }
 }
