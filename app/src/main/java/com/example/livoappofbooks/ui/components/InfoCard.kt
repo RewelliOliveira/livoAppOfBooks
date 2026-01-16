@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,7 +54,7 @@ fun InfoCard(
                 Image(
                     painter = painterResource(R.drawable.ic_book),
                     contentDescription = "Ícone de livro",
-                    colorFilter = ColorFilter.tint(primary),
+                    colorFilter = ColorFilter.tint(outline),
                     modifier = Modifier.size(16.dp)
                 )
 
@@ -64,7 +63,7 @@ fun InfoCard(
                 Text(
                     texto,
                     fontSize = 13.sp,
-                    color = primary
+                    color = onBackground
                 )
             }
         }

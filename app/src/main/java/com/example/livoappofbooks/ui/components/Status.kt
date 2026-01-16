@@ -32,7 +32,7 @@
             shape = RoundedCornerShape(50)
         ) {
             Icon(
-                imageVector = MarcaPagina,
+                imageVector = BookmarkFilled,
                 contentDescription = "Marca Página",
                 modifier = Modifier.size(18.dp),
                 tint = status.color

@@ -2,6 +2,7 @@ package com.example.livoappofbooks.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.livoappofbooks.ui.icons.BookOpen
+import com.example.livoappofbooks.ui.icons.BookmarkOutlined
 import com.example.livoappofbooks.ui.icons.MagnifyingGlass
 import com.example.livoappofbooks.ui.icons.User
 
@@ -22,6 +23,12 @@ sealed class Screen(
         ScreenIcon.Vector(User)
     )
 
+    object Shelfs : Screen(
+        "shelfs",
+        "Prateleiras",
+        ScreenIcon.Vector(BookmarkOutlined)
+    )
+
     object Search : Screen(
         "search",
         "Procurar",
@@ -29,15 +36,55 @@ sealed class Screen(
     )
 
     object ViewBook : Screen(
-        "view_book",
+        "view_book/{bookId}",
         "Visualizar Livro",
         null
-    )
-    object RegisterReading : Screen(
-        "register_reading",
-        "Registrar Leitura",
+    ) {
+        fun createRoute(bookId: String) = "view_book/$bookId"
+    }
+
+    object ViewBookInit : Screen(
+        "view_book_init/{bookId}",
+        "Visualizar Livro Inicial",
+        null
+    ) {
+        fun createRoute(bookId: String) = "view_book_init/$bookId"
+    }
+
+    object RegisterReading : Screen("register_reading/{bookId}", "Registrar Leitura", null) {
+        fun createRoute(bookId: String) = "register_reading/$bookId"
+    }
+
+    object ShelfDetails : Screen(
+        "shelf_details/{shelfId}",
+        "Detalhes da Prateleira",
+        null
+    ) {
+        fun createRoute(shelfId: String) = "shelf_details/$shelfId"
+    }
+
+    object EditShelf : Screen(
+        "edit_shelf/{shelfId}",
+        "Editar Prateleira",
+        null
+    ) {
+        fun createRoute(shelfId: String) = "edit_shelf/$shelfId"
+    }
+
+    object AddShelf : Screen(
+        "add_shelf",
+        "Criar Prateleira",
         null
     )
+
+    object ReadingHistory : Screen(
+        "reading_history/{bookId}",
+        "Histórico de Leitura",
+        null
+    ) {
+        fun createRoute(bookId: String) = "reading_history/$bookId"
+    }
+
 }
 
 sealed class ScreenIcon {

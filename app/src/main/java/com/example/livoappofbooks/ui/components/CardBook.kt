@@ -1,15 +1,18 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
@@ -21,17 +24,21 @@ import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun CardBook(
+    bookId: String,
     title: String,
     author: String,
     rate: Double,
     publishYear: String,
     pageCount: Int,
     imageUrl: String,
-    personalLibrary: Boolean
+    personalLibrary: Boolean,
+    onClick: (String) -> Unit = {},
+    onAddClick: (String) -> Unit = {}
 ) {
     Box(
         Modifier
             .fillMaxWidth()
+            .clickable { onClick(bookId) }
             .shadow(
                 elevation = 10.dp,
                 spotColor = onBackground.copy(alpha = 0.5f),
@@ -55,16 +62,19 @@ fun CardBook(
                     .clip(RoundedCornerShape(15.dp))
             )
 
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(4.dp))
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp) // garante altura consistente com a imagem
             ) {
-
                 Text(
                     text = title,
-                    style = AppTypography.titleMedium,
-                    color = onBackground
+                    style = AppTypography.headlineSmall,
+                    color = onBackground,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(Modifier.height(2.dp))
@@ -72,6 +82,8 @@ fun CardBook(
                 Text(
                     text = author,
                     style = AppTypography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = tertiary
                 )
 
@@ -81,37 +93,42 @@ fun CardBook(
 
                 Spacer(Modifier.height(10.dp))
 
+                Spacer(modifier = Modifier.weight(1f))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
                     Column(
+                        modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         InfoItem(
                             icon = CalendarDays,
                             text = publishYear,
-                            height = 22.dp
                         )
                         InfoItem(
                             icon = BookOpen,
                             text = "$pageCount págs",
-                            height = 22.dp
                         )
                     }
+                    Spacer(Modifier.width(10.dp))
 
                     PrimaryButton(
-                        text = if (!personalLibrary) "Já adicionado" else "Adicionar",
-                        icon = if (!personalLibrary) CheckCircle else PlusCircle,
-                        onClick = {},
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .defaultMinSize(minWidth = 72.dp),
+                        text = if (!personalLibrary) "Adicionar" else "Adicionado",
+                        enabled = if(!personalLibrary) true else false,
+                        icon = if (!personalLibrary) PlusCircle else  CheckCircle,
                         height = 36.dp,
-                        width = 140.dp
+                        onClick = { onAddClick(bookId) },
+                        style = AppTypography.bodySmall
                     )
                 }
             }
         }
     }
 }
-

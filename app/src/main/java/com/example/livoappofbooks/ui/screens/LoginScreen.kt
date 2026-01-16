@@ -11,8 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.Input
@@ -28,7 +27,7 @@ import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
 import com.example.livoappofbooks.ui.theme.*
 import com.example.livoappofbooks.ui.viewModel.LoginUiState
 import com.example.livoappofbooks.ui.viewModel.LoginViewModel
-import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -43,7 +42,8 @@ class LoginViewModelFactory(private val context: Context) : ViewModelProvider.Fa
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    showSuccessSnackbar: Boolean = false
 ) {
     val context = LocalContext.current.applicationContext
     val factory = LoginViewModelFactory(context)
@@ -51,34 +51,26 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
 
-    // Observa estado do ViewModel
-    LaunchedEffect(viewModel) {
-        viewModel.uiState.collectLatest { state ->
-            when (state) {
-                is LoginUiState.Loading -> {
-                    isLoading = true
-                    errorMessage = null
-                }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-                is LoginUiState.Success -> {
-                    isLoading = false
-                    errorMessage = null
-                    onLoginSuccess()
-                }
+    LaunchedEffect(showSuccessSnackbar) {
+        if (showSuccessSnackbar) {
+            snackbarHostState.showSnackbar("Usuário cadastrado com sucesso!")
+        }
+    }
 
-                is LoginUiState.Error -> {
-                    isLoading = false
-                    errorMessage = state.message
-                }
-
-                else -> {
-                    isLoading = false
-                    errorMessage = null
-                }
+    LaunchedEffect(uiState) {
+        when (val state = uiState) {
+            is LoginUiState.Success -> {
+                onLoginSuccess()
             }
+            is LoginUiState.Error -> {
+                snackbarHostState.showSnackbar(state.message)
+                viewModel.resetState()
+            }
+            else -> {}
         }
     }
 
@@ -87,34 +79,24 @@ fun LoginScreen(
         bottomBar = {
             Footer(
                 onLoginClick = { viewModel.login(email, password) },
-                isLoading = isLoading
+                isLoading = (uiState is LoginUiState.Loading),
+                snackbarHostState = snackbarHostState
             )
         },
         containerColor = background
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(horizontal = 30.dp)
         ) {
-
             Main(
                 email = email,
                 onEmailChange = { email = it },
                 password = password,
                 onPasswordChange = { password = it }
             )
-
-            if (errorMessage != null) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = errorMessage ?: "",
-                    color = Color.Red,
-                    fontSize = 14.sp
-                )
-            }
         }
     }
 }
@@ -124,6 +106,10 @@ private fun Header(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -135,16 +121,15 @@ private fun Header(
         Icon(
             imageVector = Arrow_back_ios_new,
             contentDescription = "Seta de voltar",
-            tint = primary,
+            tint = outline,
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { onBackClick() }
         )
 
         Image(
-            painter = painterResource(R.drawable.livo),
+            painter = painterResource(logoRes),
             contentDescription = "Icone Livo",
-            colorFilter = ColorFilter.tint(primary),
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -186,14 +171,16 @@ private fun Main(
     Input(
         label = "Digite sua senha",
         value = password,
-        onValueChange = onPasswordChange
+        onValueChange = onPasswordChange,
+        isPassword = true
     )
 }
 
 @Composable
 fun Footer(
     onLoginClick: () -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean,
+    snackbarHostState: SnackbarHostState
 ) {
     Box(
         modifier = Modifier
@@ -236,5 +223,12 @@ fun Footer(
                 )
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
     }
 }

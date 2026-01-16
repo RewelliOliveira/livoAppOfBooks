@@ -3,7 +3,6 @@ package com.example.livoappofbooks.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,17 +12,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarSimple(
-    progress: Float, modifier: Modifier = Modifier
+    progress: Float,
+    modifier: Modifier = Modifier
 ) {
-    val percentage = (progress * 100).toInt()
+
+    val progressInt = progress.toInt()
+    val progressNormalized = (progress / 100f).coerceIn(0f, 1f)
 
     Row(
-        modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Box(
@@ -31,29 +33,26 @@ fun ProgressBarSimple(
                 .weight(1f)
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(surface)
+                .background(outline.copy(alpha = 0.2f))
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progress)
+                    .fillMaxWidth(progressNormalized)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(primary)
+                    .background(outline)
             )
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = "$percentage%", style = TextStyle(
-                color = primary, fontSize = 12.sp, fontWeight = FontWeight.Bold
+            text = "$progressInt%",
+            style = TextStyle(
+                color = outline,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
             )
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewProgressBarSimple() {
-    ProgressBarSimple(progress = 0.30f)
 }

@@ -1,5 +1,6 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,111 +16,96 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.livoappofbooks.R
-import com.example.livoappofbooks.ui.components.Book
-import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.ui.graphics.ColorFilter
+import com.example.livoappofbooks.R
+import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.domain.model.BookStatus
+import com.example.livoappofbooks.ui.components.Book
+import com.example.livoappofbooks.ui.components.SearchBar
 import com.example.livoappofbooks.ui.components.FilterBar
 import com.example.livoappofbooks.ui.theme.*
-
-data class Livro(
-    val status: String,
-    val progress: Int,
-    val evaluate: Int,
-    val imageUrl: String
-)
+import com.example.livoappofbooks.ui.viewModel.LibraryUiState
+import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
+import androidx.compose.foundation.isSystemInDarkTheme
 
 @Composable
 fun LibraryScreen(
-    onNavigate: () -> Unit,
-    onBookClick: (Livro) -> Unit
+    context: Context,
+    onBookClick: (Book) -> Unit
 ) {
+    val viewModel = remember { LibraryViewModel(context) }
+
+    val books by viewModel.books.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
-    val livrosMock = listOf(
-        Livro(
-            "Lido",
-            100,
-            4,
-            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Lido",
-            100,
-            4,
-            "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Lido",
-            100,
-            4,
-            "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Lido",
-            100,
-            5,
-            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Lendo",
-            30,
-            0,
-            "https://m.media-amazon.com/images/I/71jLBXtWJWL._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Lendo",
-            50,
-            0,
-            "https://m.media-amazon.com/images/I/81iqZ2HHD-L._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Quero Ler",
-            0,
-            0,
-            "https://m.media-amazon.com/images/I/71kxa1-0mfL._AC_UF1000,1000_QL80_.jpg"
-        ),
-        Livro(
-            "Abandonado",
-        40,
-        0,
-        ""
-    )
-    )
-
-    val filteredLivros = when (selectedFilter) {
-        "Todos" -> livrosMock
-        "Lendo" -> livrosMock.filter { it.status == "Lendo" }
-        "Lido" -> livrosMock.filter { it.status == "Lido" }
-        "Quero Ler" -> livrosMock.filter { it.status == "Quero Ler" }
-        "Abandonado" -> livrosMock.filter { it.status == "Abandonado" }
-        else -> livrosMock
+    LaunchedEffect(Unit) {
+        viewModel.loadBooks()
     }
 
+    val filteredBooks = books
+        .filter {
+            it.title.contains(searchQuery, ignoreCase = true)
+        }
+        .filter {
+            when (selectedFilter) {
+                "Todos" -> true
+                "Lendo" -> it.status == BookStatus.LENDO
+                "Lido" -> it.status == BookStatus.LIDO
+                "Quero Ler" -> it.status == BookStatus.QUERO_LER
+                "Abandonado" -> it.status == BookStatus.ABANDONADO
+                else -> true
+            }
+        }
+
+        .sortedWith(
+            compareBy(
+                { book ->
+                    when (book.status) {
+                        BookStatus.LENDO -> 1
+                        BookStatus.LIDO -> 2
+                        BookStatus.QUERO_LER -> 3
+                        BookStatus.ABANDONADO -> 4
+                        else -> 5
+                    }
+                },
+            )
+        )
+
+
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
+
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         color = background
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.statusBars)
             ) {
+
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(primary),
+                        painter = painterResource(logoRes),
                         contentDescription = "LIVO Logo",
                         modifier = Modifier
                             .height(30.dp)
@@ -131,12 +117,12 @@ fun LibraryScreen(
 
                 SearchBar(
                     query = searchQuery,
+                    placeholder = "Pesquisar na minha biblioteca",
                     onQueryChange = { searchQuery = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 FilterBar(
                     selectedFilter = selectedFilter,
@@ -146,41 +132,52 @@ fun LibraryScreen(
                         .padding(bottom = 24.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                if (filteredLivros.isNotEmpty()) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        content = {
-                            items(filteredLivros) { livro ->
-                                Book(
-                                    status = livro.status,
-                                    progress = livro.progress,
-                                    evaluate = livro.evaluate,
-                                    imageUrl = livro.imageUrl,
-                                    onClick = { onBookClick(livro) }
+                // CONTEÚDO
+                when (uiState) {
+                    is LibraryUiState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Carregando biblioteca...")
+                        }
+                    }
+
+                    else -> {
+                        if (filteredBooks.isEmpty()) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Vá na aba de busca para adicionar livros à sua biblioteca!",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = tertiary.copy(alpha = 0.6f),
+                                    textAlign = TextAlign.Center
                                 )
                             }
+                        } else {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(3),
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                items(filteredBooks) { book ->
+                                    Book(
+                                        status = book.status ?: BookStatus.QUERO_LER,
+                                        progress = book.userReadProgress,
+                                        evaluate = book.libraryRegistration?.personalRating ?: 0,
+                                        imageUrl = book.thumbnail.orEmpty(),
+                                        onClick = { onBookClick(book) }
+                                    )
+                                }
+                            }
                         }
-                    )
-                }
-            }
-
-            if (filteredLivros.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Nenhum livro encontrado",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = tertiary.copy(alpha = 0.6f),
-                        textAlign = TextAlign.Center
-                    )
+                    }
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.example.livoappofbooks.data.remote
 import com.example.livoappofbooks.data.remote.dto.LoginRequest
 import com.example.livoappofbooks.data.remote.dto.LoginResponse
 import com.example.livoappofbooks.data.remote.dto.RegisterRequest
-import com.example.livoappofbooks.data.remote.dto.RegisterResponse
+import com.example.livoappofbooks.data.service.AuthService
 
 class AuthRepository(
     private val api: AuthService
@@ -12,7 +12,7 @@ class AuthRepository(
         return api.login(request)
     }
 
-    suspend fun register(request: RegisterRequest): RegisterResponse {
+    suspend fun register(request: RegisterRequest): Unit {
         return api.register(request)
     }
 }

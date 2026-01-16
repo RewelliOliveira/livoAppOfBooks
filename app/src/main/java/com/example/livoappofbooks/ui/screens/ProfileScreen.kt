@@ -1,8 +1,16 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -11,223 +19,301 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.ConfigSection
 import com.example.livoappofbooks.ui.components.CustomSwitch
 import com.example.livoappofbooks.ui.components.InfoCard
-import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.statusBars
 import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
+import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
+import com.example.livoappofbooks.utils.NotificationService
 
 @Composable
 fun ProfileScreen(
-    onNavigate: () -> Unit,
-    themeViewModel: ThemeViewModel
+    themeViewModel: ThemeViewModel,
+    viewModel: ProfileViewModel,
+    onLogoutSuccess: () -> Unit
 ) {
+    val state by viewModel.uiState.collectAsState()
     val isDark by themeViewModel.isDarkTheme.collectAsState()
+    val profileImagePath by viewModel.profileImagePath.collectAsState()
+    val context = LocalContext.current
+
+    val isNotificationsEnabled by viewModel.isNotificationsEnabled.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchUserProfile()
+    }
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            if (uri != null) {
+                viewModel.updateProfileImage(context, uri)
+            }
+        }
+    )
+
+    fun sendTestNotification() {
+        val service = NotificationService(context)
+        service.showReadingReminder(
+            title = "Notificações Ativadas! ",
+            message = "Você vai receber lembretes de leitura, preguiçoso🧐"
+        )
+    }
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                viewModel.toggleNotifications(context, true)
+                sendTestNotification()
+            } else {
+                viewModel.toggleNotifications(context, false)
+            }
+        }
+    )
+
+    fun onNotificationSwitchChanged(isChecked: Boolean) {
+        if (isChecked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val permissionStatus = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+                if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                    viewModel.toggleNotifications(context, true)
+                    sendTestNotification()
+                } else {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            } else {
+                viewModel.toggleNotifications(context, true)
+                sendTestNotification()
+            }
+        } else {
+            viewModel.toggleNotifications(context, false)
+        }
+    }
+
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val isDarkThemeVal = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isDarkTheme }
+    val logoRes = if (isDarkThemeVal) R.drawable.livo_white else R.drawable.livo
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = background
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+        if (state.isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = primary)
+            }
+        } else {
+            val userProfile = state.userProfile
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.statusBars)
-            ) {
-                // Cabeçalho - Mesmo alinhamento que LibraryScreen
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.livo),
-                        colorFilter = ColorFilter.tint(primary),
-                        contentDescription = "LIVO Logo",
-                        modifier = Modifier
-                            .height(30.dp)
-                            .width(100.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Seção de perfil do usuário
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(70.dp)
-                            .clip(CircleShape)
-                            .background(primary.copy(alpha = 0.2f))
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            "Nome do usuário",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = tertiary
-                        )
-                        Text(
-                            "example@mail.com",
-                            fontSize = 14.sp,
-                            color = tertiary.copy(alpha = 0.7f)
-                        )
-                    }
-
-                    IconButton(onClick = { }) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_edit),
-                            contentDescription = "Editar perfil",
-                            colorFilter = ColorFilter.tint(primary),
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Cards de estatísticas
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    InfoCard(
-                        modifier = Modifier.weight(1f),
-                        numero = "14",
-                        texto = "Livros em leitura",
-                        isDark = isDark
-                    )
-                    InfoCard(
-                        modifier = Modifier.weight(1f),
-                        numero = "31",
-                        texto = "Livros Lidos",
-                        isDark = isDark
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Seções de configuração
+            Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    ConfigSection(
-                        titulo = "Aparência",
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                                Image(
-                                    painter = painterResource(R.drawable.ic_theme),
-                                    contentDescription = "Tema",
-                                    colorFilter = ColorFilter.tint(primary),
-                                    modifier = Modifier.size(24.dp)
-                                )
-
-                                Spacer(modifier = Modifier.width(12.dp))
-
-                                Column {
-                                    Text(
-                                        "Modo escuro",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = tertiary
-                                    )
-                                    Text(
-                                        "Reduz o cansaço visual",
-                                        fontSize = 13.sp,
-                                        color = tertiary.copy(alpha = 0.7f)
-                                    )
-                                }
-                            }
-
-                            CustomSwitch(
-                                checked = isDark,
-                                onCheckedChange = { themeViewModel.toggleTheme() }
-                            )
-                        }
-                    }
-
-                    ConfigSection(
-                        titulo = "Notificações",
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                                Image(
-                                    painter = painterResource(R.drawable.ic_noti),
-                                    contentDescription = "Notificações",
-                                    colorFilter = ColorFilter.tint(primary),
-                                    modifier = Modifier.size(24.dp)
-                                )
-
-                                Spacer(modifier = Modifier.width(12.dp))
-
-                                Column {
-                                    Text(
-                                        "Ativar as notificações",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = tertiary
-                                    )
-                                    Text(
-                                        "Receba lembretes todos os dias",
-                                        fontSize = 13.sp,
-                                        color = tertiary.copy(alpha = 0.7f)
-                                    )
-                                }
-                            }
-
-                            CustomSwitch(
-                                checked = false,
-                                onCheckedChange = { }
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Botão de sair
-                OutlinedButton(
-                    onClick = { },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = error
-                    ),
-                    border = BorderStroke(1.dp, error)
+                        .fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.statusBars)
                 ) {
-                    Text("Sair da conta", fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(logoRes),
+                            contentDescription = "LIVO Logo",
+                            modifier = Modifier.height(30.dp).width(100.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(70.dp)
+                                .clip(CircleShape)
+                                .background(primary.copy(alpha = 0.2f))
+                                .clickable {
+                                    photoPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                }
+                        ) {
+                            if (profileImagePath != null) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(profileImagePath)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource(logoRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = userProfile?.username ?: "Usuário",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = tertiary
+                            )
+                            Text(
+                                text = userProfile?.email ?: "",
+                                fontSize = 14.sp,
+                                color = tertiary.copy(alpha = 0.7f)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        InfoCard(
+                            modifier = Modifier.weight(1f),
+                            numero = userProfile?.reading?.toString() ?: "-",
+                            texto = "Livros em leitura",
+                            isDark = isDark
+                        )
+                        InfoCard(
+                            modifier = Modifier.weight(1f),
+                            numero = userProfile?.read?.toString() ?: "-",
+                            texto = "Livros Lidos",
+                            isDark = isDark
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        ConfigSection(
+                            titulo = "Aparência",
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_theme),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(primary),
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column {
+                                        Text(
+                                            "Modo escuro",
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = tertiary
+                                        )
+                                        Text(
+                                            "Reduz o cansaço visual",
+                                            fontSize = 13.sp,
+                                            color = tertiary.copy(alpha = 0.7f)
+                                        )
+                                    }
+                                }
+                                CustomSwitch(
+                                    checked = isDark,
+                                    onCheckedChange = { themeViewModel.toggleTheme() }
+                                )
+                            }
+                        }
+
+                        ConfigSection(
+                            titulo = "Notificações",
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_noti),
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(primary),
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column {
+                                        Text(
+                                            "Ativar as notificações",
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = tertiary
+                                        )
+                                        Text(
+                                            "Receba lembretes a cada 3h",
+                                            fontSize = 13.sp,
+                                            color = tertiary.copy(alpha = 0.7f)
+                                        )
+                                    }
+                                }
+                                CustomSwitch(
+                                    checked = isNotificationsEnabled,
+                                    onCheckedChange = { isChecked ->
+                                        onNotificationSwitchChanged(isChecked)
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.logout()
+                            onLogoutSuccess()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 32.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = error
+                        ),
+                        border = BorderStroke(1.dp, error)
+                    ) {
+                        Text("Sair da conta", fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }

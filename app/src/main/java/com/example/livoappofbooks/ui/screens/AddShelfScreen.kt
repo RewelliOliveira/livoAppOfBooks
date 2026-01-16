@@ -1,0 +1,285 @@
+package com.example.livoappofbooks.ui.screens
+
+import android.content.Context
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.ui.components.CardShelf
+import com.example.livoappofbooks.ui.components.Input
+import com.example.livoappofbooks.ui.components.PrimaryButton
+import com.example.livoappofbooks.ui.theme.AppTypography
+import com.example.livoappofbooks.ui.theme.background
+import com.example.livoappofbooks.ui.theme.primary
+import com.example.livoappofbooks.ui.theme.tertiary
+import com.example.livoappofbooks.ui.viewModel.LibraryUiState
+import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
+import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
+import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
+import com.example.livoappofbooks.ui.theme.outline
+
+@Composable
+fun AddShelfScreen(
+    context: Context,
+    viewModel: ShelvesViewModel,
+    onBackClick: () -> Unit
+) {
+
+    var name by remember { mutableStateOf(viewModel.formName) }
+    var description by remember { mutableStateOf(viewModel.formDescription) }
+
+
+    var showSaveDialog by remember { mutableStateOf(false) }
+
+    val loading by viewModel.loading.observeAsState(false)
+    val success by viewModel.operationSuccess.observeAsState(false)
+
+
+    val libraryViewModel = remember { LibraryViewModel(context) }
+    val books by libraryViewModel.books.collectAsState()
+    val libraryState by libraryViewModel.uiState.collectAsState()
+
+
+    LaunchedEffect(name) {
+        viewModel.formName = name
+    }
+
+    LaunchedEffect(description) {
+        viewModel.formDescription = description
+    }
+
+
+    LaunchedEffect(success) {
+        if (success) {
+            viewModel.resetOperationSuccess()
+            onBackClick()
+        }
+    }
+
+
+    LaunchedEffect(Unit) {
+        libraryViewModel.loadBooks()
+    }
+
+
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = {
+                Text(
+                    text = "Criar Prateleira",
+                    style = AppTypography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "Deseja criar a prateleira \"$name\"?",
+                    style = AppTypography.bodyMedium
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showSaveDialog = false
+                        if (name.isNotBlank()) {
+                            viewModel.createShelf(name, description.ifBlank { null })
+                        }
+                    }
+                ) {
+                    Text("Criar", color = primary, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSaveDialog = false }) {
+                    Text("Cancelar", color = tertiary)
+                }
+            },
+            containerColor = background
+        )
+    }
+
+    Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = {
+                    viewModel.clearFormState()
+                    onBackClick()
+                }) {
+                    Icon(
+                        imageVector = Arrow_back_ios_new,
+                        contentDescription = "Voltar",
+                        tint = outline
+                    )
+                }
+                Text(
+                    text = "Criar Prateleira",
+                    style = AppTypography.headlineSmall,
+                    color = outline,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        },
+        containerColor = background
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Input(
+                label = "Nome da Prateleira",
+                value = name,
+                onValueChange = { name = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Input(
+                label = "Descrição (opcional)",
+                value = description,
+                onValueChange = { description = it },
+                modifier = Modifier.height(120.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Seus livros",
+                style = AppTypography.titleLarge,
+                color = outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            when (libraryState) {
+                is LibraryUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = primary)
+                    }
+                }
+
+                is LibraryUiState.Error -> {
+                    val message = (libraryState as LibraryUiState.Error).message
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = message,
+                            style = AppTypography.bodyMedium,
+                            color = tertiary
+                        )
+                    }
+                }
+
+                else -> {
+                    if (books.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Nenhum livro na sua biblioteca ainda.",
+                                style = AppTypography.bodyMedium,
+                                color = tertiary
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(books) { book ->
+                                ShelfSelectableBookItem(
+                                    book = book,
+                                    isSelected = book.libraryRegistration?.id?.toLongOrNull()
+                                        ?.let { viewModel.selectedBooks.containsKey(it) }
+                                        ?: false,
+                                    onToggle = { registrationId ->
+                                        viewModel.toggleBookSelection(
+                                            registrationId = registrationId,
+                                            bookId = book.id,
+                                            status = book.status
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (loading) {
+                CircularProgressIndicator(color = primary)
+                Spacer(modifier = Modifier.height(32.dp))
+            } else {
+                PrimaryButton(
+                    text = "Salvar",
+                    onClick = {
+                        if (name.isNotBlank()) {
+                            showSaveDialog = true
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShelfSelectableBookItem(
+    book: Book,
+    isSelected: Boolean,
+    onToggle: (Long) -> Unit
+) {
+
+    val registrationId = book.libraryRegistration?.id?.toLongOrNull()
+        ?: return
+
+    CardShelf(
+        bookId = book.id,
+        title = book.title,
+        author = book.authors.firstOrNull() ?: "",
+        rate = book.averageRating ?: 0.0,
+        publishYear = book.publishedDate ?: "",
+        pageCount = book.pageCount ?: 0,
+        imageUrl = book.thumbnail.orEmpty(),
+        personalLibrary = isSelected,
+        onClick = { onToggle(registrationId) },
+        onAddClick = { onToggle(registrationId) }
+    )
+}

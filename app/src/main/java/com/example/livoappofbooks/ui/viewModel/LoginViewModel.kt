@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.livoappofbooks.data.remote.AuthRepository
-import com.example.livoappofbooks.data.remote.AuthService
+import com.example.livoappofbooks.data.service.AuthService
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.remote.dto.LoginRequest
 import com.example.livoappofbooks.data.remote.dto.LoginResponse
@@ -12,6 +12,8 @@ import com.example.livoappofbooks.data.remote.local.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 sealed class LoginUiState {
     object Idle : LoginUiState()
@@ -24,7 +26,8 @@ class LoginViewModel(
     context: Context
 ) : ViewModel() {
 
-    private val authService: AuthService = RetrofitInstance.getApi(context)
+    private val authService = RetrofitInstance
+        .createService(context, AuthService::class.java)
     private val repository: AuthRepository = AuthRepository(authService)
     private val tokenManager = TokenManager(context)
 
@@ -45,7 +48,18 @@ class LoginViewModel(
 
                 _uiState.value = LoginUiState.Success(response)
             } catch (e: Exception) {
-                _uiState.value = LoginUiState.Error(e.message ?: "Erro desconhecido")
+                val errorMessage = when (e) {
+                    is HttpException -> {
+                        when (e.code()) {
+                            401, 403, 404 -> "Usuário ou senha inválidos."
+                            500 -> "Ocorreu um erro no servidor. Tente novamente mais tarde."
+                            else -> "Ocorreu um erro inesperado."
+                        }
+                    }
+                    is IOException -> "Sem conexão com a internet."
+                    else -> "Ocorreu um erro desconhecido."
+                }
+                _uiState.value = LoginUiState.Error(errorMessage)
             }
         }
     }

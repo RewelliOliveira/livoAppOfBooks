@@ -17,6 +17,7 @@ fun BottomBar(navController: NavController) {
     val screens = listOf(
         Screen.Library,
         Screen.Search,
+        Screen.Shelfs,
         Screen.Profile
     )
 
@@ -63,11 +64,11 @@ fun BottomBar(navController: NavController) {
                 },
                 label = { Text(text = screen.label) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = primary, // cor do ícone selecionado
-                    unselectedIconColor = tertiary, // cor do ícone não selecionado
-                    selectedTextColor = primary, // cor do label selecionado
-                    unselectedTextColor = tertiary, // cor do label não selecionado
-                    indicatorColor = tertiary.copy(alpha = 0.1f) // <- bordinha
+                    selectedIconColor = outline,
+                    unselectedIconColor = tertiary,
+                    selectedTextColor = outline,
+                    unselectedTextColor = tertiary,
+                    indicatorColor = onBackground.copy(alpha = 0.1f)
                 )
             )
         }

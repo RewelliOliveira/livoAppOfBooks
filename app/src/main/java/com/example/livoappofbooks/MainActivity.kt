@@ -1,5 +1,6 @@
 package com.example.livoappofbooks
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,9 +13,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.example.livoappofbooks.data.ThemePreferences
 import com.example.livoappofbooks.data.ThemeRepository
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.livoappofbooks.navigation.AppNavigation
 import com.example.livoappofbooks.ui.screens.InitialScreen
 import com.example.livoappofbooks.ui.screens.LoginScreen
@@ -22,6 +25,8 @@ import com.example.livoappofbooks.ui.screens.RegisterScreen
 import com.example.livoappofbooks.ui.theme.ThemeProvider
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
 import com.example.livoappofbooks.ui.viewModel.ThemeViewModelFactory
+import com.example.livoappofbooks.utils.NotificationScheduler
+import com.example.livoappofbooks.utils.NotificationService
 
 class MainActivity : ComponentActivity() {
 
@@ -31,9 +36,21 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val notificationService = NotificationService(applicationContext) //notificaçãozinha
+        notificationService.createNotificationChannel()
+
+        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val isNotificationsEnabled = prefs.getBoolean("notifications_enabled", false)
+
+        if (isNotificationsEnabled) {
+            NotificationScheduler.schedulePeriodicReminder(applicationContext)
+        } else {
+            NotificationScheduler.cancelReminder(applicationContext)
+        }
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -66,14 +83,22 @@ fun RootNavigation(themeViewModel: ThemeViewModel) {
             )
         }
 
-        composable("login") {
+        composable(
+            route = "login?show_success_snackbar={show_success_snackbar}",
+            arguments = listOf(navArgument("show_success_snackbar") {
+                type = NavType.BoolType
+                defaultValue = false
+            })
+        ) { backStackEntry ->
+            val showSnackbar = backStackEntry.arguments?.getBoolean("show_success_snackbar") ?: false
             LoginScreen(
                 onLoginSuccess = {
                     navController.navigate("app") {
                         popUpTo("initial") { inclusive = true }
                     }
                 },
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                showSuccessSnackbar = showSnackbar
             )
         }
 
@@ -81,8 +106,8 @@ fun RootNavigation(themeViewModel: ThemeViewModel) {
             RegisterScreen(
                 onBackClick = { navController.popBackStack() },
                 onRegisterComplete = {
-                    navController.navigate("initial") {
-                        popUpTo("register") { inclusive = true }
+                    navController.navigate("login?show_success_snackbar=true") {
+                        popUpTo("initial")
                     }
                 }
             )

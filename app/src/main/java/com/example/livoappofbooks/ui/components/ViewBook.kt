@@ -1,7 +1,6 @@
-package com.example.livoappofbooks.ui.screens
+package com.example.livoappofbooks.ui.components
 
 import RatingButton
-import com.example.livoappofbooks.ui.icons.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,12 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.domain.model.BookStatus
-import com.example.livoappofbooks.ui.components.*
+import com.example.livoappofbooks.ui.icons.*
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
@@ -44,16 +42,26 @@ fun ViewBook(
     pageCount: String,
     status: String,
     shelf: String,
+    userCurrentPage: Int? = null,
+    userTotalPages: Int = 0,
     onBackClick: () -> Unit,
     onRegisterClick: () -> Unit,
-) {
-
+    onStatusClick: () -> Unit,
+    onShelfClick: () -> Unit,
+    onRemoveClick: () -> Unit = {},
+    onRatingClick: () -> Unit,
+    onReadingHistoryClick: () -> Unit
+    ) {
     val isExpanded = remember { mutableStateOf(false) }
     val previewLimit = 150
     val shouldTruncate = sinopse.length > previewLimit
 
     val displayedSinopse = if (isExpanded.value || !shouldTruncate) sinopse
     else sinopse.take(previewLimit) + "..."
+
+    val safeImageModel = imageUrl.ifBlank { null }
+
+    val currentStatus = BookStatus.fromString(status)
 
     Box(
         modifier = Modifier
@@ -72,15 +80,16 @@ fun ViewBook(
                 contentAlignment = Alignment.TopCenter
             ) {
                 AsyncImage(
-                    model = imageUrl.takeIf { it.isNotBlank() },
-                    placeholder = painterResource(id = R.drawable.livro_teste),
+                    model = safeImageModel,
+                    placeholder = painterResource(id = R.drawable.capa_default),
+                    error = painterResource(id = R.drawable.capa_default),
+                    fallback = painterResource(id = R.drawable.capa_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(320.dp)
-                        .blur(10.dp)
-                        .shadow(20.dp)
+                        .blur(2.dp)
                 )
 
                 Box(
@@ -90,14 +99,16 @@ fun ViewBook(
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(Color.Transparent, background),
-                                startY = 250f
+                                startY = 10f
                             )
                         )
                 )
 
                 AsyncImage(
-                    model = imageUrl.takeIf { it.isNotBlank() },
-                    placeholder = painterResource(id = R.drawable.livro_teste),
+                    model = safeImageModel,
+                    placeholder = painterResource(id = R.drawable.capa_default),
+                    error = painterResource(id = R.drawable.capa_default),
+                    fallback = painterResource(id = R.drawable.capa_default),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -142,9 +153,9 @@ fun ViewBook(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    InfoItem(icon = CalendarDays, text = publishYear)
-                    InfoItem(icon = BuildingLibrary, text = publisher.take(12))
-                    InfoItem(icon = BookOpen, text = "$pageCount págs")
+                    InfoItem(icon = CalendarDays, text = publishYear, 22.dp)
+                    InfoItem(icon = BuildingLibrary, text = publisher.take(12), 22.dp)
+                    InfoItem(icon = BookOpen, text = "$pageCount págs", 22.dp)
                 }
 
                 Spacer(Modifier.height(16.dp))
@@ -158,40 +169,54 @@ fun ViewBook(
                 ) {
                     PrimaryButton(
                         modifier = Modifier.weight(2f),
-                        text = shelf.take(8),
-                        onClick = {},
-                        icon = Bookshelf
+                        text = shelf.take(15),
+                        onClick = onShelfClick,
+                        icon = Bookshelf,
+                        style = AppTypography.titleSmall
                     )
                     Spacer(Modifier.width(8.dp))
+
                     Status(
                         modifier = Modifier.weight(1f),
                         status = BookStatus.fromString(status),
-                        onClick = {}
+                        onClick = onStatusClick
                     )
                 }
 
                 Spacer(Modifier.height(16.dp))
 
-                Column {
-                    PrimaryButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        icon = Pencil,
-                        text = "Registrar Leitura",
-                        onClick = onRegisterClick
-                    )
-                    RatingButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {}
-                    )
+                if (currentStatus != BookStatus.QUERO_LER) {
+                    Column {
+                        PrimaryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Pencil,
+                            text = "Registrar Leitura",
+                            onClick = onRegisterClick,
+                            style = AppTypography.titleSmall,
+                            height = 48.dp
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        if(currentStatus == BookStatus.LIDO) {
+                            RatingButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = onRatingClick
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        ReadingHistoryButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onReadingHistoryClick
+                        )
+                    }
                 }
 
                 Spacer(Modifier.height(16.dp))
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
@@ -223,7 +248,8 @@ fun ViewBook(
                             )
                         }
                     }
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(32.dp))
+
                     Text(
                         text = "Remover livro",
                         style = AppTypography.titleMedium.copy(
@@ -233,7 +259,7 @@ fun ViewBook(
                         ),
                         modifier = Modifier
                             .padding(bottom = 60.dp)
-                            .clickable(onClick = {})
+                            .clickable(onClick = onRemoveClick)
                     )
                 }
             }
@@ -248,44 +274,23 @@ fun ViewBook(
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    onBackClick()
-                },
+                ) { onBackClick() },
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                imageVector = Arrow_back_ios_new,
+            Icon(imageVector = Arrow_back_ios_new,
                 contentDescription = "Voltar",
                 tint = Color.Black.copy(alpha = 0.8f),
-                modifier = Modifier.size(24.dp)
-            )
+                modifier = Modifier.size(24.dp))
         }
 
-
-        ProgressBarBook(
-            currentPage = 108,
-            totalPages = 240,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+        if (userCurrentPage != null && userCurrentPage >= 0) {
+            ProgressBarBook(
+                currentPage = userCurrentPage,
+                totalPages = if (userTotalPages > 0) userTotalPages else 1,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
+        }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun PreviewViewBook() {
-    ViewBook(
-        title = "O Senhor dos Anéis",
-        author = "J. R. R. Tolkien",
-        rate = 4.8,
-        sinopse = "Uma aventura épica pela Terra-média, onde Frodo Bolseiro deve destruir o Um Anel antes que Sauron recupere seu poder absoluto. Com a ajuda da Sociedade do Anel, ele enfrenta inúmeros desafios e perigos.",
-        imageUrl = "",
-        publishYear = "1954",
-        publisher = "HarperCollins",
-        pageCount = "1216",
-        status = "LIDO",
-        shelf = "Fantasia",
-        onBackClick = {},
-        onRegisterClick = {}
-    )
 }

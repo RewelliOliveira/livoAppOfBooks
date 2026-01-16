@@ -1,7 +1,7 @@
 package com.example.livoappofbooks.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -13,25 +13,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
 import com.example.livoappofbooks.R
-import com.example.livoappofbooks.ui.theme.*
+import com.example.livoappofbooks.domain.model.BookStatus
 import com.example.livoappofbooks.ui.theme.rememberThemeState
-import androidx.compose.ui.text.style.TextOverflow
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun Book(
-    status: String,
+    status: BookStatus,
     progress: Int,
     evaluate: Int,
     imageUrl: String,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) {
     val isDark = rememberThemeState().isDarkTheme
 
@@ -39,7 +41,10 @@ fun Book(
         modifier = Modifier
             .width(120.dp)
             .padding(4.dp)
-            .clickable { onClick?.invoke() },
+            .combinedClickable(
+                onClick = { onClick?.invoke() },
+                onLongClick = { onLongClick?.invoke() }
+            ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -49,11 +54,11 @@ fun Book(
                 .aspectRatio(2f / 3f)
                 .clip(RoundedCornerShape(10.dp))
         ) {
-
             AsyncImage(
                 model = imageUrl.takeIf { it.isNotBlank() },
                 placeholder = painterResource(id = R.drawable.capa_default),
                 error = painterResource(id = R.drawable.capa_default),
+                fallback = painterResource(id = R.drawable.capa_default),
                 contentDescription = "Capa do livro",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -70,24 +75,19 @@ fun Book(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            val (corFundo, corTexto) = when (status) {
-                "Lido"       -> PrincipalColor to Color.White
-                "Lendo"      -> DarkColor to Color.White
-                "Quero Ler"  -> Yellow to Color.Black
-                "Abandonado" -> SubtitlesColor to Color.White
-                else         -> PrincipalColor to Color.White
-            }
+            val corFundo = status.color
+            val corTexto = Color.White
 
-            // Se for 'Quero Ler', ocupar todo o espaço disponível
-            val statusModifier = if (status == "Quero Ler") {
-                Modifier
-                    .weight(1f)
-                    .height(20.dp)
-            } else {
-                Modifier
-                    .width(75.dp)
-                    .height(20.dp)
-            }
+            val statusModifier =
+                if (status == BookStatus.QUERO_LER) {
+                    Modifier
+                        .weight(1f)
+                        .height(20.dp)
+                } else {
+                    Modifier
+                        .width(75.dp)
+                        .height(20.dp)
+                }
 
             Box(
                 modifier = statusModifier
@@ -96,7 +96,7 @@ fun Book(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = status,
+                    text = status.displayName,
                     color = corTexto,
                     fontSize = 9.47.sp,
                     fontWeight = FontWeight.Medium,
@@ -105,9 +105,8 @@ fun Book(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-
-            // Se for 'Quero Ler' escondemos o bloco de info (progresso/estrelas)
-            if (status != "Quero Ler") {
+            
+            if (status != BookStatus.QUERO_LER) {
                 val infoColor = if (isDark) Color.White else corFundo
 
                 Box(
@@ -116,19 +115,17 @@ fun Book(
                         .height(24.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    if (status == "Lido") {
+                    if (status == BookStatus.LIDO) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.height(14.dp)
                         ) {
                             Text(
-                                text = "$evaluate",
+                                text = evaluate.toString(),
                                 color = infoColor,
                                 fontSize = 9.47.sp,
                                 fontWeight = FontWeight.Medium,
-                                lineHeight = 9.47.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                lineHeight = 9.47.sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Icon(
@@ -138,32 +135,17 @@ fun Book(
                                 modifier = Modifier.size(12.dp)
                             )
                         }
-
                     } else {
                         Text(
                             text = "$progress%",
                             color = infoColor,
                             fontSize = 9.47.sp,
                             fontWeight = FontWeight.Medium,
-                            lineHeight = 9.47.sp,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            lineHeight = 9.47.sp
                         )
                     }
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun BookPreview() {
-    Book(
-        status = "Quero Ler",
-        progress = 0,
-        imageUrl = "",
-        evaluate = 0,
-        onClick = {}
-    )
 }

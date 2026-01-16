@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,25 +13,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.livoappofbooks.ui.theme.*
 
 @Composable
 fun ProgressBarBook(
-    currentPage: Int,       
+    currentPage: Int, // ATENÇÃO: A API está enviando a PORCENTAGEM (ex: 26) aqui, não as páginas.
     totalPages: Int,
     modifier: Modifier = Modifier
 ) {
-    val progress = currentPage.toFloat() / totalPages.toFloat()
-    val percentage = (progress * 100).toInt()
+    val safeTotalPages = if (totalPages > 0) totalPages else 1
+
+    val percentage = currentPage.coerceIn(0, 100)
+
+    val progressFactor = percentage / 100f
+
+    val estimatedPagesRead = (progressFactor * safeTotalPages).toInt()
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, primary, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
+            .border(1.dp, outline.copy(alpha = 0.9F), RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .background(background, RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
             .padding(horizontal = 10.dp, vertical = 20.dp)
-
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -42,15 +44,15 @@ fun ProgressBarBook(
             Text(
                 text = "$percentage% do livro foi lido",
                 style = TextStyle(
-                    color = primary,
+                    color = outline,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
             )
             Text(
-                text = "$currentPage/$totalPages",
+                text = "$estimatedPagesRead/$safeTotalPages",
                 style = TextStyle(
-                    color = primary,
+                    color = outline,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -64,23 +66,15 @@ fun ProgressBarBook(
                 .fillMaxWidth()
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(surface) // trilho suave
+                .background(outline.copy(alpha = 0.2f)) // trilho suave
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progress)
+                    .fillMaxWidth(progressFactor) // Usa o fator baseado na porcentagem (0.26)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(primary) // barra principal
+                    .background(outline) // barra principal
             )
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun PreviewProgressBarBook() {
-    ProgressBarBook(
-        currentPage = 108,
-        totalPages = 364
-    )
 }

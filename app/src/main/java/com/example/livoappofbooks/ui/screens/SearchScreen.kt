@@ -1,6 +1,7 @@
 package com.example.livoappofbooks.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,136 +15,202 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import com.example.livoappofbooks.ui.components.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.livoappofbooks.R
 import com.example.livoappofbooks.ui.components.CardBook
 import com.example.livoappofbooks.ui.theme.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.livoappofbooks.domain.model.BookStatus
+import com.example.livoappofbooks.ui.components.modals.sheets.BookStatusBottomSheet
 import com.example.livoappofbooks.ui.viewModel.SearchViewModel
 import com.example.livoappofbooks.ui.viewModel.SearchUiState
 
 @Composable
-fun SearchScreen(onNavigate: () -> Unit, viewModel: SearchViewModel = viewModel()) {
+fun SearchScreen(
+    viewModel: SearchViewModel = viewModel(),
+    onBookClick: (bookId: String, isInLibrary: Boolean) -> Unit
+) {
+
+    val isDarkTheme = runCatching { rememberThemeState().isDarkTheme }
+        .getOrElse { isSystemInDarkTheme() }
+
+    val logoRes = if (isDarkTheme) R.drawable.livo_white else R.drawable.livo
     val query by viewModel.query.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
-    Column(
+    // Obter livros populares a partir de mocks
+    val popularByCategory = remember { com.example.livoappofbooks.data.mock.PopularBooks.shuffled() }
+
+    var showAddSheet by remember { mutableStateOf(false) }
+    var selectedBookId by remember { mutableStateOf<String?>(null) }
+
+    Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .windowInsetsPadding(WindowInsets.statusBars),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp),
+        color = background
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.statusBars),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.livo),
-                contentDescription = "LIVO Logo",
-                colorFilter = ColorFilter.tint(primary),
-                modifier = Modifier
-                    .height(30.dp)
-                    .width(100.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        SearchBar(
-            query = query,
-            onQueryChange = { viewModel.onQueryChange(it) },
-            onSearch = { viewModel.search() },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-        when (uiState) {
-            is SearchUiState.Idle -> {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Text(
-                        text = "Livros Populares",
-                        style = AppTypography.headlineSmall,
-                        color = primary
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    CardBook(
-                        title = "Peter Pan in Wonderland",
-                        author = "Samira Sales",
-                        rate = 3.7,
-                        imageUrl = "https://covers.openlibrary.org/b/id/15119025-L.jpg",
-                        publishYear = "2025",
-                        pageCount = 240,
-                        personalLibrary = true
-                    )
-                }
-            }
-
-            is SearchUiState.Loading -> {
-                Box(
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = logoRes),
+                    contentDescription = "LIVO Logo",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                        .height(30.dp)
+                        .width(100.dp)
+                )
             }
 
-            is SearchUiState.Success -> {
-                val results = (uiState as SearchUiState.Success).results
+            Spacer(modifier = Modifier.height(32.dp))
 
-                if (results.isEmpty()) {
-                    Text(
-                        text = "Nenhum resultado encontrado.",
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                } else {
-                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        items(results) { book ->
-                            CardBook(
-                                title = book.title,
-                                author = book.authors.firstOrNull() ?: "Desconhecido",
-                                rate = book.averageRating ?: 0.0,
-                                imageUrl = book.thumbnail ?: "",
-                                publishYear = book.publishedDate?.take(4) ?: "--",
-                                pageCount = book.pageCount ?: 0,
-                                personalLibrary = book.personalLibrary
+            SearchBar(
+                query = query,
+                onQueryChange = { viewModel.onQueryChange(it) },
+                onSearch = { viewModel.search() },
+                placeholder = "Buscar livros",
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+            when (uiState) {
+                is SearchUiState.Idle -> {
+                    // Mostrar livros populares organizados por categoria
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        Text(
+                            text = "Descubra",
+                            style = AppTypography.headlineMedium,
+                            color = outline
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Para cada categoria, renderizar um título e um LazyRow de itens
+                        popularByCategory.forEach { (category, books) ->
+                            Text(
+                                text = category,
+                                style = AppTypography.titleMedium,
+                                color = onBackground,
+                                modifier = Modifier.padding(vertical = 8.dp)
                             )
+
+                            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                items(books) { book ->
+                                    com.example.livoappofbooks.ui.components.PopularBookItem(book = book, modifier = Modifier.padding(end = 8.dp)) { id: String ->
+                                        onBookClick(id, book.personalLibrary)
+                                    }
+                                }
+                            }
+
                             Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                    }
+                }
+
+                is SearchUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is SearchUiState.Success -> {
+                    val results = (uiState as SearchUiState.Success).results
+
+                    if (results.isEmpty()) {
+                        Text(
+                            text = "Nenhum resultado encontrado.",
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                    } else {
+                        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                            items(results) { book ->
+                                CardBook(
+                                    bookId = book.id,
+                                    title = book.title,
+                                    author = book.authors.firstOrNull() ?: "Desconhecido",
+                                    rate = book.averageRating ?: 0.0,
+                                    imageUrl = book.thumbnail ?: "",
+                                    publishYear = book.publishedDate?.take(4) ?: "--",
+                                    pageCount = book.pageCount ?: 0,
+                                    personalLibrary = book.personalLibrary,
+                                    onClick = { id ->
+                                        onBookClick(id, book.personalLibrary)
+                                    },
+                                    onAddClick = { id ->
+                                        selectedBookId = id
+                                        showAddSheet = true
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
                         }
                     }
                 }
-            }
 
-            is SearchUiState.Error -> {
-                val message = (uiState as SearchUiState.Error).message
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = message, style = AppTypography.bodyMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    // Opcional: botões de retry poderiam ser adicionados aqui
+                is SearchUiState.Error -> {
+                    val message = (uiState as SearchUiState.Error).message
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = message, style = AppTypography.bodyMedium)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
+        }
+        if (showAddSheet && selectedBookId != null) {
+            val options = BookStatus.entries.map { it.displayName }
+
+            BookStatusBottomSheet(
+                options = options,
+                selectedOption = BookStatus.QUERO_LER.displayName, // Padrão
+                onDismiss = {
+                    showAddSheet = false
+                    selectedBookId = null
+                },
+                onSelectionChange = { selectedName ->
+                    val status = BookStatus.entries.find { it.displayName == selectedName }
+                        ?: BookStatus.QUERO_LER
+
+                    viewModel.addBookToLibrary(selectedBookId!!, status.id)
+
+                    showAddSheet = false
+                    selectedBookId = null
+                }
+            )
         }
     }
 }
