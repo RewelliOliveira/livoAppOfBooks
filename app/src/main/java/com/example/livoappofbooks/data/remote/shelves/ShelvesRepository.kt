@@ -3,6 +3,7 @@ package com.example.livoappofbooks.data.remote.shelves
 import android.content.Context
 import com.example.livoappofbooks.data.remote.RetrofitInstance
 import com.example.livoappofbooks.data.remote.shelves.dto.AddBookToShelfRequest
+import com.example.livoappofbooks.data.remote.shelves.dto.BookShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfRequest
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfResponse
 import com.example.livoappofbooks.data.remote.shelves.dto.ShelfUpdateRequest
@@ -20,12 +21,13 @@ class ShelvesRepository(
 
     suspend fun createShelf(
         name: String,
-        description: String?
+        description: String?,
+        books: List<BookShelfRequest>
     ): ShelfResponse {
         val body = ShelfRequest(
             name = name,
             description = description,
-            books = emptyList()
+            books = books
         )
         return service.createShelf(body)
     }
@@ -50,7 +52,7 @@ class ShelvesRepository(
         return service.updateShelf(id, body)
     }
 
-    suspend fun removeBookFromShelf(shelfId: String, bookId: Long) {
+    suspend fun removeBookFromShelf(shelfId: String, bookId: String) {
         service.deleteBookFromShelf(shelfId, bookId)
     }
 

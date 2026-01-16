@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         notificationService.createNotificationChannel()
 
         val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isNotificationsEnabled = prefs.getBoolean("notifications_enabled", false) // true é o padrão se nunca escolheu
+        val isNotificationsEnabled = prefs.getBoolean("notifications_enabled", false)
 
         if (isNotificationsEnabled) {
             NotificationScheduler.schedulePeriodicReminder(applicationContext)

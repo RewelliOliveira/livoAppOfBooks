@@ -1,6 +1,9 @@
 package com.example.livoappofbooks.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -8,31 +11,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.livoappofbooks.data.model.Book
+import com.example.livoappofbooks.ui.components.CardShelf
 import com.example.livoappofbooks.ui.components.Input
 import com.example.livoappofbooks.ui.components.PrimaryButton
 import com.example.livoappofbooks.ui.theme.AppTypography
 import com.example.livoappofbooks.ui.theme.background
 import com.example.livoappofbooks.ui.theme.primary
 import com.example.livoappofbooks.ui.theme.tertiary
+import com.example.livoappofbooks.ui.viewModel.LibraryUiState
+import com.example.livoappofbooks.ui.viewModel.LibraryViewModel
 import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
 import com.example.livoappofbooks.ui.icons.Arrow_back_ios_new
+import com.example.livoappofbooks.ui.theme.outline
 
 @Composable
 fun AddShelfScreen(
+    context: Context,
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit
 ) {
-    // Estados locais vinculados ao ViewModel para sobreviver à rotação
+
     var name by remember { mutableStateOf(viewModel.formName) }
     var description by remember { mutableStateOf(viewModel.formDescription) }
 
-    // Estado para o modal de confirmação
+
     var showSaveDialog by remember { mutableStateOf(false) }
 
     val loading by viewModel.loading.observeAsState(false)
     val success by viewModel.operationSuccess.observeAsState(false)
 
-    // Sincroniza com ViewModel quando os valores mudam
+
+    val libraryViewModel = remember { LibraryViewModel(context) }
+    val books by libraryViewModel.books.collectAsState()
+    val libraryState by libraryViewModel.uiState.collectAsState()
+
+
     LaunchedEffect(name) {
         viewModel.formName = name
     }
@@ -41,7 +55,7 @@ fun AddShelfScreen(
         viewModel.formDescription = description
     }
 
-    // Observa o sucesso para navegar de volta
+
     LaunchedEffect(success) {
         if (success) {
             viewModel.resetOperationSuccess()
@@ -49,7 +63,12 @@ fun AddShelfScreen(
         }
     }
 
-    // Modal de confirmação para criar
+
+    LaunchedEffect(Unit) {
+        libraryViewModel.loadBooks()
+    }
+
+
     if (showSaveDialog) {
         AlertDialog(
             onDismissRequest = { showSaveDialog = false },
@@ -102,13 +121,13 @@ fun AddShelfScreen(
                     Icon(
                         imageVector = Arrow_back_ios_new,
                         contentDescription = "Voltar",
-                        tint = primary
+                        tint = outline
                     )
                 }
                 Text(
                     text = "Criar Prateleira",
                     style = AppTypography.headlineSmall,
-                    color = primary,
+                    color = outline,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -138,8 +157,88 @@ fun AddShelfScreen(
                 onValueChange = { description = it },
                 modifier = Modifier.height(120.dp)
             )
-            
-            Spacer(modifier = Modifier.weight(1f))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Seus livros",
+                style = AppTypography.titleLarge,
+                color = outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            when (libraryState) {
+                is LibraryUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = primary)
+                    }
+                }
+
+                is LibraryUiState.Error -> {
+                    val message = (libraryState as LibraryUiState.Error).message
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = message,
+                            style = AppTypography.bodyMedium,
+                            color = tertiary
+                        )
+                    }
+                }
+
+                else -> {
+                    if (books.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Nenhum livro na sua biblioteca ainda.",
+                                style = AppTypography.bodyMedium,
+                                color = tertiary
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(books) { book ->
+                                ShelfSelectableBookItem(
+                                    book = book,
+                                    isSelected = book.libraryRegistration?.id?.toLongOrNull()
+                                        ?.let { viewModel.selectedBooks.containsKey(it) }
+                                        ?: false,
+                                    onToggle = { registrationId ->
+                                        viewModel.toggleBookSelection(
+                                            registrationId = registrationId,
+                                            bookId = book.id,
+                                            status = book.status
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
             if (loading) {
                 CircularProgressIndicator(color = primary)
@@ -159,4 +258,28 @@ fun AddShelfScreen(
             }
         }
     }
+}
+
+@Composable
+private fun ShelfSelectableBookItem(
+    book: Book,
+    isSelected: Boolean,
+    onToggle: (Long) -> Unit
+) {
+
+    val registrationId = book.libraryRegistration?.id?.toLongOrNull()
+        ?: return
+
+    CardShelf(
+        bookId = book.id,
+        title = book.title,
+        author = book.authors.firstOrNull() ?: "",
+        rate = book.averageRating ?: 0.0,
+        publishYear = book.publishedDate ?: "",
+        pageCount = book.pageCount ?: 0,
+        imageUrl = book.thumbnail.orEmpty(),
+        personalLibrary = isSelected,
+        onClick = { onToggle(registrationId) },
+        onAddClick = { onToggle(registrationId) }
+    )
 }

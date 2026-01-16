@@ -54,7 +54,7 @@ interface ShelvesService {
     @DELETE("/library/shelfs/{shelfId}/books/{bookId}")
     suspend fun deleteBookFromShelf(
         @Path("shelfId") shelfId: String,
-        @Path("bookId") bookId: Long
+        @Path("bookId") bookId: String
     )
 
     @POST("/library/shelfs/{shelfId}/books")

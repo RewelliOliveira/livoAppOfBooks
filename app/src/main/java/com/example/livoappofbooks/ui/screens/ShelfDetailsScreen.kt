@@ -28,7 +28,7 @@ fun ShelfDetailsScreen(
     viewModel: ShelvesViewModel,
     onBackClick: () -> Unit,
     onEditClick: (String) -> Unit,
-    onBookClick: (Long) -> Unit
+    onBookClick: (String) -> Unit
 ) {
     val shelf by viewModel.selectedShelf.observeAsState()
     val loading by viewModel.loading.observeAsState(false)
@@ -37,9 +37,9 @@ fun ShelfDetailsScreen(
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
-    // Estado para o modal de exclusão de livro
     var showRemoveDialog by remember { mutableStateOf(false) }
     var selectedBookToRemove by remember { mutableStateOf<com.example.livoappofbooks.data.remote.shelves.dto.BookShelf?>(null) }
+
 
     LaunchedEffect(shelfId) {
         if (!shelfId.isNullOrBlank()) {
@@ -107,7 +107,7 @@ fun ShelfDetailsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Modal de confirmação para remover livro
+
             if (showRemoveDialog && selectedBookToRemove != null) {
                 AlertDialog(
                     onDismissRequest = { showRemoveDialog = false },
@@ -132,7 +132,7 @@ fun ShelfDetailsScreen(
                                 showRemoveDialog = false
                                 selectedBookToRemove?.let { book ->
                                     shelfId?.let { sId ->
-                                        viewModel.removeBookFromShelf(sId, book.bookId)
+                                        viewModel.removeBookFromShelf(sId, book.googleBookId)
                                     }
                                 }
                             }
@@ -149,7 +149,7 @@ fun ShelfDetailsScreen(
                 )
             }
 
-            // Content
+
              if (loading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = primary)
@@ -175,6 +175,18 @@ fun ShelfDetailsScreen(
                             else -> true
                         }
                     }
+                     .sortedWith(
+                         compareBy(
+                             { book ->
+                                 when (BookStatus.fromString(book.status)) {
+                                     BookStatus.LENDO -> 1
+                                     BookStatus.LIDO -> 2
+                                     BookStatus.QUERO_LER -> 3
+                                     BookStatus.ABANDONADO -> 4
+                                 }
+                             },
+                         )
+                     )
 
                  if (filteredBooks.isEmpty()) {
                      Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -195,10 +207,10 @@ fun ShelfDetailsScreen(
                          items(filteredBooks) { book ->
                              Book(
                                  status = BookStatus.fromString(book.status),
-                                 progress = book.readingProgress,
+                                 progress = 0,
                                  evaluate = book.rating?.toInt() ?: 0,
                                  imageUrl = book.thumbnail ?: "",
-                                 onClick = { onBookClick(book.bookId) },
+                                 onClick = { onBookClick(book.googleBookId) },
                                  onLongClick = {
                                      selectedBookToRemove = book
                                      showRemoveDialog = true

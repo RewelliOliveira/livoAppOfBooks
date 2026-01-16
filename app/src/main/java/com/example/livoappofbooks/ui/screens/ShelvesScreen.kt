@@ -27,7 +27,7 @@ fun ShelvesScreen(
     onAddShelfClick: () -> Unit = {},
     viewModel: ShelvesViewModel,
 ) {
-    // viewModel agora é injetado
+
 
     val shelvesResponse by viewModel.shelves.observeAsState(emptyList())
     val loading by viewModel.loading.observeAsState(false)
@@ -45,7 +45,7 @@ fun ShelvesScreen(
                 id = shelf.id,
                 nome = shelf.name,
                 quantidadeLivros = shelf.quantity,
-                // Pega as thumbnails dos primeiros 3 livros da prateleira, tratando strings vazias como null
+
                 capas = shelf.bookShelfDto
                     .map { it.thumbnail?.takeIf { url -> url.isNotBlank() } }
                     .take(3)
@@ -156,12 +156,14 @@ fun ShelvesScreen(
         }
 
         PrimaryButton(
-            text = "Criar shelf",
+            text = "Criar Prateleira",
             icon = PlusCircle,
             onClick = onAddShelfClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 16.dp),
+            height = 50.dp,
+            style = AppTypography.labelLarge
         )
     }
 }

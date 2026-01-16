@@ -20,13 +20,7 @@ import com.example.livoappofbooks.data.remote.shelves.ShelvesRepository
 import com.example.livoappofbooks.data.repository.LibraryRepository
 import com.example.livoappofbooks.data.service.LibraryService
 import com.example.livoappofbooks.ui.screens.*
-import com.example.livoappofbooks.ui.viewModel.ProfileViewModel
-import com.example.livoappofbooks.ui.viewModel.ProfileViewModelFactory
-import com.example.livoappofbooks.ui.viewModel.SearchViewModel
-import com.example.livoappofbooks.ui.viewModel.SearchViewModelFactory
-import com.example.livoappofbooks.ui.viewModel.ShelvesViewModel
-import com.example.livoappofbooks.ui.viewModel.ShelvesViewModelFactory
-import com.example.livoappofbooks.ui.viewModel.ThemeViewModel
+import com.example.livoappofbooks.ui.viewModel.*
 
 @Composable
 fun AppNavigation(themeViewModel: ThemeViewModel) {
@@ -135,7 +129,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
                     viewModel = shelvesViewModel,
                     onBackClick = { navController.popBackStack() },
                     onEditClick = { id -> navController.navigate(Screen.EditShelf.createRoute(id)) },
-                    onBookClick = { bookId -> navController.navigate(Screen.ViewBook.createRoute(bookId.toString())) }
+                    onBookClick = { bookId -> navController.navigate(Screen.ViewBook.createRoute(bookId)) }
                 )
             }
 
@@ -154,6 +148,7 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
             composable(Screen.AddShelf.route) {
                 AddShelfScreen(
+                    context = context,
                     viewModel = shelvesViewModel,
                     onBackClick = { navController.popBackStack() }
                 )
@@ -205,8 +200,8 @@ fun AppNavigation(themeViewModel: ThemeViewModel) {
 
                 val bookId = backStackEntry.arguments?.getString("bookId") ?: return@composable
 
-                val viewModel: com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModel = viewModel(
-                    factory = com.example.livoappofbooks.ui.viewModel.RegisterReadingViewModelFactory(bookId, libraryRepository)
+                val viewModel: RegisterReadingViewModel = viewModel(
+                    factory = RegisterReadingViewModelFactory(bookId, libraryRepository)
                 )
 
                 RegisterReadingScreen(
